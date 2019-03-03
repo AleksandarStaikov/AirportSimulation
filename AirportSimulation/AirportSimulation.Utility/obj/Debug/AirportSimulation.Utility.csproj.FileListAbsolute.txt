@@ -1,6 +1,0 @@
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\bin\Debug\AirportSimulation.Utility.dll
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\bin\Debug\AirportSimulation.Utility.pdb
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\obj\Debug\AirportSimulation.Utility.csprojAssemblyReference.cache
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\obj\Debug\AirportSimulation.Utility.csproj.CoreCompileInputs.cache
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\obj\Debug\AirportSimulation.Utility.dll
-C:\Users\385642\Desktop\AirportSimulation\AirportSimulation.Utility\obj\Debug\AirportSimulation.Utility.pdb
