@@ -1,37 +1,43 @@
-﻿using AirportApplication.Core;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace AirportSimulation.App
+﻿namespace AirportSimulation.App
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+    using AirportApplication.Core;
+    using NLog;
+    using System;
+    using System.Windows;
+
     public partial class App : Application
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
-            IoC.Start();
-
-            Current.MainWindow = new MainWindow
+            try
             {
-                DataContext = IoC.Container
-            };
+                Logger.Info("Starting application...");
 
-            Current.MainWindow.Closed += HandleClosed;
-            Current.MainWindow.Show();
+                base.OnStartup(e);
+
+                using (var container = ContainerConfig.Configure())
+                    container.BeginLifetimeScope();
+
+                Current.MainWindow = new MainWindow();
+                Current.MainWindow.Closed += HandleClosed;
+                Current.MainWindow.Show();
+
+                Logger.Info("Application stared.");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Something went wrong while starting the application, see inner exception", 
+                    ex.InnerException?.Message);
+
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         private void HandleClosed(object sender, EventArgs e)
         {
-            IoC.Stop();
+            ContainerConfig.Stop();
         }
     }
 }
