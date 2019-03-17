@@ -1,12 +1,12 @@
 ﻿namespace AirportSimulation.Core
 {
     using Autofac;       
-    using Services.Interfaces;
     using System.Reflection;
     using System;
     using Autofac.Core;
     using ImportExport;
     using NLog;
+    using AirportSimulation.Core.Contracts;
 
     public static class ContainerConfig
     {

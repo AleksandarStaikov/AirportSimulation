@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.App
 {
+    using AirportSimulation.App.Views;
     using Core;
     using NLog;
     using System;
