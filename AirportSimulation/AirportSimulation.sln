@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimulation.Core", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimulation.ImportExport", "ImportExport\AirportSimulation.ImportExport.csproj", "{3B44D6F6-D27C-4D0E-92FD-53B7E06BC236}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimulation.Common", "AirportSimulation.Common\AirportSimulation.Common.csproj", "{C23326E3-3FF3-405F-B74F-45924D828FB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimulation.Abstractions", "AirportSimulations.Abstractions\AirportSimulation.Abstractions.csproj", "{1A4315D7-EDC8-444F-B5D9-544FC760A19C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimulation.Test", "AirportSimulation.Test\AirportSimulation.Test.csproj", "{BD9FBB60-66DC-47D2-8CF1-EC6073E99E4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{3B44D6F6-D27C-4D0E-92FD-53B7E06BC236}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B44D6F6-D27C-4D0E-92FD-53B7E06BC236}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B44D6F6-D27C-4D0E-92FD-53B7E06BC236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C23326E3-3FF3-405F-B74F-45924D828FB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C23326E3-3FF3-405F-B74F-45924D828FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C23326E3-3FF3-405F-B74F-45924D828FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C23326E3-3FF3-405F-B74F-45924D828FB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A4315D7-EDC8-444F-B5D9-544FC760A19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A4315D7-EDC8-444F-B5D9-544FC760A19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A4315D7-EDC8-444F-B5D9-544FC760A19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A4315D7-EDC8-444F-B5D9-544FC760A19C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD9FBB60-66DC-47D2-8CF1-EC6073E99E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD9FBB60-66DC-47D2-8CF1-EC6073E99E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD9FBB60-66DC-47D2-8CF1-EC6073E99E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD9FBB60-66DC-47D2-8CF1-EC6073E99E4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -65,5 +65,15 @@
   <ItemGroup>
     <Folder Include="ViewModels\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AirportSimulation.Utility\AirportSimulation.Utilities.csproj">
+      <Project>{fb7f0a95-93e2-476f-8256-8a133aa8047e}</Project>
+      <Name>AirportSimulation.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImportExport\AirportSimulation.ImportExport.csproj">
+      <Project>{3b44d6f6-d27c-4d0e-92fd-53b7e06bc236}</Project>
+      <Name>AirportSimulation.ImportExport</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
