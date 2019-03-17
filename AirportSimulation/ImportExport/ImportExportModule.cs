@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.ImportExport
 {
     using Autofac;
+    using Contracts;
     using Services;
 
     public class ImportExportModule : Module 

@@ -8,6 +8,14 @@
 
     class ExcelWriter : IExcelWriter
     {
+        private readonly IExcelReader _excelReader;
+
+        public ExcelWriter(IExcelReader excelReader)
+        {
+            _excelReader = excelReader;
+        }
+
+
         public void WriteSettingsToExcelFile<T>(T settings, string fileLocation, string fileName)
         {
             using (var helper = new ExcelPackage())
