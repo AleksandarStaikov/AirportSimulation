@@ -1,43 +1,37 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using Common.Models;
     using Contracts;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public abstract class ChainLink : IChainLink
     {
-        protected List<Action> _subscribers;
+        private NodeState _status;
 
         public ChainLink()
         {
-            _subscribers = new List<Action>();
+            _status = NodeState.Free;
         }
 
+        public NodeState Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                if (value == NodeState.Free)
+                {
+                    OnStatusChangedToFree?.Invoke();
+                }
+            }
+        }
+        
         public ChainLink SuccessSuccessor { get; set; }
 
         public ChainLink Predecessor { get; set; }
 
-        public abstract bool CanProcess();
-        public abstract void Process();
+        public Action OnStatusChangedToFree { get; set; }
 
-        public void SubscribeOnDone(Action methodToCall)
-        {
-            _subscribers.Add(methodToCall);
-        }
-
-        public void UnSubscribeOnDone(Action methodToUnsubsctibe)
-        {
-            _subscribers.Remove(methodToUnsubsctibe);
-        }
-
-        public void OnDone()
-        {
-            if (_subscribers.Any())
-            {
-                _subscribers.First().Invoke();
-                _subscribers.RemoveAt(0);
-            }
-        }
+        public abstract void PassBaggage(Baggage baggage);
     }
 }

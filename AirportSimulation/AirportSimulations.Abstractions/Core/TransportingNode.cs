@@ -3,24 +3,30 @@
     using Common.Models;
     using CuttingEdge.Conditions;
     using System;
+    using System.Security.Cryptography.X509Certificates;
     using System.Timers;
+    using Contracts;
 
-    public abstract class TransportingNode : ChainLink
+    public abstract class TransportingNode : ChainLink, ITransportingNode
     {
         protected int _lastIndex => _length - 1;
         protected readonly int _length;
         protected Baggage[] _conveyorBelt;
         protected Timer _timer;
 
+        public Baggage LastBaggage => _conveyorBelt[_lastIndex];
+
         public TransportingNode(int length)
         {
             _length = length;
             _conveyorBelt = new Baggage[_length];
             _timer = new Timer();
-            _timer.Elapsed += Move;
+            _timer.Elapsed += (sender, args) => Move();
             _timer.Interval = 1000;
             _timer.Start();
         }
+
+        #region Inserting
 
         public bool CanAdd()
         {
@@ -32,36 +38,60 @@
             Condition.Requires(CanAdd(), "conveyor")
                 .IsEqualTo(true, "Trying to add to {0}, while full.");
 
+            Status = NodeState.Busy;
+
             _conveyorBelt[0] = baggage;
         }
 
-        public bool CanGet()
+        public override void PassBaggage(Baggage baggage)
         {
-            return _conveyorBelt[_lastIndex] != null;
+            Add(baggage);
         }
 
-        public Baggage Get()
+        #endregion
+
+        private bool HasLastItem() => LastBaggage != null;
+
+        private bool CanMove()
         {
-            Condition.Requires(CanGet(), "conveyor")
-                .IsEqualTo(true, "Trying to get from {0}, while empty.");
+            if (SuccessSuccessor.Status == NodeState.Free)
+            {
+                return true;
+            }
 
-            Baggage baggage = _conveyorBelt[_lastIndex];
-            _conveyorBelt[_lastIndex] = null;
+            if (!HasLastItem())
+            {
+                return true;
+            }
 
-            return baggage;
+            return false;
         }
 
-        private bool CanMove() => !CanGet();
-
-        private void Move(object sender, EventArgs e)
+        private void Move()
         {
+            _timer.Stop();
+
             if (CanMove())
             {
+                if (LastBaggage != null)
+                {
+                    SuccessSuccessor.PassBaggage(LastBaggage);
+                    _conveyorBelt[_lastIndex] = null;
+                }
+
                 for (int i = _lastIndex - 1; i <= 0; i--)
                 {
                     _conveyorBelt[i] = _conveyorBelt[i - 1];
                     _conveyorBelt[i - 1] = null;
                 }
+
+                SuccessSuccessor.OnStatusChangedToFree -= Move;
+                Status = NodeState.Free;
+                _timer.Start();
+            }
+            else
+            {
+                SuccessSuccessor.OnStatusChangedToFree += Move;
             }
         }
     }
