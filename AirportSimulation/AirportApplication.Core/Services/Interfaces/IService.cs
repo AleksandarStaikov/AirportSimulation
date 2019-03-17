@@ -1,4 +1,4 @@
-﻿namespace AirportApplication.Core.Services.Interfaces
+﻿namespace AirportSimulation.Core.Services.Interfaces
 {
     public interface IService
     {

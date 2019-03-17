@@ -1,10 +1,11 @@
-﻿namespace AirportApplication.Core
+﻿namespace AirportSimulation.Core
 {
     using Autofac;       
-    using AirportApplication.Core.Services.Interfaces;
+    using Services.Interfaces;
     using System.Reflection;
     using System;
     using Autofac.Core;
+    using ImportExport;
     using NLog;
 
     public static class ContainerConfig
@@ -25,6 +26,8 @@
                    .Where(t => typeof(IService).IsAssignableFrom(t))
                    .SingleInstance()
                    .AsImplementedInterfaces();
+
+            builder.RegisterModule<ImportExportModule>();
 
             _container = builder.Build();
 

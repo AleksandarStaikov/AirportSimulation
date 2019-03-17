@@ -1,6 +1,6 @@
 ﻿namespace AirportSimulation.App
 {
-    using AirportApplication.Core;
+    using Core;
     using NLog;
     using System;
     using System.Windows;

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AirportSimulation.Core")]
+[assembly: AssemblyTitle("AirportSimulation.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AirportSimulation.Core")]
+[assembly: AssemblyProduct("AirportSimulation.Common")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4dc912dc-4827-4cbe-9a0d-418b546fb760")]
+[assembly: Guid("c23326e3-3ff3-405f-b74f-45924d828fb8")]
 
 // Version information for an assembly consists of the following four values:
 //
