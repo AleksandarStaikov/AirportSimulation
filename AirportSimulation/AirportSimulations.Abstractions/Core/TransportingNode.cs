@@ -79,7 +79,7 @@
                     _conveyorBelt[_lastIndex] = null;
                 }
 
-                for (int i = _lastIndex - 1; i <= 0; i--)
+                for (int i = _lastIndex; i > 0; i--)
                 {
                     _conveyorBelt[i] = _conveyorBelt[i - 1];
                     _conveyorBelt[i - 1] = null;
