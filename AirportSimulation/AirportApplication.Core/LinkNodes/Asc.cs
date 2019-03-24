@@ -12,9 +12,9 @@
         public override void ProcessInternal(Baggage baggage)
         {
             //TODO : Implment
-            bool CheckSuccessfull = new Random().Next(0,1) > 0 ? true : false;
+            var checkSuccessful = new Random().Next(0,1) > 0;
 
-            if (CheckSuccessfull)
+            if (checkSuccessful)
             {
                 SuccessSuccessor.PassBaggage(baggage);
             }
