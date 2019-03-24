@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
 
@@ -7,6 +8,10 @@
     {
         protected Baggage _currentBaggage;
 
+        protected ProcessingNode(ITimerService timerService) : base(timerService)
+        {
+        }
+        
         public abstract void ProcessInternal(Baggage baggage);
 
         public override void PassBaggage(Baggage baggage)

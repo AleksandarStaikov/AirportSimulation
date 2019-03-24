@@ -1,11 +1,10 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using Abstractions.Contracts;
     using Common.Models;
-    using CuttingEdge.Conditions;
-    using System;
-    using System.Security.Cryptography.X509Certificates;
-    using System.Timers;
     using Contracts;
+    using CuttingEdge.Conditions;
+    using System.Timers;
 
     public abstract class TransportingNode : ChainLink, ITransportingNode
     {
@@ -16,7 +15,8 @@
 
         public Baggage LastBaggage => _conveyorBelt[_lastIndex];
 
-        public TransportingNode(int length)
+        protected TransportingNode(int length, ITimerService timerService) 
+            : base(timerService)
         {
             _length = length;
             _conveyorBelt = new Baggage[_length];

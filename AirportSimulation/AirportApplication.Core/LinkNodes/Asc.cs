@@ -1,12 +1,17 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
     using System;
+    using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
 
     public class Asc : ProcessingNode, IProcessingNode
     {
+        public Asc(ITimerService timerService) : base(timerService)
+        {
+        }
+
         public ChainLink FailSuccessor { get; set; }
 
         public override void ProcessInternal(Baggage baggage)
@@ -23,5 +28,6 @@
                 FailSuccessor.PassBaggage(baggage);
             }
         }
+
     }
 }

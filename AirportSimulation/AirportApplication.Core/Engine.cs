@@ -1,19 +1,19 @@
 ﻿namespace AirportSimulation.Core
 {
-    using System.Runtime.InteropServices;
     using LinkNodes;
+    using Services;
 
     public class Engine
     {
         public void Run()
         {
-            var aa = new Aa();
-            var mpaToAa = new Conveyor(10);
-            var mpa = new Mpa();
-            var pscToMpa = new Conveyor(10);
-            var psc = new Psc();
-            var checkInToPsc = new Conveyor(10);
-            var checkIn = new CheckInDesk();
+            var aa = new Aa(new TimerService());
+            var mpaToAa = new Conveyor(10, new TimerService());
+            var mpa = new Mpa(new TimerService());
+            var pscToMpa = new Conveyor(10, new TimerService());
+            var psc = new Psc(new TimerService());
+            var checkInToPsc = new Conveyor(10, new TimerService());
+            var checkIn = new CheckInDesk(new TimerService());
 
             checkIn.SuccessSuccessor = checkInToPsc;
             checkInToPsc.SuccessSuccessor = psc;

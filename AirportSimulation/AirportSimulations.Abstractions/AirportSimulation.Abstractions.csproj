@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\ITimerService.cs" />
     <Compile Include="Core\ChainLink.cs" />
     <Compile Include="Core\Contracts\IChainLink.cs" />
     <Compile Include="Core\Contracts\IProcessingNode.cs" />
