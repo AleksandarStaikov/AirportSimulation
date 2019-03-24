@@ -47,6 +47,7 @@
     <Compile Include="Exceptions\ConveyorFullException.cs" />
     <Compile Include="Models\Baggage.cs" />
     <Compile Include="Models\BaggageType.cs" />
+    <Compile Include="Models\NodeState.cs" />
     <Compile Include="Models\SimulationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
