@@ -21,9 +21,7 @@
                 using (var container = ContainerConfig.Configure())
                     container.BeginLifetimeScope();
 
-                Current.MainWindow = new MainWindow();
-                Current.MainWindow.Closed += HandleClosed;
-                Current.MainWindow.Show();
+                InitializeMainWindow();
 
                 Logger.Info("Application stared.");
             }
@@ -39,6 +37,20 @@
         private void HandleClosed(object sender, EventArgs e)
         {
             ContainerConfig.Stop();
+        }
+
+        private void InitializeMainWindow()
+        {
+            Current.MainWindow = new MainWindow
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowState = WindowState.Maximized,
+                ResizeMode = ResizeMode.CanMinimize,
+                WindowStyle = WindowStyle.ThreeDBorderWindow,
+            };
+
+            Current.MainWindow.Closed += HandleClosed;
+            Current.MainWindow.Show();
         }
     }
 }
