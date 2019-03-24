@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.App.Commands
+﻿namespace AirportSimulation.Core.Commands
 {
     using System;
     using System.Windows.Input;
@@ -28,6 +28,5 @@
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-
     }
 }
