@@ -21,7 +21,7 @@
 
             if (SuccessSuccessor.Status == NodeState.Free)
             {
-                //TODO: Add Helper {Drop-Off, Discard, Airplane, PickUp} Nodes
+                //TODO: Add Helper {Drop-Off, Discard, Airplane, PickUp, BSU} Nodes
                 SuccessSuccessor.OnStatusChangedToFree -= Process;
                 ProcessInternal(_currentBaggage);
                 Status = NodeState.Free;
