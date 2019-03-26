@@ -1,7 +1,17 @@
-﻿namespace AirportSimulation.Common.Models
+﻿namespace AirportSimulation.Core.ViewModels
 {
-    public class SimulationSettings
+    using AirportSimulation.Common.Models;
+    using AirportSimulation.Core.Commands;
+    using System.Windows.Input;
+
+    public class SimulationSettingsViewModel
     {
+        public SimulationSettingsViewModel()
+        {
+            this.BaggageTypeChange = new RelayCommand<SimulationSettingsViewModel>(this.HandleOnBaggageTypeChange);
+        }
+
+
         public int CheckInStationsCount { get; set; }
 
         public int PscConveyorsCount { get; set; }
@@ -35,5 +45,18 @@
         public int DropOffRate { get; set; }
 
         public int LoadUnloadRateAtAa { get; set; }
+
+        public int EmployeesCount { get; set; }
+
+        public int EmployeeProcessingBagTime { get; set; }
+
+        public BaggageType BaggageType { get; set; } = BaggageType.Small;
+
+        public bool IsSmallBaggageType => BaggageType == BaggageType.Small;
+
+        public ICommand BaggageTypeChange { get; set; }
+
+        private void HandleOnBaggageTypeChange(SimulationSettingsViewModel vm) =>
+            this.BaggageType = vm.IsSmallBaggageType ? BaggageType.Small : BaggageType.Big;
     }
 }

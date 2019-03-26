@@ -5,17 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AirportSimulation.App.Views"
         mc:Ignorable="d"
+        xmlns:pages="clr-namespace:AirportSimulation.App.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Airport Baggage Simulation">
     <Grid>
         <TabControl>
-            <TabItem>
+            <TabItem Selector.IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Start" />
                     </StackPanel>
                 </TabItem.Header>
+                <Frame Source="AdministrationPage.xaml"></Frame>
             </TabItem>
-            <TabItem Selector.IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Overview" />
