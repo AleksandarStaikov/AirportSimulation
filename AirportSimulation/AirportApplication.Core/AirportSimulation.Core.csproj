@@ -61,6 +61,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="LinkNodes\Aa.cs" />
     <Compile Include="LinkNodes\Asc.cs" />
+    <Compile Include="LinkNodes\Bsu.cs" />
     <Compile Include="LinkNodes\CheckInDesk.cs" />
     <Compile Include="LinkNodes\Conveyor.cs" />
     <Compile Include="LinkNodes\Mpa.cs" />
