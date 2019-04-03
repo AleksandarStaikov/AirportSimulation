@@ -6,19 +6,19 @@
     using Common.Models;
     using System.Collections.Generic;
 
-    public class Bsu : ProcessingNode, IProcessingNode
+    public class BSU : ChainLink, IChainLink
     {
-        private Dictionary<string, BaggageBucket> _baggageBuckets;
-        private Conveyor _inboundConveyor;
-        private Conveyor _outboundConveyor;
-        private RobotBSU _robot;
+        internal Dictionary<string, BaggageBucket> _baggageBuckets;
+        internal Conveyor _inboundConveyor;
+        internal Conveyor _outboundConveyor;
+        internal RobotBSU _robot;
 
-        public Bsu(ITimerService timerService) : base(timerService)
+        public BSU(ITimerService timerService) : base(timerService)
         {
             _baggageBuckets = new Dictionary<string, BaggageBucket>();
             _inboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
             _outboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
-            _robot = new RobotBSU(1, timerService); //Lenght is always 1
+            _robot = new RobotBSU(1, timerService, this); //Lenght is always 1
 
             _inboundConveyor.Predecessor = this.Predecessor;
             _inboundConveyor.SuccessSuccessor = _robot;
@@ -26,16 +26,18 @@
             _outboundConveyor.SuccessSuccessor = this.SuccessSuccessor;
         }
 
-        public void AddBaggage(string flightNumber, int timeToFlight) //TODO Implement with Baggage
+        public void AddBaggage(Baggage baggage)
         {
-            //TODO Check for existing
-            _baggageBuckets.Add(flightNumber, new BaggageBucket(flightNumber, timeToFlight, this.TtimerService));
-            _baggageBuckets[flightNumber].timeToProcessHandler += new BaggageBucket.onTimeToProcess(moveToOutbound);
-        }
-
-        private void moveToOutbound(string flightNumber)
-        {
-           //TODO implement
+            if(!_baggageBuckets.ContainsKey(baggage.FlightNumber))
+            {
+                _baggageBuckets.Add(baggage.FlightNumber, new BaggageBucket(baggage.FlightNumber, 1, this.TtimerService)); //TODO Variable timeToFlight
+                _baggageBuckets[baggage.FlightNumber].timeToProcessHandler += new BaggageBucket.onTimeToProcess(_outboundConveyor.PassBaggage); //TODO Implement
+            }
+            else
+            {
+                _baggageBuckets[baggage.FlightNumber].Add(baggage);
+            }
+            
         }
 
         public override void PassBaggage(Baggage baggage)
@@ -43,21 +45,16 @@
             _inboundConveyor.PassBaggage(baggage);
         }
 
-        public override void ProcessInternal(Baggage baggage)
-        {
-            throw new System.NotImplementedException();
-        }
-
         #region BaggageBucket
+
         //Possibly externalize this class. No need so far, as only used in BSU
-        //Possibly change inheritance to ProcessingNode
         internal class BaggageBucket : ChainLink, IChainLink
         {
             private string _flightNumber;
             private int _timeToFLight;
             public List<Baggage> Baggages { get; set; }
 
-            public delegate void onTimeToProcess(string flightNumber);
+            public delegate void onTimeToProcess(Baggage baggage);
             public event onTimeToProcess timeToProcessHandler;
 
 
@@ -80,25 +77,51 @@
                 this.Add(baggage);
             }
         }
-
         #endregion
+
+        #region Robot
+
+        internal enum RobotStatus
+        {
+            Inbound = 0,
+            Outbound = 1
+        }
 
         internal class RobotBSU : TransportingNode, ITransportingNode
         {
-            public RobotBSU(int length, ITimerService timerService) : base(length, timerService) { }
+            private BSU _bsu;
+            RobotStatus status = RobotStatus.Inbound;
 
-            public void PassBaggage(Baggage baggage, ChainLink predecessor, ChainLink successor)
+            public RobotBSU(int length, ITimerService timerService, BSU bsu) : base(length, timerService)
             {
-                this.Predecessor = predecessor;
-                this.SuccessSuccessor = successor;
+                this._bsu = bsu;
+            }
+
+            public override void PassBaggage(Baggage baggage)
+            {
+                this.PassBaggage(baggage, RobotStatus.Inbound);
+            }
+
+            public void PassBaggage(Baggage baggage, RobotStatus status)
+            {
+                if(status == RobotStatus.Outbound)
+                {
+                    this.Predecessor = _bsu._baggageBuckets[baggage.FlightNumber];
+                    this.SuccessSuccessor = _bsu._outboundConveyor;
+                }
+                else
+                {
+                    this.Predecessor = _bsu._inboundConveyor;
+                    this.SuccessSuccessor = _bsu._outboundConveyor;
+                }
+                
 
                 base.PassBaggage(baggage);
                 
             }
-
-            
         }
+        #endregion
     }
 
-   
+
 }
