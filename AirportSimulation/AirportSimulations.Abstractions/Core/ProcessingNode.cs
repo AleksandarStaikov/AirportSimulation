@@ -6,34 +6,52 @@
 
     public abstract class ProcessingNode : ChainLink, IProcessingNode
     {
+        private readonly ITimerService _timerService;
         protected Baggage _currentBaggage;
 
         protected ProcessingNode(ITimerService timerService) : base(timerService)
         {
+            _timerService = timerService;
         }
         
-        public abstract void ProcessInternal(Baggage baggage);
+        public abstract void Process(Baggage baggage);
 
         public override void PassBaggage(Baggage baggage)
         {
             Status = NodeState.Busy;
             _currentBaggage = baggage;
-            Process();
+            ProcessInternal(baggage);
+        }
+        
+        public void ProcessInternal(Baggage baggage)
+        {
+            //TODO : //Refactor time management
+            baggage.Log.Add(new BaggageEventLog()
+            {
+                EventTime = _timerService.GetTimeSinceSimulationStart(),
+                Description = $"Starting processing at {this.GetType().ToString()}"
+            });
+            Process(baggage);
+            baggage.Log.Add(new BaggageEventLog()
+            {
+                EventTime = _timerService.GetTimeSinceSimulationStart(),
+                Description = $"Finished processing at {this.GetType().ToString()}"
+            });
+            Move();
         }
 
-        public void Process()
+        public void Move()
         {
-
-            if (SuccessSuccessor.Status == NodeState.Free)
+            if (NextLink.Status == NodeState.Free && this._currentBaggage != null)
             {
                 //TODO: Add Helper {Drop-Off, Discard, Airplane, PickUp, BSU} Nodes
-                SuccessSuccessor.OnStatusChangedToFree -= Process;
-                ProcessInternal(_currentBaggage);
+                NextLink.OnStatusChangedToFree -= Move;
+                NextLink.PassBaggage(_currentBaggage);
                 Status = NodeState.Free;
             }
             else
             {
-                SuccessSuccessor.OnStatusChangedToFree += Process;
+                NextLink.OnStatusChangedToFree += Move;
             }
         }
     }

@@ -4,8 +4,10 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
 
-    class Conveyor : TransportingNode, ITransportingNode
+    public class Conveyor : TransportingNode, ITransportingNode
     {
+        public delegate Conveyor Factory(int length);
+
         public Conveyor(int length, ITimerService timerService)
             : base(length, timerService)
         {

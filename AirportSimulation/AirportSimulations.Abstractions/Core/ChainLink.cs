@@ -16,7 +16,7 @@
             _status = NodeState.Free;
         }
 
-        protected ITimerService TtimerService => _timerService;
+        protected ITimerService TimerService => _timerService;
 
         public NodeState Status
         {
@@ -30,10 +30,10 @@
                 }
             }
         }
-        
-        public ChainLink SuccessSuccessor { get; set; }
 
-        public ChainLink Predecessor { get; set; }
+        public string Name => this.GetType().Name;
+
+        public ChainLink NextLink { get; set; }
 
         public Action OnStatusChangedToFree { get; set; }
 
