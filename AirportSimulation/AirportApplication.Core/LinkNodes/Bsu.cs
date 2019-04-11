@@ -4,7 +4,9 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using System;
     using System.Collections.Generic;
+    using System.Timers;
 
     public class BSU : ChainLink, IChainLink
     {
@@ -18,32 +20,54 @@
             _baggageBuckets = new Dictionary<string, BaggageBucket>();
             _inboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
             _outboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
-            _robot = new RobotBSU(1, timerService, this); //Lenght is always 1
+            _robot = new RobotBSU(timerService, this); //Lenght is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
 
-            _inboundConveyor.Predecessor = this.Predecessor;
-            _inboundConveyor.SuccessSuccessor = _robot;
-            _outboundConveyor.Predecessor = _robot;
-            _outboundConveyor.SuccessSuccessor = this.SuccessSuccessor;
+            _inboundConveyor.NextLink = _robot;
+            _outboundConveyor.NextLink = this.NextLink;
         }
 
-        public void AddBaggage(Baggage baggage)
+        private void addBaggageBucket(Baggage baggage)
         {
             if(!_baggageBuckets.ContainsKey(baggage.FlightNumber))
             {
-                _baggageBuckets.Add(baggage.FlightNumber, new BaggageBucket(baggage.FlightNumber, 1, this.TtimerService)); //TODO Variable timeToFlight
-                _baggageBuckets[baggage.FlightNumber].timeToProcessHandler += new BaggageBucket.onTimeToProcess(_outboundConveyor.PassBaggage); //TODO Implement
-            }
-            else
-            {
-                _baggageBuckets[baggage.FlightNumber].Add(baggage);
+                BaggageBucket newBucket = new BaggageBucket(baggage.FlightNumber, 1, this.TimerService);
+                newBucket.NextLink = _robot;
+                newBucket.OnTimeToProcess += passToRobot;
+                newBucket.OnBucketEmpty += (string flightNumber) => _baggageBuckets.Remove(flightNumber);
+
+                _baggageBuckets.Add(baggage.FlightNumber, newBucket); //TODO Variable timeToFlight
             }
             
         }
 
+        private void passToRobot(string flightNumber)
+        {
+            BaggageBucket current = _baggageBuckets[flightNumber];
+
+            if(current.NextLink.Status == NodeState.Free && current.Baggages.Count > 0)
+            {
+                ((RobotBSU)current.NextLink).PassBaggage(current.Baggages.Pop(), RobotStatus.Outbound);
+
+                current.NextLink.OnStatusChangedToFree -= current.passToRobot;
+            }
+            else if(current.Baggages.Count == 0)
+            {
+                current.OnBucketEmpty(flightNumber);
+            }
+            else
+            {
+                current.NextLink.OnStatusChangedToFree += current.passToRobot;
+            }
+        }
+
         public override void PassBaggage(Baggage baggage)
         {
+            //TODO Implement check if inbound full
+            addBaggageBucket(baggage);
             _inboundConveyor.PassBaggage(baggage);
         }
+
+
 
         #region BaggageBucket
 
@@ -52,29 +76,41 @@
         {
             private string _flightNumber;
             private int _timeToFLight;
-            public List<Baggage> Baggages { get; set; }
+            private Timer _timer;
+            public Stack<Baggage> Baggages { get; set; }
 
-            public delegate void onTimeToProcess(Baggage baggage);
-            public event onTimeToProcess timeToProcessHandler;
-
+            public Action<string> OnTimeToProcess { get; set; }
+            public Action<string> OnBucketEmpty { get; set; }
 
             public BaggageBucket(string flightNumber, int time, ITimerService timerService) : base(timerService)
             {
                 this._flightNumber = flightNumber;
                 this._timeToFLight = time;
-                this.Baggages = new List<Baggage>();
+                this.Baggages = new Stack<Baggage>();
             }
 
             //TODO Implement timeToProcess()
-
-            public void Add(Baggage baggage)
+            private void timeToProcess()
             {
-                this.Baggages.Add(baggage);
+                _timer = new Timer(1000);
+                _timer.Elapsed += (sender,args) => passToRobot();
+            }
+
+            internal void passToRobot()
+            {
+                _timer.Stop();
+                OnTimeToProcess(_flightNumber);
+                _timer.Start();
+            }
+
+            private void add(Baggage baggage)
+            {
+                this.Baggages.Push(baggage);
             }
 
             public override void PassBaggage(Baggage baggage)
             {
-                this.Add(baggage);
+                this.add(baggage);
             }
         }
         #endregion
@@ -92,7 +128,7 @@
             private BSU _bsu;
             RobotStatus status = RobotStatus.Inbound;
 
-            public RobotBSU(int length, ITimerService timerService, BSU bsu) : base(length, timerService)
+            public RobotBSU(ITimerService timerService, BSU bsu) : base(1, timerService)
             {
                 this._bsu = bsu;
             }
@@ -106,13 +142,11 @@
             {
                 if(status == RobotStatus.Outbound)
                 {
-                    this.Predecessor = _bsu._baggageBuckets[baggage.FlightNumber];
-                    this.SuccessSuccessor = _bsu._outboundConveyor;
+                    this.NextLink = _bsu._outboundConveyor;
                 }
                 else
                 {
-                    this.Predecessor = _bsu._inboundConveyor;
-                    this.SuccessSuccessor = _bsu._outboundConveyor;
+                    this.NextLink = _bsu._baggageBuckets[baggage.FlightNumber];
                 }
                 
 
