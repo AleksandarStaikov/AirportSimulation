@@ -5,6 +5,8 @@
     using NLog;
     using System;
     using System.Windows;
+    using Autofac;
+    using Core.Contracts;
 
     public partial class App : Application
     {
@@ -19,8 +21,14 @@
                 base.OnStartup(e);
 
                 using (var container = ContainerConfig.Configure())
+                {
                     container.BeginLifetimeScope();
 
+                    var engine = container.Resolve<IEngine>();
+
+                    engine.Run();
+                }
+                    
                 InitializeMainWindow();
 
                 Logger.Info("Application stared.");

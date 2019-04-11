@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using System.Runtime.CompilerServices;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
@@ -33,13 +34,18 @@
             return _conveyorBelt[0] == null;
         }
 
+        //[MethodImpl(MethodImplOptions.Synchronized)]
         public void Add(Baggage baggage)
         {
             Condition.Requires(CanAdd(), "conveyor")
                 .IsEqualTo(true, "Trying to add to {0}, while full.");
 
             Status = NodeState.Busy;
-
+            baggage.Log.Add(new BaggageEventLog()
+            {
+               EventTime = TimerService.GetTimeSinceSimulationStart(),
+               Description = $"Baggage got onto conveyor {this.GetType()}"
+            });
             _conveyorBelt[0] = baggage;
         }
 
@@ -54,7 +60,7 @@
 
         private bool CanMove()
         {
-            if (SuccessSuccessor.Status == NodeState.Free)
+            if (NextLink.Status == NodeState.Free)
             {
                 return true;
             }
@@ -75,7 +81,12 @@
             {
                 if (LastBaggage != null)
                 {
-                    SuccessSuccessor.PassBaggage(LastBaggage);
+                    LastBaggage.Log.Add(new BaggageEventLog()
+                    {
+                        EventTime = TimerService.GetTimeSinceSimulationStart(),
+                        Description = $"Baggage went off of conveyor {this.GetType()}"
+                    });
+                    NextLink.PassBaggage(LastBaggage);
                     _conveyorBelt[_lastIndex] = null;
                 }
 
@@ -85,13 +96,13 @@
                     _conveyorBelt[i - 1] = null;
                 }
 
-                SuccessSuccessor.OnStatusChangedToFree -= Move;
+                NextLink.OnStatusChangedToFree -= Move;
                 Status = NodeState.Free;
                 _timer.Start();
             }
             else
             {
-                SuccessSuccessor.OnStatusChangedToFree += Move;
+                NextLink.OnStatusChangedToFree += Move;
             }
         }
     }

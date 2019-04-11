@@ -7,14 +7,14 @@
 
     public class Mpa : ProcessingNode, IProcessingNode
     {
+        public delegate Mpa Factory();
         public Mpa(ITimerService timerService) : base(timerService)
         {
         }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
             //TODO : Implment
-            SuccessSuccessor.PassBaggage(baggage);
         }
     }
 }

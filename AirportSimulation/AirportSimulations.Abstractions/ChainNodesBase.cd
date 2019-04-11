@@ -3,16 +3,8 @@
   <Class Name="AirportSimulation.Abstractions.Core.ChainLink">
     <Position X="3.5" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AEAAAAAEAAQAAAAAAAAAAEAAAAAAACAAAAAEAAAAAAA=</HashCode>
+      <HashCode>AEAQAAAEAAQAAAAgAAACAAQAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>Core\ChainLink.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="AirportSimulation.Abstractions.Core.ProcessingNode">
-    <Position X="1.25" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAgAAAAAAAABAAAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Core\ProcessingNode.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -21,6 +13,14 @@
     <TypeIdentifier>
       <HashCode>AAIAACgAAIQwAAAAAAgAAIAAAgAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>Core\TransportingNode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AirportSimulation.Abstractions.Core.ProcessingNode">
+    <Position X="1.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIQAAAAAAgACAAAAAABAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Core\ProcessingNode.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

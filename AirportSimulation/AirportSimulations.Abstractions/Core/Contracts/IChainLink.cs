@@ -5,7 +5,6 @@
     public interface IChainLink
     {
         NodeState Status { get; set; }
-        ChainLink SuccessSuccessor { get; set; }
-        ChainLink Predecessor { get; set; }
+        ChainLink NextLink { get; set; }
     }
 }
