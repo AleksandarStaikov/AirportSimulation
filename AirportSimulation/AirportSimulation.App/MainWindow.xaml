@@ -63,7 +63,7 @@
         <!--#region ADMINISTRATION -->
         
         <Border Background="#7395AE" BorderBrush="#7395AE" BorderThickness="3 0 3 2">
-            <Grid x:Name="GridAdministration" Background="WhiteSmoke" Height="513" Visibility="Hidden">
+            <Grid x:Name="GridAdministration" Background="WhiteSmoke" Height="513" Visibility="Visible">
 
 
                 <Grid.ColumnDefinitions>
@@ -278,6 +278,8 @@
             </Grid>
         </Border>-->
         <!--#endregion-->
+        
+        
         
         
     </StackPanel>
