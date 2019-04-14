@@ -15,7 +15,7 @@
 
         public override void Process(Baggage baggage)
         {
-            //TODO : Implment
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "CheckIn processing");
         }
     }
 }

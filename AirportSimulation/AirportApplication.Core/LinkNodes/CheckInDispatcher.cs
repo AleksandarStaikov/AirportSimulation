@@ -19,11 +19,25 @@
         {
             _queuedCustomers = new Queue<Baggage>();
             //TODO : Implement dispatching rate
-            //TODO : Extract _timer.Start() in another method -> perhaps in ChainLink
             _timer = new Timer();
             _timer.Interval = 1000;
             _timer.Elapsed += (sender, e) => DispatchBaggage();
-            _timer.Start();
+        }
+
+        public void Start()
+        {
+            if (!_timer.Enabled)
+            {
+                _timer.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            if (_timer.Enabled)
+            {
+                _timer.Stop();
+            }
         }
 
         public override void PassBaggage(Baggage baggage)
@@ -44,7 +58,6 @@
             {
                 if (NextLink.OnStatusChangedToFree == null)
                 {
-                    //SuccessSuccessor.OnStatusChangedToFree -= PassQueuedBaggage;
                     NextLink.OnStatusChangedToFree += PassQueuedBaggage;
                 }
                 _queuedCustomers.Enqueue(baggage);

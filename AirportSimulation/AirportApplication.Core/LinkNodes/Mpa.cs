@@ -14,6 +14,7 @@
 
         public override void Process(Baggage baggage)
         {
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "MPA processing");
             //TODO : Implment
         }
     }
