@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AirportSimulation.Abstractions.Core.ChainLink">
+    <Position X="3.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAEAAQAAAAAAAAAAEAAAAAAACAAAAAEAAAAAAA=</HashCode>
+      <FileName>Core\ChainLink.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AirportSimulation.Abstractions.Core.ProcessingNode">
+    <Position X="1.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAgAAAAAAAABAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Core\ProcessingNode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AirportSimulation.Abstractions.Core.TransportingNode">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAACgAAIQwAAAAAAgAAIAAAgAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Core\TransportingNode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
