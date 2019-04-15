@@ -7,14 +7,15 @@
 
     public class CheckInDesk : ProcessingNode, IProcessingNode
     {
+        public delegate CheckInDesk Factory();
+
         public CheckInDesk(ITimerService timerService) : base(timerService)
         {
         }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
-            //TODO : Implment
-            SuccessSuccessor.PassBaggage(_currentBaggage);
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "CheckIn processing");
         }
     }
 }

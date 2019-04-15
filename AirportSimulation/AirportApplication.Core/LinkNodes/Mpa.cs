@@ -7,14 +7,15 @@
 
     public class Mpa : ProcessingNode, IProcessingNode
     {
+        public delegate Mpa Factory();
         public Mpa(ITimerService timerService) : base(timerService)
         {
         }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "MPA processing");
             //TODO : Implment
-            SuccessSuccessor.PassBaggage(baggage);
         }
     }
 }

@@ -1,25 +1,52 @@
 ﻿namespace AirportSimulation.Core
 {
+    using Abstractions.Contracts;
+    using Common.Models;
+    using Contracts;
+    using Contracts.Services;
     using LinkNodes;
-    using Services;
 
-    public class Engine
+    public class Engine : IEngine
     {
+        private readonly IChainLinkFactory _chainLinkFactory;
+        private readonly ITimerService _timerService;
+
+        public Engine(IChainLinkFactory chainLinkFactory, ITimerService timerService)
+        {
+            _chainLinkFactory = chainLinkFactory;
+            _timerService = timerService;
+        }
+
         public void Run()
         {
-            var aa = new Aa(new TimerService());
-            var mpaToAa = new Conveyor(10, new TimerService());
-            var mpa = new Mpa(new TimerService());
-            var pscToMpa = new Conveyor(10, new TimerService());
-            var psc = new Psc(new TimerService());
-            var checkInToPsc = new Conveyor(10, new TimerService());
-            var checkIn = new CheckInDesk(new TimerService());
+            var checkIn = _chainLinkFactory.CreateCheckInDesk();
+            var checkInToPsc = _chainLinkFactory.CreateConveyor(10);
+            var psc = _chainLinkFactory.CreatePsc();
+            var PscToMpa = _chainLinkFactory.CreateConveyor(10);
+            var mpa = _chainLinkFactory.CreateMpa();
+            var MpaToAA = _chainLinkFactory.CreateConveyor(10);
+            var aa = _chainLinkFactory.CreateAa();
 
-            checkIn.SuccessSuccessor = checkInToPsc;
-            checkInToPsc.SuccessSuccessor = psc;
-            psc.SuccessSuccessor = pscToMpa;
-            pscToMpa.SuccessSuccessor = mpa;
-            mpa.SuccessSuccessor = mpaToAa;
+
+            //EndNodes
+            var checkInDispatcher = _chainLinkFactory.CreateCheckInDispatcher();
+            var bagCollector = _chainLinkFactory.CreateBagCollector();
+
+            //Linking
+            checkInDispatcher.NextLink = checkIn;
+            checkIn.NextLink = checkInToPsc;
+            checkInToPsc.NextLink = psc;
+            psc.NextLink = PscToMpa;
+            PscToMpa.NextLink = mpa;
+            mpa.NextLink = MpaToAA;
+            MpaToAA.NextLink = aa;
+            aa.NextLink = bagCollector;
+
+            _timerService.RunNewTimer(2);
+            checkInToPsc.Start();
+            PscToMpa.Start();
+            MpaToAA.Start();
+            checkInDispatcher.DispatchBaggage();
         }
     }
 }

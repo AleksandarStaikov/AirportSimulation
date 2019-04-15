@@ -4,8 +4,6 @@
 
     public interface IProcessingNode
     {
-        void Process();
-
-        void ProcessInternal(Baggage baggage);
+        void Process(Baggage baggage);
     }
 }

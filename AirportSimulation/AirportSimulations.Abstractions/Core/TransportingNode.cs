@@ -8,6 +8,8 @@
 
     public abstract class TransportingNode : ChainLink, ITransportingNode
     {
+        private const int ConveyorDefaultMovingTime = 1000;
+
         protected int _lastIndex => _length - 1;
         protected readonly int _length;
         protected Baggage[] _conveyorBelt;
@@ -20,10 +22,26 @@
         {
             _length = length;
             _conveyorBelt = new Baggage[_length];
+
             _timer = new Timer();
             _timer.Elapsed += (sender, args) => Move();
-            _timer.Interval = 1000;
-            _timer.Start();
+        }
+
+        public void Start()
+        {
+            _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
+            if (!_timer.Enabled)
+            {
+                _timer.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            if (_timer.Enabled)
+            {
+                _timer.Stop();
+            }
         }
 
         #region Inserting
@@ -39,7 +57,6 @@
                 .IsEqualTo(true, "Trying to add to {0}, while full.");
 
             Status = NodeState.Busy;
-
             _conveyorBelt[0] = baggage;
         }
 
@@ -54,7 +71,7 @@
 
         private bool CanMove()
         {
-            if (SuccessSuccessor.Status == NodeState.Free)
+            if (NextLink.Status == NodeState.Free)
             {
                 return true;
             }
@@ -75,7 +92,7 @@
             {
                 if (LastBaggage != null)
                 {
-                    SuccessSuccessor.PassBaggage(LastBaggage);
+                    NextLink.PassBaggage(LastBaggage);
                     _conveyorBelt[_lastIndex] = null;
                 }
 
@@ -85,13 +102,13 @@
                     _conveyorBelt[i - 1] = null;
                 }
 
-                SuccessSuccessor.OnStatusChangedToFree -= Move;
+                NextLink.OnStatusChangedToFree -= Move;
                 Status = NodeState.Free;
                 _timer.Start();
             }
             else
             {
-                SuccessSuccessor.OnStatusChangedToFree += Move;
+                NextLink.OnStatusChangedToFree += Move;
             }
         }
     }
