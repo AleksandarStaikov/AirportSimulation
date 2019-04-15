@@ -21,13 +21,15 @@
             _timerService.RunNewTimer(1);
             //var aa = _chainLinkFactory.CreateAa();
             //var mpaToAa = _chainLinkFactory.CreateConveyor(10);
-            //var mpa = _chainLinkFactory.CreateMpa();
             //var asc = _chainLinkFactory.CreateAsc();
             //var pscToMpa = _chainLinkFactory.CreateConveyor(10);
            // var pscToAsc = _chainLinkFactory.CreateConveyor(10);
             //var psc = _chainLinkFactory.CreatePsc();
             var checkInToPsc = _chainLinkFactory.CreateConveyor(10);
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
+            var mpa = _chainLinkFactory.CreateMpa();
+            var bsu = _chainLinkFactory.CreateBsu();
+            var mpaToAa = _chainLinkFactory.CreateConveyor(10);
 
             //EndNodes
             var checkInDispatcher = _chainLinkFactory.CreateCheckInDispatcher();
@@ -36,7 +38,9 @@
             //Linking
             checkInDispatcher.NextLink = checkIn;
             checkIn.NextLink = checkInToPsc;
-            checkInToPsc.NextLink = bagCollector;
+            checkInToPsc.NextLink = mpa;
+            mpa.NextLink.Add(bsu);
+            mpa.NextLink.Add(mpaToAa);
             //checkInToPsc.SuccessSuccessor = psc;
             //psc.SuccessSuccessor = pscToMpa;
             //psc.FailSuccessor = pscToAsc;

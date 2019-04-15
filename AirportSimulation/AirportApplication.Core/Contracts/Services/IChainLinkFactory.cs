@@ -8,6 +8,7 @@
         Psc CreatePsc();
         Asc CreateAsc();
         Mpa CreateMpa();
+        BSU CreateBsu();
         Aa CreateAa();
         Conveyor CreateConveyor(int length);
         CheckInDispatcher CreateCheckInDispatcher();

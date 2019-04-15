@@ -7,9 +7,12 @@
     using System;
     using System.Collections.Generic;
     using System.Timers;
+    using 
 
     public class BSU : ChainLink, IChainLink
     {
+        public delegate BSU Factory();
+
         internal Dictionary<string, BaggageBucket> _baggageBuckets;
         internal Conveyor _inboundConveyor;
         internal Conveyor _outboundConveyor;
@@ -62,12 +65,25 @@
 
         public override void PassBaggage(Baggage baggage)
         {
-            //TODO Implement check if inbound full
-            addBaggageBucket(baggage);
-            _inboundConveyor.PassBaggage(baggage);
+            Action statusIsFree = () =>
+            {
+                this.PassBaggage(baggage);
+            };
+
+            this.Status = NodeState.Busy;
+            if (_inboundConveyor.Status == NodeState.Free)
+            {
+                addBaggageBucket(baggage);
+                _inboundConveyor.PassBaggage(baggage);
+                this.Status = NodeState.Free;
+                _inboundConveyor.OnStatusChangedToFree -= statusIsFree;
+
+            }
+            else
+            {
+                _inboundConveyor.OnStatusChangedToFree += statusIsFree;
+            }
         }
-
-
 
         #region BaggageBucket
 

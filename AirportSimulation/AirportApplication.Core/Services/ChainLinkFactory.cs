@@ -10,6 +10,7 @@
         private readonly Psc.Factory _pscFactory;
         private readonly Asc.Factory _ascFactory;
         private readonly Mpa.Factory _mpaFactory;
+        private readonly BSU.Factory _bsuFactory;
         private readonly Aa.Factory _aaFactory;
         private readonly Conveyor.Factory _conveyorFactory;
         private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
@@ -19,6 +20,7 @@
             Psc.Factory pscFactory,
             Asc.Factory ascFactory,
             Mpa.Factory mpaFactory,
+            BSU.Factory bsuFactory,
             Aa.Factory aaFactory,
             Conveyor.Factory conveyorFactory,
             CheckInDispatcher.Factory checkInDispatcherFactory,
@@ -28,6 +30,7 @@
             _pscFactory = pscFactory;
             _ascFactory = ascFactory;
             _mpaFactory = mpaFactory;
+            _bsuFactory = bsuFactory;
             _aaFactory = aaFactory;
             _conveyorFactory = conveyorFactory;
             _checkInDispatcherFactory = checkInDispatcherFactory;
@@ -52,6 +55,11 @@
         public Mpa CreateMpa()
         {
             return _mpaFactory();
+        }
+
+        public BSU CreateBsu()
+        {
+            return _bsuFactory();
         }
 
         public Aa CreateAa()

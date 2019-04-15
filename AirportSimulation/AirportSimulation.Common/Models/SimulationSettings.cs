@@ -1,4 +1,6 @@
-﻿namespace AirportSimulation.Common.Models
+﻿using System;
+
+namespace AirportSimulation.Common.Models
 {
     public class SimulationSettings
     {
@@ -33,5 +35,7 @@
         public int PickUpRate { get; set; }
 
         public int DropOffRate { get; set; }
+
+        public readonly TimeSpan TimeToFlight = new TimeSpan(0, 3, 0);
     }
 }
