@@ -8,20 +8,22 @@
 
     public class Asc : ProcessingNode, IProcessingNode
     {
+        public delegate Asc Factory();
+
         public Asc(ITimerService timerService) : base(timerService)
         {
         }
 
         public ChainLink FailSuccessor { get; set; }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
             //TODO : Implment
             var checkSuccessful = new Random().Next(0,1) > 0;
 
             if (checkSuccessful)
             {
-                SuccessSuccessor.PassBaggage(baggage);
+                NextLink.PassBaggage(baggage);
             }
             else
             {

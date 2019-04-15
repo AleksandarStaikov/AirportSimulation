@@ -8,25 +8,18 @@
 
     public class Psc : ProcessingNode, IProcessingNode
     {
+        public delegate Psc Factory();
+
         public Psc(ITimerService timerService) : base(timerService)
         {
         }
 
         public ChainLink FailSuccessor { get; set; }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
-            //TODO : Implment
-            bool CheckSuccessfull = new Random().Next(0, 1) > 0 ? true : false;
-
-            if (CheckSuccessfull)
-            {
-                SuccessSuccessor.PassBaggage(baggage);
-            }
-            else
-            {
-                FailSuccessor.PassBaggage(baggage);
-            }
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "Primary security check processing");
+            //TODO : Implment 
         }
 
     }

@@ -5,16 +5,18 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
 
-    class Aa : ProcessingNode, IProcessingNode
+    public class Aa : ProcessingNode, IProcessingNode
     {
+        public delegate Aa Factory();
+
         public Aa(ITimerService timerService) : base(timerService)
         {
         }
 
-        public override void ProcessInternal(Baggage baggage)
+        public override void Process(Baggage baggage)
         {
             //TODO : Implment
-            throw new System.NotImplementedException();
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "AA processing");
         }
     }
 }

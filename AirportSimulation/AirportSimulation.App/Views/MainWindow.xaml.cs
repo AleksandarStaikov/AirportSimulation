@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 
 namespace AirportSimulation.App.Views
 {
-    using System.Windows;
 
     public partial class MainWindow : Window
     {

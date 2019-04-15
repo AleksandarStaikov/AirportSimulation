@@ -270,7 +270,6 @@
                 Grid.Column="1"
                 Grid.Row="0" 
                 ChartTitle="Time Elapsed"
-                CharSubTitle="{x:Null}"
                 Palette="{Binding Path=SelectedPalette.Value}"
                 FontSize="{Binding Path=SelectedFontSize}"
                 ToolTipFormat="{Binding Path=ToolTipFormat}"

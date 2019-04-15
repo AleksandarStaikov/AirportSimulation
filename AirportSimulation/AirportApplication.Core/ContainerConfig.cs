@@ -3,10 +3,13 @@
     using Autofac;       
     using System.Reflection;
     using System;
+    using Abstractions.Core.Contracts;
     using Autofac.Core;
     using ImportExport;
     using NLog;
     using AirportSimulation.Core.Contracts;
+    using Contracts.Services;
+    using LinkNodes;
     using Services;
 
     public static class ContainerConfig
@@ -23,16 +26,34 @@
             // TODO: Register types according to their life time scope. 
             // This is just an example:
             var assembly = Assembly.GetCallingAssembly();
-            builder.RegisterAssemblyTypes(assembly)
-                   .Where(t => typeof(IService).IsAssignableFrom(t))
-                   .SingleInstance()
-                   .AsImplementedInterfaces();
 
             #region LocalRegistrations
+
+            builder.RegisterAssemblyTypes(assembly)
+                .Where(t => typeof(IService).IsAssignableFrom(t))
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<Engine>()
+                .InstancePerDependency()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ChainLinkFactory>()
+                .SingleInstance()
+                .AsImplementedInterfaces();
 
             builder.RegisterType<TimerService>()
                 .SingleInstance()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<CheckInDesk>();
+            builder.RegisterType<Psc>();
+            builder.RegisterType<Asc>();
+            builder.RegisterType<Mpa>();
+            builder.RegisterType<Aa>();
+            builder.RegisterType<Conveyor>();
+            builder.RegisterType<CheckInDispatcher>();
+            builder.RegisterType<BagCollector>();
 
             #endregion
 
