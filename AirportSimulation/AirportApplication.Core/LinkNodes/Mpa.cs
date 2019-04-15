@@ -13,11 +13,13 @@
 
         private Conveyor _mainConveyor;
         private Sorter _sorter;
-        public new List<ChainLink> NextLink { get; set; }
+        public new List<ChainLink> NextLink { get; set; } //[0] is BSU, [1] is MpaToAA
 
         public Mpa(ITimerService timerService) : base(timerService)
         {
+            NextLink = new List<ChainLink>();
             _mainConveyor = new Conveyor(10, timerService);
+            _mainConveyor.Start();
             _sorter = new Sorter(timerService, this);
 
             _mainConveyor.NextLink = _sorter;
@@ -63,6 +65,7 @@
                 //{
                 //    this.NextLink = _mpa.NextLink[1];
                 //}
+                this.NextLink = _mpa.NextLink[0];
             }
         }
     }

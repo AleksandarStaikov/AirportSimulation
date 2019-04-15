@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using System;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
@@ -20,23 +21,20 @@
         {
             Status = NodeState.Busy;
             _currentBaggage = baggage;
+            if (baggage.TransportationStartTime != null)
+            {
+                var transportationStart = baggage.TransportationStartTime ?? 0;
+                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
+                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Received in " + this.GetType().Name + " Transportation time");
+                baggage.TransportationStartTime = null;
+            }
             ProcessInternal(baggage);
         }
         
         public void ProcessInternal(Baggage baggage)
         {
-            //TODO : //Refactor time management
-            baggage.Log.Add(new BaggageEventLog()
-            {
-                EventTime = _timerService.GetTimeSinceSimulationStart(),
-                Description = $"Starting processing at {this.GetType().ToString()}"
-            });
             Process(baggage);
-            baggage.Log.Add(new BaggageEventLog()
-            {
-                EventTime = _timerService.GetTimeSinceSimulationStart(),
-                Description = $"Finished processing at {this.GetType().ToString()}"
-            });
+            _currentBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
             Move();
         }
 
@@ -44,12 +42,11 @@
         {
             if (NextLink.Status == NodeState.Free && this._currentBaggage != null)
             {
-                //TODO: Add Helper {Drop-Off, Discard, Airplane, PickUp, BSU} Nodes
                 NextLink.OnStatusChangedToFree -= Move;
                 NextLink.PassBaggage(_currentBaggage);
                 Status = NodeState.Free;
             }
-            else
+            else if (NextLink.Status != NodeState.Free)
             {
                 NextLink.OnStatusChangedToFree += Move;
             }

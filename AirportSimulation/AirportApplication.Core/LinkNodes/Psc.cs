@@ -18,18 +18,8 @@
 
         public override void Process(Baggage baggage)
         {
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "Primary security check processing");
             //TODO : Implment 
-            //TODO : Check FailSuccessor state somewhere bruh
-            bool CheckSuccessfull = new Random().Next(0, 2) > 0 ? true : false;
-
-            if (true)
-            {
-                NextLink.PassBaggage(baggage);
-            }
-            else
-            {
-                //FailSuccessor.PassBaggage(baggage);
-            }
         }
 
     }

@@ -1,6 +1,5 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
-    using System.Runtime.CompilerServices;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
@@ -9,6 +8,8 @@
 
     public abstract class TransportingNode : ChainLink, ITransportingNode
     {
+        private const int ConveyorDefaultMovingTime = 1000;
+
         protected int _lastIndex => _length - 1;
         protected readonly int _length;
         protected Baggage[] _conveyorBelt;
@@ -21,10 +22,26 @@
         {
             _length = length;
             _conveyorBelt = new Baggage[_length];
+
             _timer = new Timer();
             _timer.Elapsed += (sender, args) => Move();
-            _timer.Interval = 1000;
-            _timer.Start();
+        }
+
+        public void Start()
+        {
+            _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
+            if (!_timer.Enabled)
+            {
+                _timer.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            if (_timer.Enabled)
+            {
+                _timer.Stop();
+            }
         }
 
         #region Inserting
@@ -34,18 +51,12 @@
             return _conveyorBelt[0] == null;
         }
 
-        //[MethodImpl(MethodImplOptions.Synchronized)]
         public void Add(Baggage baggage)
         {
             Condition.Requires(CanAdd(), "conveyor")
                 .IsEqualTo(true, "Trying to add to {0}, while full.");
 
             Status = NodeState.Busy;
-            baggage.Log.Add(new BaggageEventLog()
-            {
-               EventTime = TimerService.GetTimeSinceSimulationStart(),
-               Description = $"Baggage got onto conveyor {this.GetType()}"
-            });
             _conveyorBelt[0] = baggage;
         }
 
@@ -81,11 +92,6 @@
             {
                 if (LastBaggage != null)
                 {
-                    LastBaggage.Log.Add(new BaggageEventLog()
-                    {
-                        EventTime = TimerService.GetTimeSinceSimulationStart(),
-                        Description = $"Baggage went off of conveyor {this.GetType()}"
-                    });
                     NextLink.PassBaggage(LastBaggage);
                     _conveyorBelt[_lastIndex] = null;
                 }

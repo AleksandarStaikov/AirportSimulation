@@ -4,6 +4,7 @@
     using Common.Models;
     using Contracts;
     using Contracts.Services;
+    using LinkNodes;
 
     public class Engine : IEngine
     {
@@ -18,18 +19,15 @@
 
         public void Run()
         {
-            _timerService.RunNewTimer(1);
-            //var aa = _chainLinkFactory.CreateAa();
-            //var mpaToAa = _chainLinkFactory.CreateConveyor(10);
-            //var asc = _chainLinkFactory.CreateAsc();
-            //var pscToMpa = _chainLinkFactory.CreateConveyor(10);
-           // var pscToAsc = _chainLinkFactory.CreateConveyor(10);
-            //var psc = _chainLinkFactory.CreatePsc();
-            var checkInToPsc = _chainLinkFactory.CreateConveyor(10);
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
+            var checkInToPsc = _chainLinkFactory.CreateConveyor(10);
+            var psc = _chainLinkFactory.CreatePsc();
+            var PscToMpa = _chainLinkFactory.CreateConveyor(10);
             var mpa = _chainLinkFactory.CreateMpa();
             var bsu = _chainLinkFactory.CreateBsu();
-            var mpaToAa = _chainLinkFactory.CreateConveyor(10);
+            var MpaToAA = _chainLinkFactory.CreateConveyor(10);
+            var aa = _chainLinkFactory.CreateAa();
+
 
             //EndNodes
             var checkInDispatcher = _chainLinkFactory.CreateCheckInDispatcher();
@@ -38,19 +36,21 @@
             //Linking
             checkInDispatcher.NextLink = checkIn;
             checkIn.NextLink = checkInToPsc;
-            checkInToPsc.NextLink = mpa;
+            checkInToPsc.NextLink = psc;
+            psc.NextLink = PscToMpa;
+            PscToMpa.NextLink = mpa;
             mpa.NextLink.Add(bsu);
-            mpa.NextLink.Add(mpaToAa);
-            //checkInToPsc.SuccessSuccessor = psc;
-            //psc.SuccessSuccessor = pscToMpa;
-            //psc.FailSuccessor = pscToAsc;
-            //pscToMpa.SuccessSuccessor = mpa;
-            //pscToAsc.SuccessSuccessor = asc;
-            //mpa.SuccessSuccessor = mpaToAa;
-            //mpaToAa.SuccessSuccessor = aa;
+            mpa.NextLink.Add(MpaToAA);
+            bsu.NextLink = mpa;
+            MpaToAA.NextLink = aa;
+            aa.NextLink = bagCollector;
 
-//asc.SuccessSuccessor = bagCollector;
-            //aa.SuccessSuccessor = bagCollector;
+            _timerService.RunNewTimer(2);
+            checkInToPsc.Start();
+            PscToMpa.Start();
+            MpaToAA.Start();
+            bsu.Start();
+            checkInDispatcher.DispatchBaggage();
         }
     }
 }

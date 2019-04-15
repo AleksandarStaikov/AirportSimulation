@@ -50,6 +50,7 @@
             builder.RegisterType<Psc>();
             builder.RegisterType<Asc>();
             builder.RegisterType<Mpa>();
+            builder.RegisterType<BSU>();
             builder.RegisterType<Aa>();
             builder.RegisterType<Conveyor>();
             builder.RegisterType<CheckInDispatcher>();

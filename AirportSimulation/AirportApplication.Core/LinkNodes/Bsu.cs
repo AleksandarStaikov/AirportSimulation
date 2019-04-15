@@ -7,8 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Timers;
-    using 
-
+    
     public class BSU : ChainLink, IChainLink
     {
         public delegate BSU Factory();
@@ -17,16 +16,26 @@
         internal Conveyor _inboundConveyor;
         internal Conveyor _outboundConveyor;
         internal RobotBSU _robot;
+        
 
         public BSU(ITimerService timerService) : base(timerService)
         {
             _baggageBuckets = new Dictionary<string, BaggageBucket>();
             _inboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
             _outboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
-            _robot = new RobotBSU(timerService, this); //Lenght is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
+            _robot = new RobotBSU(timerService, this); //Length is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
+        }
 
+        public void Start()
+        {
             _inboundConveyor.NextLink = _robot;
             _outboundConveyor.NextLink = this.NextLink;
+            _robot.NextLink = _outboundConveyor;
+
+
+            _inboundConveyor.Start();
+            _outboundConveyor.Start();
+            _robot.Start();
         }
 
         private void addBaggageBucket(Baggage baggage)
@@ -65,6 +74,13 @@
 
         public override void PassBaggage(Baggage baggage)
         {
+            if (baggage.TransportationStartTime != null)
+            {
+                var transportationStart = baggage.TransportationStartTime ?? 0;
+                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
+                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Received in " + this.GetType().Name + " Transportation time");
+                baggage.TransportationStartTime = null;
+            }
             Action statusIsFree = () =>
             {
                 this.PassBaggage(baggage);
@@ -90,6 +106,8 @@
         //Possibly externalize this class. No need so far, as only used in BSU
         internal class BaggageBucket : ChainLink, IChainLink
         {
+            private const int DEFAULT_MOVING_TIME = 1000;
+
             private string _flightNumber;
             private int _timeToFLight;
             private Timer _timer;
@@ -108,7 +126,7 @@
             //TODO Implement timeToProcess()
             private void timeToProcess()
             {
-                _timer = new Timer(1000);
+                _timer = new Timer(DEFAULT_MOVING_TIME / TimerService.SimulationMultiplier);
                 _timer.Elapsed += (sender,args) => passToRobot();
             }
 
@@ -142,7 +160,6 @@
         internal class RobotBSU : TransportingNode, ITransportingNode
         {
             private BSU _bsu;
-            RobotStatus status = RobotStatus.Inbound;
 
             public RobotBSU(ITimerService timerService, BSU bsu) : base(1, timerService)
             {
@@ -151,7 +168,7 @@
 
             public override void PassBaggage(Baggage baggage)
             {
-                this.PassBaggage(baggage, RobotStatus.Inbound);
+                this.PassBaggage(baggage, RobotStatus.Outbound);
             }
 
             public void PassBaggage(Baggage baggage, RobotStatus status)

@@ -16,7 +16,7 @@
         public override void Process(Baggage baggage)
         {
             //TODO : Implment
-            //throw new System.NotImplementedException();
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "AA processing");
         }
     }
 }

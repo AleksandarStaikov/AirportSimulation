@@ -4,7 +4,7 @@
 
     public class BaggageEventLog
     {
-        public TimeSpan EventTime { get; set; }
+        public TimeSpan TimeElapsed { get; set; }
 
         public string Description { get; set; }
     }
