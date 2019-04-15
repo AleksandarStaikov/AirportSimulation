@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:MetroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:local="clr-namespace:AirportSimulation.App.Views"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+
     <Grid>
+
         <TabControl>
             <TabItem Selector.IsSelected="True">
                 <TabItem.Header>
@@ -108,23 +111,23 @@
 
                         <StackPanel Grid.Column="0" Grid.Row="1" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of Check-In Desks"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                            <TextBox Name="nrCheckInDescs" VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="2" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of PSC Conveyors"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="nrPSCConveyrs"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="3" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="PSC Fail Percentage"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="failPercent"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="4" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of AA"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="nrOfAA"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="0" Grid.Row="5" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from Check-In to MPA"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="distCheckInMPA"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
 
 
@@ -135,23 +138,23 @@
 
                         <StackPanel Grid.Column="1" Grid.Row="1" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to AA"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="distMPAtAA"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="2" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to Pick-Up Area"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="distMPAtoPick"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="3" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Drop-off Rate"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="dropOffRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="4" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Pick-up Rate"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="pickUpRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="5" Margin="25 20">
                             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Load/Unload Rate AA"/></TextBlock>
-                            <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
+                        <TextBox Name="loadUnlRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
                         </StackPanel>
 
 
@@ -167,8 +170,8 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <RadioButton Grid.Column="0" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" IsChecked="True" Margin="0 10" Content="x kg"/>
-                                <RadioButton Grid.Column="1" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" Content="y kg"/>
+                                <RadioButton Name="smallTypeBag" Grid.Column="0" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" IsChecked="True" Margin="0 10" Content="10 kg"/>
+                            <RadioButton Name="bigTypeBag" Grid.Column="1" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" Content="20 kg"/>
                             </Grid>
                         </StackPanel>
 
@@ -180,9 +183,9 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <TextBox Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Number of Employees" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
+                                <TextBox Name="nrASCEmpl" Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Number of Employees" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
 
-                                <TextBox Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
+                                <TextBox Name="emplProcessTime" Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
                             </Grid>
                         </StackPanel>
 
@@ -195,11 +198,11 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <TextBox Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Number of Employees" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
+                                <TextBox Name="capacityBagStor" Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Capacity" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
 
-                                <TextBox Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
+                                <TextBox Name="servRbs" Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Serving Robots" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
 
-                                <TextBox Grid.Row="2" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
+                                <TextBox Name="procTimeBagStor" Grid.Row="2" VerticalAlignment="Center" Foreground="#5D5C61" Text="Processing time x bag" FontSize="11" GotFocus="TextBox_GotFocus" Margin="0 5"/>
 
                             </Grid>
                         </StackPanel>
@@ -211,11 +214,11 @@
 
 
                         <StackPanel Grid.Column="3" Grid.Row="1" Margin="25 20">
-                            <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                         FontSize="12">
-                                _SAVE &amp; EXPORT
-                            </Button>
-                        </StackPanel>
+                        <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
+                         FontSize="12" Click="ButtonSave_Click">
+                            _SAVE &amp; EXPORT
+                        </Button>
+                    </StackPanel>
 
                         <StackPanel Grid.Column="3" Grid.Row="2" Margin="25 20">
                             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
@@ -261,6 +264,34 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Grid.Row="0" Margin="25 20">
+                        <MetroChart:ClusteredColumnChart  
+                Grid.Column="1"
+                Grid.Row="0" 
+                ChartTitle="Time Elapsed"
+                CharSubTitle="{x:Null}"
+                Palette="{Binding Path=SelectedPalette.Value}"
+                FontSize="{Binding Path=SelectedFontSize}"
+                ToolTipFormat="{Binding Path=ToolTipFormat}"
+                Foreground="{Binding Path=Foreground}" 
+                Background="{Binding Path=Background}"                 
+                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                            <MetroChart:ClusteredColumnChart.Series>
+                                <MetroChart:ChartSeries
+                        SeriesTitle="X"
+                        DisplayMember="Category"
+                        ValueMember="Number"
+                        ItemsSource="{Binding Path=X}" />
+                                <MetroChart:ChartSeries
+                        SeriesTitle="Y"
+                        DisplayMember="Category"
+                        ValueMember="Number"
+                        ItemsSource="{Binding Path=Y}" />
+                            </MetroChart:ClusteredColumnChart.Series>
+                        </MetroChart:ClusteredColumnChart>
+                    </Grid>
+                    
                     
                 </Grid>
                 

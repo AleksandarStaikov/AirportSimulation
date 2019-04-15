@@ -30,5 +30,12 @@ namespace AirportSimulation.App.Views
             tb.Text = string.Empty;
             tb.GotFocus -= TextBox_GotFocus;
         }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
     }
+
+
 }
