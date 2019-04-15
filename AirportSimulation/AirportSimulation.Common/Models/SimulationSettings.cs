@@ -1,7 +1,10 @@
 ﻿namespace AirportSimulation.Common.Models
-{
-    public class SimulationSettings
+
+{ 
+
+   class SimulationSettings : BaseVM
     {
+
         public int CheckInStationsCount { get; set; }
 
         public int PscConveyorsCount { get; set; }

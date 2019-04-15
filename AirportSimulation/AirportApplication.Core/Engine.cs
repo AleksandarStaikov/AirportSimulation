@@ -38,6 +38,7 @@
             checkInToPsc.NextLink = psc;
             psc.NextLink = PscToMpa;
             PscToMpa.NextLink = mpa;
+
             mpa.NextLink = MpaToAA;
             MpaToAA.NextLink = aa;
             aa.NextLink = bagCollector;
