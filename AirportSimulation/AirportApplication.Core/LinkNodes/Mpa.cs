@@ -57,15 +57,14 @@
 
             public override void Process(Baggage baggage)
             {
-                //if(baggage.TimeToFlight - TimerService.GetTimeSinceSimulationStart() > new TimeSpan(0, 1, 0))
-                //{
-                //    this.NextLink = _mpa.NextLink[0];
-                //}
-                //else
-                //{
-                //    this.NextLink = _mpa.NextLink[1];
-                //}
-                this.NextLink = _mpa.NextLink[0];
+                if ((SimulationSettings.TimeToFlight.TotalMilliseconds - TimerService.GetTimeSinceSimulationStart().TotalMilliseconds * TimerService.SimulationMultiplier) > 30000)
+                {
+                    this.NextLink = _mpa.NextLink[0];
+                }
+                else
+                {
+                    this.NextLink = _mpa.NextLink[1];
+                }
             }
         }
     }

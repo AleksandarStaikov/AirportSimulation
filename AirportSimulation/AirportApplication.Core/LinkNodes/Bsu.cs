@@ -42,12 +42,13 @@
         {
             if(!_baggageBuckets.ContainsKey(baggage.FlightNumber))
             {
-                BaggageBucket newBucket = new BaggageBucket(baggage.FlightNumber, 1, this.TimerService);
+                double interval = SimulationSettings.TimeToFlight.Duration().TotalMilliseconds - TimerService.GetTimeSinceSimulationStart().TotalMilliseconds;
+                BaggageBucket newBucket = new BaggageBucket(baggage.FlightNumber, interval / TimerService.SimulationMultiplier, this.TimerService);
                 newBucket.NextLink = _robot;
                 newBucket.OnTimeToProcess += passToRobot;
                 newBucket.OnBucketEmpty += (string flightNumber) => _baggageBuckets.Remove(flightNumber);
 
-                _baggageBuckets.Add(baggage.FlightNumber, newBucket); //TODO Variable timeToFlight
+                _baggageBuckets.Add(baggage.FlightNumber, newBucket);
             }
             
         }
@@ -62,10 +63,6 @@
 
                 current.NextLink.OnStatusChangedToFree -= current.passToRobot;
             }
-            else if(current.Baggages.Count == 0)
-            {
-                current.OnBucketEmpty(flightNumber);
-            }
             else
             {
                 current.NextLink.OnStatusChangedToFree += current.passToRobot;
@@ -74,13 +71,6 @@
 
         public override void PassBaggage(Baggage baggage)
         {
-            if (baggage.TransportationStartTime != null)
-            {
-                var transportationStart = baggage.TransportationStartTime ?? 0;
-                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
-                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Received in " + this.GetType().Name + " Transportation time");
-                baggage.TransportationStartTime = null;
-            }
             Action statusIsFree = () =>
             {
                 this.PassBaggage(baggage);
@@ -109,36 +99,53 @@
             private const int DEFAULT_MOVING_TIME = 1000;
 
             private string _flightNumber;
-            private int _timeToFLight;
-            private Timer _timer;
+            private Timer _timeToFLight;
+            private Timer _timer; //dispense timer !RENAME!
             public Stack<Baggage> Baggages { get; set; }
 
             public Action<string> OnTimeToProcess { get; set; }
             public Action<string> OnBucketEmpty { get; set; }
 
-            public BaggageBucket(string flightNumber, int time, ITimerService timerService) : base(timerService)
+            public BaggageBucket(string flightNumber, double timeToFlight, ITimerService timerService) : base(timerService)
             {
-                this._flightNumber = flightNumber;
-                this._timeToFLight = time;
-                this.Baggages = new Stack<Baggage>();
+                _flightNumber = flightNumber;
+                _timeToFLight = new Timer(timeToFlight);
+                Baggages = new Stack<Baggage>();
+
+                _timeToFLight.Elapsed += (sender, args) => timeToProcess();
+                
             }
 
             //TODO Implement timeToProcess()
             private void timeToProcess()
             {
+                _timeToFLight.Stop();
                 _timer = new Timer(DEFAULT_MOVING_TIME / TimerService.SimulationMultiplier);
                 _timer.Elapsed += (sender,args) => passToRobot();
+                _timer.Start();
             }
 
             internal void passToRobot()
             {
                 _timer.Stop();
                 OnTimeToProcess(_flightNumber);
-                _timer.Start();
+                if (Baggages.Count != 0)
+                {
+                    _timer.Start();
+                }
+                else
+                {
+                    OnBucketEmpty(_flightNumber);
+                }
+                
             }
 
             private void add(Baggage baggage)
             {
+                if(!_timeToFLight.Enabled)
+                {
+                    _timeToFLight.Start();
+                }
                 this.Baggages.Push(baggage);
             }
 
@@ -168,7 +175,7 @@
 
             public override void PassBaggage(Baggage baggage)
             {
-                this.PassBaggage(baggage, RobotStatus.Outbound);
+                this.PassBaggage(baggage, RobotStatus.Inbound);
             }
 
             public void PassBaggage(Baggage baggage, RobotStatus status)

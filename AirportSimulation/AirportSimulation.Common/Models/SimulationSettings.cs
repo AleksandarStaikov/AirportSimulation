@@ -36,6 +36,6 @@ namespace AirportSimulation.Common.Models
 
         public int DropOffRate { get; set; }
 
-        public readonly TimeSpan TimeToFlight = new TimeSpan(0, 3, 0);
+        public static TimeSpan TimeToFlight = new TimeSpan(0, 2, 0);
     }
 }

@@ -45,7 +45,7 @@
             MpaToAA.NextLink = aa;
             aa.NextLink = bagCollector;
 
-            _timerService.RunNewTimer(2);
+            _timerService.RunNewTimer(8);
             checkInToPsc.Start();
             PscToMpa.Start();
             MpaToAA.Start();
