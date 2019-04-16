@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
     using System;
+    using System.Diagnostics;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
@@ -25,7 +26,7 @@
             {
                 var transportationStart = baggage.TransportationStartTime ?? 0;
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
-                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Transportation time");
+                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Received in " + this.GetType().Name + " Transportation time");
                 baggage.TransportationStartTime = null;
             }
             ProcessInternal(baggage);

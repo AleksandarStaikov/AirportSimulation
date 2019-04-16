@@ -24,6 +24,7 @@
             var psc = _chainLinkFactory.CreatePsc();
             var PscToMpa = _chainLinkFactory.CreateConveyor(10);
             var mpa = _chainLinkFactory.CreateMpa();
+            var bsu = _chainLinkFactory.CreateBsu();
             var MpaToAA = _chainLinkFactory.CreateConveyor(10);
             var aa = _chainLinkFactory.CreateAa();
 
@@ -38,15 +39,17 @@
             checkInToPsc.NextLink = psc;
             psc.NextLink = PscToMpa;
             PscToMpa.NextLink = mpa;
-
-            mpa.NextLink = MpaToAA;
+            mpa.NextLink.Add(bsu);
+            mpa.NextLink.Add(MpaToAA);
+            bsu.NextLink = mpa;
             MpaToAA.NextLink = aa;
             aa.NextLink = bagCollector;
 
-            _timerService.RunNewTimer(2);
+            _timerService.RunNewTimer(8);
             checkInToPsc.Start();
             PscToMpa.Start();
             MpaToAA.Start();
+            bsu.Start();
             checkInDispatcher.DispatchBaggage();
         }
     }

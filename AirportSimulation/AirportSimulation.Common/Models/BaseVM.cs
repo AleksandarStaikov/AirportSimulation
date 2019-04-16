@@ -2,7 +2,7 @@
 
 namespace AirportSimulation.Common.Models
 {
-    class BaseVM : INotifyPropertyChanged
+    public class BaseVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

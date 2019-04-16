@@ -1,8 +1,10 @@
-﻿namespace AirportSimulation.Common.Models
+﻿using System;
+
+namespace AirportSimulation.Common.Models
 
 { 
 
-   class SimulationSettings : BaseVM
+   public class SimulationSettings : BaseVM
     {
 
         public int CheckInStationsCount { get; set; }
@@ -36,5 +38,7 @@
         public int PickUpRate { get; set; }
 
         public int DropOffRate { get; set; }
+
+        public static TimeSpan TimeToFlight = new TimeSpan(0, 2, 0);
     }
 }
