@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public interface ISimulationSettings
+    public interface ISimulationSettings : IFlightManagement
     {
         List<CheckInSettings> CheckIns { get; set; }
         int CheckInStationsCount { get; }
@@ -19,8 +19,6 @@
         List<ConveyorSettings> ConveyorSettingsPscToMpa { get; set; }
         List<ConveyorSettings> ConveyorSettingsAscToMpu { get; set; }
         List<ConveyorSettings> ConveyorSettingsPscToAsc { get; set; }
-        List<Flight> Flights { get; set; }
-        int Multiplier { get; set; }
     }
     public interface IMultiplierSettings
     {

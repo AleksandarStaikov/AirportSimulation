@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Contracts;
 
-    public class SimulationSettings : BaseVM, IMultiplierSettings, IFlightManagement, ISimulationSettings
+    public class SimulationSettings : BaseVM, ISimulationSettings
     {
         public SimulationSettings()
         {
@@ -21,7 +21,7 @@
             ConveyorSettingsAscToMpu = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsPscToAsc = new List<ConveyorSettings>() { new ConveyorSettings() };
 
-            Flights = new List<Flight>() { new Flight() };
+            Flights = new List<Flight>() { new Flight(){} };
         }
 
         #region NodesInfos

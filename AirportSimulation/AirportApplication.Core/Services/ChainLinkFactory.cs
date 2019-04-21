@@ -4,6 +4,7 @@
     using Contracts.Services;
     using LinkNodes;
     using System.Data;
+    using Common.Models.Contracts;
 
     public class ChainLinkFactory : IChainLinkFactory
     {

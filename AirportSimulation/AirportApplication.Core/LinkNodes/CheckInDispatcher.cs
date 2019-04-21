@@ -18,7 +18,7 @@
         private List<Timer> _flightDropOffTimers;
         private List<CheckInDesk> _checkIns;
 
-        public delegate CheckInDispatcher Factory(IFlightManagement flightManagementSe);
+        public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings);
 
         public CheckInDispatcher(ISimulationSettings simulationSettings, ITimerService timerService) : base(timerService)
         {
