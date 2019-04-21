@@ -1,9 +1,11 @@
 ﻿namespace AirportSimulation.Core
 {
+    using System.Collections.Generic;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
     using Contracts.Services;
+    using LinkNodes;
 
     public class Engine : IEngine
     {
@@ -36,7 +38,7 @@
             var bagCollector = _chainLinkFactory.CreateBagCollector();
 
             //Linking
-            checkInDispatcher.NextLink = checkIn;
+            checkInDispatcher.SetCheckIns(new List<CheckInDesk>() { checkIn });
             checkIn.NextLink = checkInToPsc;
             checkInToPsc.NextLink = psc;
             psc.NextLink = PscToMpa;
@@ -53,7 +55,7 @@
             PscToMpa.Start();
             MpaToAA.Start();
             bsu.Start();
-            checkInDispatcher.DispatchBaggage();
+            checkInDispatcher.Start();
         }
     }
 }

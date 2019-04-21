@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Contracts;
 
-    public class SimulationSettings : BaseVM, IMultiplierSettings, IFlightManagement
+    public class SimulationSettings : BaseVM, IMultiplierSettings, IFlightManagement, ISimulationSettings
     {
         public SimulationSettings()
         {

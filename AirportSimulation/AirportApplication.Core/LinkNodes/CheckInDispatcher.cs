@@ -3,42 +3,63 @@
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Common.Models;
+    using Common.Models.Contracts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Timers;
-    using Common.Models.Contracts;
+    using CuttingEdge.Conditions;
 
     public class CheckInDispatcher : ChainLink
     {
-        private readonly IFlightManagement _simulationSettings;
-        private readonly Queue<Baggage> _queuedCustomers;
-        private readonly Timer _timer;
+        private readonly ISimulationSettings _simulationSettings;
+
+        private List<Queue<Baggage>> _checkInQueues;
+        private List<Timer> _flightDropOffTimers;
+        private List<CheckInDesk> _checkIns;
 
         public delegate CheckInDispatcher Factory(IFlightManagement flightManagementSe);
 
-        public CheckInDispatcher(IFlightManagement simulationSettings, ITimerService timerService) : base(timerService)
+        public CheckInDispatcher(ISimulationSettings simulationSettings, ITimerService timerService) : base(timerService)
         {
             _simulationSettings = simulationSettings;
-            _queuedCustomers = new Queue<Baggage>();
+            SetUpQueues();
+            SetUpTimers();
 
-            _timer = new Timer();
-            SetUpTimer();
+        }
+
+        public void SetCheckIns(List<CheckInDesk> checkIns)
+        {
+            Condition
+                .Requires(checkIns.Count)
+                .IsEqualTo(_simulationSettings.CheckInStationsCount);
+
+            _checkIns = checkIns;
         }
 
         public void Start()
         {
-            if (!_timer.Enabled)
+            Condition
+                .Requires(_checkIns.Count)
+                .IsEqualTo(_simulationSettings.CheckInStationsCount);
+
+            foreach (var timer in _flightDropOffTimers)
             {
-                _timer.Start();
+                if (!timer.Enabled)
+                {
+                    timer.Start();
+                }
             }
         }
 
         public void Stop()
         {
-            if (_timer.Enabled)
+            foreach (var timer in _flightDropOffTimers)
             {
-                _timer.Stop();
+                if (timer.Enabled)
+                {
+                    timer.Stop();
+                }
             }
         }
 
@@ -47,49 +68,94 @@
             throw new NotImplementedException();
         }
 
-        public void DispatchBaggage()
+        public void DispatchBaggage(Flight flight)
         {
             //TODO : Baggage Factory ?
             var baggage = new Baggage()
             {
-                FlightNumber = _simulationSettings.Flights[0].FlightNumber,
+                FlightNumber = flight.FlightNumber,
             };
 
-            if (NextLink.Status == NodeState.Free)
+            var index = FindMostSuitableCheckInIndex();
+            var checkIn = _checkIns[index];
+            var queue = _checkInQueues[index];
+
+            if (checkIn.Status == NodeState.Free)
             {
-                NextLink.PassBaggage(baggage);
+                checkIn.PassBaggage(baggage);
             }
             else
             {
-                if (NextLink.OnStatusChangedToFree == null)
+                if (checkIn.OnStatusChangedToFree == null)
                 {
-                    NextLink.OnStatusChangedToFree += PassQueuedBaggage;
+                    checkIn.OnStatusChangedToFree += () => { PassQueuedBaggage(index); };
                 }
-                _queuedCustomers.Enqueue(baggage);
+                queue.Enqueue(baggage);
             }
         }
 
-        public void PassQueuedBaggage()
+        private void PassQueuedBaggage(int index)
         {
-            if (!_queuedCustomers.Any() || NextLink.Status != NodeState.Free)
+            var queue = _checkInQueues[index];
+            var checkIn = _checkIns[index];
+
+            if (!queue.Any() || checkIn.Status != NodeState.Free)
             {
                 return;
             }
 
-            NextLink.PassBaggage(_queuedCustomers.Dequeue());
+            checkIn.PassBaggage(queue.Dequeue());
         }
 
-        private void SetUpTimer()
+        private int FindMostSuitableCheckInIndex()
         {
-            _timer.Interval = CalculateDispatchRate();
-            _timer.Elapsed += (sender, e) => DispatchBaggage();
+            var chosen = 0;
+            var shortestQueue = _checkInQueues[0].Count;
+
+            foreach (var i in Enumerable.Range(0, _checkIns.Count))
+            {
+                if (_checkIns[i].Status == NodeState.Free)
+                {
+                    return i;
+                }
+
+                if (_checkInQueues[i].Count < shortestQueue)
+                {
+                    shortestQueue = _checkInQueues[i].Count;
+                    chosen = i;
+                }
+
+            }
+
+            return chosen;
         }
 
-        private int CalculateDispatchRate()
+        private int CalculateDispatchRate(Flight flight)
         {
-            var firstFlight = _simulationSettings.Flights[0];
-            var dispatchRate = TimerService.ConvertTimeSpanToMilliseconds(firstFlight.TimeToFlightSinceSimulationStart) / firstFlight.BaggageCount;
+            var dispatchRate = TimerService.ConvertTimeSpanToMilliseconds(flight.TimeToFlightSinceSimulationStart) / flight.BaggageCount;
             return dispatchRate / _simulationSettings.Multiplier;
+        }
+
+        private void SetUpQueues()
+        {
+            _checkInQueues = new List<Queue<Baggage>>();
+
+            foreach (var checkIn in _simulationSettings.CheckIns)
+            {
+                _checkInQueues.Add(new Queue<Baggage>());
+            }
+        }
+
+        private void SetUpTimers()
+        {
+            _flightDropOffTimers = new List<Timer>();
+            foreach (var flight in _simulationSettings.Flights)
+            {
+                var timer = new Timer { Interval = CalculateDispatchRate(flight) };
+                timer.Elapsed += (sender, e) => DispatchBaggage(flight);
+
+                _flightDropOffTimers.Add(timer);
+            }
         }
     }
 }
