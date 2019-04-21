@@ -7,21 +7,23 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Timers;
+    using Common.Models.Contracts;
 
     public class CheckInDispatcher : ChainLink
     {
+        private readonly IFlightManagement _simulationSettings;
         private readonly Queue<Baggage> _queuedCustomers;
         private readonly Timer _timer;
 
-        public delegate CheckInDispatcher Factory();
+        public delegate CheckInDispatcher Factory(IFlightManagement flightManagementSe);
 
-        public CheckInDispatcher(ITimerService timerService) : base(timerService)
+        public CheckInDispatcher(IFlightManagement simulationSettings, ITimerService timerService) : base(timerService)
         {
+            _simulationSettings = simulationSettings;
             _queuedCustomers = new Queue<Baggage>();
-            //TODO : Implement dispatching rate
+
             _timer = new Timer();
-            _timer.Interval = 1000;
-            _timer.Elapsed += (sender, e) => DispatchBaggage();
+            SetUpTimer();
         }
 
         public void Start()
@@ -48,7 +50,10 @@
         public void DispatchBaggage()
         {
             //TODO : Baggage Factory ?
-            var baggage = new Baggage();
+            var baggage = new Baggage()
+            {
+                FlightNumber = _simulationSettings.Flights[0].FlightNumber,
+            };
 
             if (NextLink.Status == NodeState.Free)
             {
@@ -72,6 +77,19 @@
             }
 
             NextLink.PassBaggage(_queuedCustomers.Dequeue());
+        }
+
+        private void SetUpTimer()
+        {
+            _timer.Interval = CalculateDispatchRate();
+            _timer.Elapsed += (sender, e) => DispatchBaggage();
+        }
+
+        private int CalculateDispatchRate()
+        {
+            var firstFlight = _simulationSettings.Flights[0];
+            var dispatchRate = TimerService.ConvertTimeSpanToMilliseconds(firstFlight.TimeToFlightSinceSimulationStart) / firstFlight.BaggageCount;
+            return dispatchRate / _simulationSettings.Multiplier;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿namespace AirportSimulation.Core.Services
 {
-    using Contracts;
+    using Common.Models;
     using Contracts.Services;
     using LinkNodes;
+    using System.Data;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
@@ -15,6 +16,8 @@
         private readonly Conveyor.Factory _conveyorFactory;
         private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
         private readonly BagCollector.Factory _bagCollectorFactory;
+
+        private SimulationSettings _simulationSettings;
 
         public ChainLinkFactory(CheckInDesk.Factory checkInDeskFactory,
             Psc.Factory pscFactory,
@@ -39,36 +42,43 @@
 
         public CheckInDesk CreateCheckInDesk()
         {
+            ValidateSettings();
             return _checkInDeskFactory();
         }
 
         public Psc CreatePsc()
         {
+            ValidateSettings();
             return _pscFactory();
         }
 
         public Asc CreateAsc()
         {
+            ValidateSettings();
             return _ascFactory();
         }
 
         public Mpa CreateMpa()
         {
+            ValidateSettings();
             return _mpaFactory();
         }
 
         public BSU CreateBsu()
         {
+            ValidateSettings();
             return _bsuFactory();
         }
 
         public Aa CreateAa()
         {
+            ValidateSettings();
             return _aaFactory();
         }
 
         public Conveyor CreateConveyor(int length)
         {
+            ValidateSettings();
             return _conveyorFactory(length);
         }
 
@@ -76,14 +86,29 @@
 
         public CheckInDispatcher CreateCheckInDispatcher()
         {
-            return _checkInDispatcherFactory();
+            ValidateSettings();
+            return _checkInDispatcherFactory(_simulationSettings);
         }
 
         public BagCollector CreateBagCollector()
         {
+            ValidateSettings();
             return _bagCollectorFactory();
         }
 
         #endregion
+
+        public void SetSettings(SimulationSettings settings)
+        {
+            this._simulationSettings = settings;
+        }
+
+        private void ValidateSettings()
+        {
+            if (_simulationSettings == null)
+            {
+                throw new NoNullAllowedException("The simulation settings have not been set");
+            }
+        }
     }
 }

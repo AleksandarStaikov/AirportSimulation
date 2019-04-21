@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core.Contracts.Services
 {
+    using Common.Models;
     using LinkNodes;
 
     public interface IChainLinkFactory
@@ -13,5 +14,7 @@
         Conveyor CreateConveyor(int length);
         CheckInDispatcher CreateCheckInDispatcher();
         BagCollector CreateBagCollector();
+
+        void SetSettings(SimulationSettings settings);
     }
 }

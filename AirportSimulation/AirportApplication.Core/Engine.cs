@@ -4,7 +4,6 @@
     using Common.Models;
     using Contracts;
     using Contracts.Services;
-    using LinkNodes;
 
     public class Engine : IEngine
     {
@@ -17,15 +16,18 @@
             _timerService = timerService;
         }
 
-        public void Run()
+        public void Run(SimulationSettings settings)
         {
+            _chainLinkFactory.SetSettings(settings);
+            _timerService.SetSettings(settings);
+
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
-            var checkInToPsc = _chainLinkFactory.CreateConveyor(10);
+            var checkInToPsc = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
             var psc = _chainLinkFactory.CreatePsc();
-            var PscToMpa = _chainLinkFactory.CreateConveyor(10);
+            var PscToMpa = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
             var mpa = _chainLinkFactory.CreateMpa();
             var bsu = _chainLinkFactory.CreateBsu();
-            var MpaToAA = _chainLinkFactory.CreateConveyor(10);
+            var MpaToAA = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
             var aa = _chainLinkFactory.CreateAa();
 
 
@@ -45,7 +47,8 @@
             MpaToAA.NextLink = aa;
             aa.NextLink = bagCollector;
 
-            _timerService.RunNewTimer(8);
+            //Starting
+            _timerService.RunNewTimer();
             checkInToPsc.Start();
             PscToMpa.Start();
             MpaToAA.Start();

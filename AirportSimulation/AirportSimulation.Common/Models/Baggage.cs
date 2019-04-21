@@ -7,8 +7,8 @@
     {
         public Baggage()
         {
-            this.Log = new List<BaggageEventLog>();
-            this.FlightNumber = "AD4324SC";
+            Log = new List<BaggageEventLog>();
+            FlightNumber = "AD4324SC";
         }
 
         public BaggageType BaggageType { get; set; }

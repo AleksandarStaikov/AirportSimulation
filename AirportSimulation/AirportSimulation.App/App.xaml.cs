@@ -6,6 +6,7 @@
     using System;
     using System.Windows;
     using Autofac;
+    using Common.Models;
     using Core.Contracts;
 
     public partial class App : Application
@@ -25,8 +26,8 @@
                     container.BeginLifetimeScope();
 
                     var engine = container.Resolve<IEngine>();
-
-                    engine.Run();
+                    //Pass the settings here
+                    engine.Run(new SimulationSettings());
                 }
                     
                 InitializeMainWindow();
