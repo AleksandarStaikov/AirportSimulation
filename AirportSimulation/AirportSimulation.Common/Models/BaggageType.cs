@@ -3,7 +3,7 @@
     public enum BaggageType
     {
         Small = 10,
-        Big = 20,
+        Regular = 20,
         Large = 30
     }
 }
