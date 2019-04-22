@@ -66,7 +66,7 @@
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
     }
-
+    
     public class PscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
@@ -96,7 +96,7 @@
     public class ConveyorSettings
     {
         public int Length { get; set; } = 10;
-
+        
         public int SpeedInMilliseconds { get; set; } = 1000;
     }
 }
