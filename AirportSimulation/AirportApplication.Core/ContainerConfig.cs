@@ -1,14 +1,12 @@
 ﻿namespace AirportSimulation.Core
 {
-    using Autofac;       
+    using Autofac;
     using System.Reflection;
     using System;
-    using Abstractions.Core.Contracts;
     using Autofac.Core;
     using ImportExport;
     using NLog;
     using AirportSimulation.Core.Contracts;
-    using Contracts.Services;
     using LinkNodes;
     using Services;
 

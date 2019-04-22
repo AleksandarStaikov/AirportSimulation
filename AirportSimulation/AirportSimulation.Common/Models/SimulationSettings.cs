@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Contracts;
 
-    public class SimulationSettings : BaseVM, ISimulationSettings
+    public class SimulationSettings : ISimulationSettings
     {
         public SimulationSettings()
         {
@@ -70,13 +70,14 @@
     public class PscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
+
         public int PscInvalidationPercentage { get; set; }
     }
 
     public class AscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
-        public int AscStaffCount { get; set; } = 2;
+        public int AscStaffCount { get; set; }
         public int AscInvalidationPercentage { get; set; }
     }
 

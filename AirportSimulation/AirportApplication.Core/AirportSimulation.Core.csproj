@@ -84,6 +84,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ConveyorBeltViewModel.cs" />
     <Compile Include="ViewModels\ConveyorSlotViewModel.cs" />
+    <Compile Include="ViewModels\SimulationSettingsContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
