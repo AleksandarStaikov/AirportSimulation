@@ -8,15 +8,9 @@
         xmlns:local="clr-namespace:AirportSimulation.App"
         xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
-        mc:Ignorable="d"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
-    <Window.Resources>
-        <localRes:EnumToBoolConverter x:Key="EBConverter" />
-    </Window.Resources>
+        mc:Ignorable="d">
     <Grid>
-
-        <TabControl>
+        <TabControl x:Name="MainTabMenu">
             <TabItem Selector.IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -26,67 +20,16 @@
                 <Grid>
                     <views:AdminView x:Name="AdminView"/>
                 </Grid>
-               
             </TabItem>
-            <TabItem >
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Simulation" />
                     </StackPanel>
                 </TabItem.Header>
-                <Grid x:Name="GridSimulation" Background="WhiteSmoke">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <Canvas Grid.Row="0" Margin="150 100">
-                        <Rectangle Width="400" Height="50"
-                   Stroke="Black" StrokeThickness="10">
-                            <Rectangle.Fill>
-                                <DrawingBrush Viewport="0 0 0.04 1" TileMode="FlipY" 
-                              Viewbox="0 0 10 1" >
-                                    <DrawingBrush.Drawing>
-                                        <GeometryDrawing Brush="Gray">
-                                            <GeometryDrawing.Geometry>
-                                                <RectangleGeometry Rect="111 111 10 100" />
-                                            </GeometryDrawing.Geometry>
-                                        </GeometryDrawing>
-                                    </DrawingBrush.Drawing>
-                                    <DrawingBrush.Transform>
-                                        <TranslateTransform x:Name="xform" />
-                                    </DrawingBrush.Transform>
-                                </DrawingBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                    </Canvas>
-
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="0">
-                            <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                    FontSize="12" Content="_START" Margin="79,0"/>
-                        </Grid>
-
-                        <Grid Grid.Column="1">
-                            <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                    FontSize="12" Content="_PAUSE" Margin="79,0"/>
-                        </Grid>
-
-                        <Grid Grid.Column="2">
-                            <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                    FontSize="12" Content="_STOP" Margin="79,0"/>
-                        </Grid>
-
-                    </Grid>
-
+                <Grid>
+                    <views:SimulationView x:Name="SimulationView"/>
                 </Grid>
-
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -104,7 +47,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <Grid Grid.Column="0" Grid.Row="0" Margin="25 20">
                         <MetroChart:ClusteredColumnChart  
                 Grid.Column="1"
@@ -130,26 +72,8 @@
                             </MetroChart:ClusteredColumnChart.Series>
                         </MetroChart:ClusteredColumnChart>
                     </Grid>
-                    
-                    
                 </Grid>
-                
             </TabItem>
         </TabControl>
     </Grid>
-
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="Page.Loaded">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation
-                            Storyboard.TargetName="xform"
-                            Storyboard.TargetProperty="X"
-                            From="0" To="1000"
-                            Duration="00:00:10"
-                            RepeatBehavior="Forever" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </Window.Triggers>
 </Window>
