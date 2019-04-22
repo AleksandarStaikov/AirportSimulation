@@ -151,25 +151,19 @@
         <StackPanel Grid.Column="3" Grid.Row="1" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
                          FontSize="12" Command="{Binding CollectSettings}">
-                _SAVE
+                RUN
             </Button>
         </StackPanel>
         <StackPanel Grid.Column="3" Grid.Row="2" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
                          FontSize="12">
-                _LOAD
+                EXPORT VARIABLES
             </Button>
         </StackPanel>
         <StackPanel Grid.Column="3" Grid.Row="3" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
                          FontSize="12">
-                _EXPORT
-            </Button>
-        </StackPanel>
-        <StackPanel Grid.Column="3" Grid.Row="4" Margin="25 20">
-            <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                         FontSize="12">
-                _IMPORT
+                IMPORT VARIABLES
             </Button>
         </StackPanel>
     </Grid>
