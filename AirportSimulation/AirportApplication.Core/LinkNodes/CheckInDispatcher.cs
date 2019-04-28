@@ -12,6 +12,9 @@
 
     public class CheckInDispatcher : ChainLink
     {
+        //                                                          sec * milliseconds  
+        private const int DefaultMaxPreflightBufferInMilliseconds = 600 * 1000;
+
         private readonly ISimulationSettings _simulationSettings;
 
         private List<Queue<Baggage>> _checkInQueues;
@@ -70,7 +73,7 @@
 
         public void DispatchBaggage(Flight flight)
         {
-            //TODO : Baggage Factory ?
+            flight.DespatchedBaggagesCount++;
             var baggage = new Baggage()
             {
                 FlightNumber = flight.FlightNumber,
@@ -132,10 +135,20 @@
 
         private int CalculateDispatchRate(Flight flight)
         {
-            var dispatchRate = TimerService.ConvertTimeSpanToMilliseconds(flight.TimeToFlightSinceSimulationStart) / flight.BaggageCount;
-            return dispatchRate / _simulationSettings.Multiplier;
-        }
+            var millisecondsBetweenStartAndFlight = TimerService.ConvertTimeSpanToMilliseconds(flight.TimeToFlightSinceSimulationStart);
+            var calculatedPreflightBuffer = millisecondsBetweenStartAndFlight * 0.1;
 
+            if (calculatedPreflightBuffer > DefaultMaxPreflightBufferInMilliseconds)
+            {
+                calculatedPreflightBuffer = DefaultMaxPreflightBufferInMilliseconds;
+            }
+
+            var timeUntillFlightWithoutPreflightBuffer = millisecondsBetweenStartAndFlight - calculatedPreflightBuffer;
+
+            var dispatchRate = timeUntillFlightWithoutPreflightBuffer / flight.BaggageCount;
+            return (int)dispatchRate / _simulationSettings.Multiplier;
+        }
+        
         private void SetUpQueues()
         {
             _checkInQueues = new List<Queue<Baggage>>();
@@ -152,7 +165,17 @@
             foreach (var flight in _simulationSettings.Flights)
             {
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
-                timer.Elapsed += (sender, e) => DispatchBaggage(flight);
+                timer.Elapsed += (sender, e) => 
+                {
+                    if (flight.BaggageCount < flight.DespatchedBaggagesCount)
+                    {
+                        DispatchBaggage(flight);
+                    }
+                    else
+                    {
+                        timer.Stop();
+                    }
+                };
 
                 _flightDropOffTimers.Add(timer);
             }
