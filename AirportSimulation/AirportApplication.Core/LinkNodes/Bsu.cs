@@ -13,43 +13,43 @@
         public delegate BSU Factory();
 
         internal Dictionary<string, BaggageBucket> _baggageBuckets;
-        internal Conveyor _inboundConveyor;
-        internal Conveyor _outboundConveyor;
-        internal RobotBSU _robot;
+        internal OneToOneConveyor _inboundConveyor;
+        internal OneToOneConveyor _outboundConveyor;
+        //internal RobotBSU _robot;
         
 
         public BSU(ITimerService timerService) : base(timerService)
         {
             _baggageBuckets = new Dictionary<string, BaggageBucket>();
-            _inboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
-            _outboundConveyor = new Conveyor(5, timerService); //TODO variable conveyor capacity
-            _robot = new RobotBSU(timerService, this); //Length is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
+            _inboundConveyor = new OneToOneConveyor(5, timerService); //TODO variable conveyor capacity
+            _outboundConveyor = new OneToOneConveyor(5, timerService); //TODO variable conveyor capacity
+            //_robot = new RobotBSU(timerService, this); //Length is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
         }
 
         public void Start()
         {
-            _inboundConveyor.NextLink = _robot;
-            _outboundConveyor.NextLink = this.NextLink;
-            _robot.NextLink = _outboundConveyor;
+            //_inboundConveyor.NextLink = _robot;
+            //_outboundConveyor.NextLink = this.NextLink;
+            //_robot.NextLink = _outboundConveyor;
 
 
             _inboundConveyor.Start();
             _outboundConveyor.Start();
-            _robot.Start();
+            //_robot.Start();
         }
 
         private void addBaggageBucket(Baggage baggage)
         {
-            if(!_baggageBuckets.ContainsKey(baggage.FlightNumber))
-            {
-                double interval = SimulationSettings.TimeToFlight.Duration().TotalMilliseconds - TimerService.GetTimeSinceSimulationStart().TotalMilliseconds;
-                BaggageBucket newBucket = new BaggageBucket(baggage.FlightNumber, interval / TimerService.SimulationMultiplier, this.TimerService);
-                newBucket.NextLink = _robot;
-                newBucket.OnTimeToProcess += passToRobot;
-                newBucket.OnBucketEmpty += (string flightNumber) => _baggageBuckets.Remove(flightNumber);
+            //if(!_baggageBuckets.ContainsKey(baggage.FlightNumber))
+            //{
+            //    double interval = SimulationSettings.TimeToFlight.Duration().TotalMilliseconds - TimerService.GetTimeSinceSimulationStart().TotalMilliseconds;
+            //    BaggageBucket newBucket = new BaggageBucket(baggage.FlightNumber, interval / TimerService.SimulationMultiplier, this.TimerService);
+            //    newBucket.NextLink = _robot;
+            //    newBucket.OnTimeToProcess += passToRobot;
+            //    newBucket.OnBucketEmpty += (string flightNumber) => _baggageBuckets.Remove(flightNumber);
 
-                _baggageBuckets.Add(baggage.FlightNumber, newBucket);
-            }
+            //    _baggageBuckets.Add(baggage.FlightNumber, newBucket);
+            //}
             
         }
 
@@ -57,16 +57,16 @@
         {
             BaggageBucket current = _baggageBuckets[flightNumber];
 
-            if(current.NextLink.Status == NodeState.Free && current.Baggages.Count > 0)
-            {
-                ((RobotBSU)current.NextLink).PassBaggage(current.Baggages.Pop(), RobotStatus.Outbound);
+            //if(current.NextLink.Status == NodeState.Free && current.Baggages.Count > 0)
+            //{
+            //    ((RobotBSU)current.NextLink).PassBaggage(current.Baggages.Pop(), RobotStatus.Outbound);
 
-                current.NextLink.OnStatusChangedToFree -= current.passToRobot;
-            }
-            else
-            {
-                current.NextLink.OnStatusChangedToFree += current.passToRobot;
-            }
+            //    current.NextLink.OnStatusChangedToFree -= current.passToRobot;
+            //}
+            //else
+            //{
+            //    current.NextLink.OnStatusChangedToFree += current.passToRobot;
+            //}
         }
 
         public override void PassBaggage(Baggage baggage)
@@ -164,36 +164,36 @@
             Outbound = 1
         }
 
-        internal class RobotBSU : TransportingNode, ITransportingNode
-        {
-            private BSU _bsu;
+        //internal class RobotBSU : TransportingNode, ITransportingNode
+        //{
+        //    private BSU _bsu;
 
-            public RobotBSU(ITimerService timerService, BSU bsu) : base(1, timerService)
-            {
-                this._bsu = bsu;
-            }
+        //    public RobotBSU(ITimerService timerService, BSU bsu) : base(1, timerService)
+        //    {
+        //        this._bsu = bsu;
+        //    }
 
-            public override void PassBaggage(Baggage baggage)
-            {
-                this.PassBaggage(baggage, RobotStatus.Inbound);
-            }
+        //    public override void PassBaggage(Baggage baggage)
+        //    {
+        //        this.PassBaggage(baggage, RobotStatus.Inbound);
+        //    }
 
-            public void PassBaggage(Baggage baggage, RobotStatus status)
-            {
-                if(status == RobotStatus.Outbound)
-                {
-                    this.NextLink = _bsu._outboundConveyor;
-                }
-                else
-                {
-                    this.NextLink = _bsu._baggageBuckets[baggage.FlightNumber];
-                }
+        //    public void PassBaggage(Baggage baggage, RobotStatus status)
+        //    {
+        //        if(status == RobotStatus.Outbound)
+        //        {
+        //            this.NextLink = _bsu._outboundConveyor;
+        //        }
+        //        else
+        //        {
+        //            this.NextLink = _bsu._baggageBuckets[baggage.FlightNumber];
+        //        }
                 
 
-                base.PassBaggage(baggage);
+        //        base.PassBaggage(baggage);
                 
-            }
-        }
+        //    }
+        //}
         #endregion
     }
 

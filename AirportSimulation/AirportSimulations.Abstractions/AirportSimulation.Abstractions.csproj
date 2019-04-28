@@ -54,6 +54,8 @@
     <Compile Include="Contracts\ITimerService.cs" />
     <Compile Include="Core\ChainLink.cs" />
     <Compile Include="Core\Contracts\IChainLink.cs" />
+    <Compile Include="Core\Contracts\IConveyourConnector.cs" />
+    <Compile Include="Core\Contracts\IManyToOneConveyor.cs" />
     <Compile Include="Core\Contracts\IProcessingNode.cs" />
     <Compile Include="Core\Contracts\ITransportingNode.cs" />
     <Compile Include="Core\ProcessingNode.cs" />

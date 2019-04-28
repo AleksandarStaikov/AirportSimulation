@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
+    using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -17,6 +18,11 @@
         {
             //TODO : Implment
             baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "AA processing");
+        }
+
+        protected override void DetermineNextLink()
+        {
+            NextLink = _allSuccessors.First();
         }
     }
 }

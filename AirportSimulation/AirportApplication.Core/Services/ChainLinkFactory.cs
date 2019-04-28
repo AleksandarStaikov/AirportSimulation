@@ -4,7 +4,6 @@
     using Contracts.Services;
     using LinkNodes;
     using System.Data;
-    using Common.Models.Contracts;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
@@ -14,7 +13,9 @@
         private readonly Mpa.Factory _mpaFactory;
         private readonly BSU.Factory _bsuFactory;
         private readonly Aa.Factory _aaFactory;
-        private readonly Conveyor.Factory _conveyorFactory;
+        private readonly OneToOneConveyor.Factory _oneToOneConveyorFactory;
+        private readonly ManyToOneConveyor.Factory _manyToOneConveyorFactory;
+        private readonly ConveyorConnector.Factory _conveyorConnectorFactory;
         private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
         private readonly BagCollector.Factory _bagCollectorFactory;
 
@@ -26,7 +27,9 @@
             Mpa.Factory mpaFactory,
             BSU.Factory bsuFactory,
             Aa.Factory aaFactory,
-            Conveyor.Factory conveyorFactory,
+            OneToOneConveyor.Factory oneToOneConveyorFactory,
+            ManyToOneConveyor.Factory manyToOneConveyorFactory,
+            ConveyorConnector.Factory conveyorConnectorFactory,
             CheckInDispatcher.Factory checkInDispatcherFactory,
             BagCollector.Factory bagCollectorFactory)
         {
@@ -36,7 +39,9 @@
             _mpaFactory = mpaFactory;
             _bsuFactory = bsuFactory;
             _aaFactory = aaFactory;
-            _conveyorFactory = conveyorFactory;
+            _oneToOneConveyorFactory = oneToOneConveyorFactory;
+            _manyToOneConveyorFactory = manyToOneConveyorFactory;
+            _conveyorConnectorFactory = conveyorConnectorFactory;
             _checkInDispatcherFactory = checkInDispatcherFactory;
             _bagCollectorFactory = bagCollectorFactory;
         }
@@ -77,10 +82,22 @@
             return _aaFactory();
         }
 
-        public Conveyor CreateConveyor(int length)
+        public OneToOneConveyor CreateOneToOneConveyor(int length)
         {
             ValidateSettings();
-            return _conveyorFactory(length);
+            return _oneToOneConveyorFactory(length);
+        }
+
+        public ManyToOneConveyor CreateManyToOneConveyor(int length)
+        {
+            ValidateSettings();
+            return _manyToOneConveyorFactory(length);
+        }
+
+        public ConveyorConnector CreateConveyorConnector()
+        {
+            ValidateSettings();
+            return _conveyorConnectorFactory();
         }
 
         #region EndNodes

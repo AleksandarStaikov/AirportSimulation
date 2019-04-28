@@ -18,6 +18,8 @@
 
         protected ITimerService TimerService => _timerService;
 
+        public string Destination { get; set; }
+
         public NodeState Status
         {
             get => _status;
@@ -30,10 +32,8 @@
                 }
             }
         }
-
-        public string Name => this.GetType().Name;
-
-        public ChainLink NextLink { get; set; }
+        
+        protected IChainLink NextLink { get; set; }
 
         public Action OnStatusChangedToFree { get; set; }
 

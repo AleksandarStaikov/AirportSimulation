@@ -50,7 +50,7 @@
             builder.RegisterType<Mpa>();
             builder.RegisterType<BSU>();
             builder.RegisterType<Aa>();
-            builder.RegisterType<Conveyor>();
+            builder.RegisterType<OneToOneConveyor>();
             builder.RegisterType<CheckInDispatcher>();
             builder.RegisterType<BagCollector>();
 

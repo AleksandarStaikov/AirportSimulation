@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
     using System;
+    using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -14,8 +15,6 @@
         {
         }
 
-        public ChainLink FailSuccessor { get; set; }
-
         public override void Process(Baggage baggage)
         {
             //TODO : Implment
@@ -23,13 +22,19 @@
 
             if (checkSuccessful)
             {
-                NextLink.PassBaggage(baggage);
+                //TODO: Global constants ?
+                _currentBaggage.Destination = "Mpa";
             }
             else
             {
-                FailSuccessor.PassBaggage(baggage);
+                //TODO: Global constants ?
+                _currentBaggage.Destination = "BagCollector";
             }
         }
 
+        protected override void DetermineNextLink()
+        {
+            NextLink = _allSuccessors.FirstOrDefault(x => x.Destination == _currentBaggage.Destination);
+        }
     }
 }

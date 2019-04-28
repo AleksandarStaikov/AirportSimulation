@@ -76,7 +76,7 @@
             flight.DespatchedBaggagesCount++;
             var baggage = new Baggage()
             {
-                FlightNumber = flight.FlightNumber,
+                Flight = flight,
             };
 
             var index = FindMostSuitableCheckInIndex();

@@ -17,15 +17,7 @@
 
         public Baggage LastBaggage => _conveyorBelt[_lastIndex];
 
-        protected TransportingNode(int length, ITimerService timerService) 
-            : base(timerService)
-        {
-            _length = length;
-            _conveyorBelt = new Baggage[_length];
-
-            _timer = new Timer();
-            _timer.Elapsed += (sender, args) => Move();
-        }
+        public IChainLink NextNode { get; set; }
 
         public void Start()
         {
@@ -44,32 +36,36 @@
             }
         }
 
-        #region Inserting
-
-        public bool CanAdd()
+        protected TransportingNode(int length, ITimerService timerService) 
+            : base(timerService)
         {
-            return _conveyorBelt[0] == null;
+            _length = length;
+            _conveyorBelt = new Baggage[_length];
+
+            _timer = new Timer();
+            _timer.Elapsed += (sender, args) => Move();
         }
 
-        public void Add(Baggage baggage)
+        #region Inserting
+
+        protected bool CanAdd(int index = 0)
+        {
+            return _conveyorBelt[index] == null;
+        }
+
+        protected void Add(Baggage baggage, int index = 0)
         {
             Condition.Requires(CanAdd(), "conveyor")
                 .IsEqualTo(true, "Trying to add to {0}, while full.");
 
-            Status = NodeState.Busy;
-            _conveyorBelt[0] = baggage;
-        }
-
-        public override void PassBaggage(Baggage baggage)
-        {
-            Add(baggage);
+            _conveyorBelt[index] = baggage;
         }
 
         #endregion
 
         private bool HasLastItem() => LastBaggage != null;
 
-        private bool CanMove()
+        protected bool CanMove()
         {
             if (NextLink.Status == NodeState.Free)
             {
@@ -84,32 +80,6 @@
             return false;
         }
 
-        private void Move()
-        {
-            _timer.Stop();
-
-            if (CanMove())
-            {
-                if (LastBaggage != null)
-                {
-                    NextLink.PassBaggage(LastBaggage);
-                    _conveyorBelt[_lastIndex] = null;
-                }
-
-                for (int i = _lastIndex; i > 0; i--)
-                {
-                    _conveyorBelt[i] = _conveyorBelt[i - 1];
-                    _conveyorBelt[i - 1] = null;
-                }
-
-                NextLink.OnStatusChangedToFree -= Move;
-                Status = NodeState.Free;
-                _timer.Start();
-            }
-            else
-            {
-                NextLink.OnStatusChangedToFree += Move;
-            }
-        }
+        protected abstract void Move();
     }
 }
