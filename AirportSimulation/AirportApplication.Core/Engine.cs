@@ -30,7 +30,13 @@
             var mpa = _chainLinkFactory.CreateMpa();
             var bsu = _chainLinkFactory.CreateBsu();
             var MpaToAA = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
+            var MpaToAA2 = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
             var aa = _chainLinkFactory.CreateAa();
+            var aa2 = _chainLinkFactory.CreateAa();
+
+            aa.CurrentFlight = "FR6969";
+            aa2.CurrentFlight = "sadsa2";
+
 
 
             //EndNodes
@@ -43,10 +49,11 @@
             checkInToPsc.NextLink = psc;
             psc.NextLink = PscToMpa;
             PscToMpa.NextLink = mpa;
-            mpa.NextLink.Add(bsu);
-            mpa.NextLink.Add(MpaToAA);
+            mpa.AddConnection(2, MpaToAA2);
+            mpa.AddConnection(5, MpaToAA);
             bsu.NextLink = mpa;
             MpaToAA.NextLink = aa;
+            MpaToAA2.NextLink = aa2;
             aa.NextLink = bagCollector;
 
             //Starting

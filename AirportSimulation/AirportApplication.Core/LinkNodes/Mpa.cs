@@ -11,18 +11,18 @@
     {
         public delegate Mpa Factory();
 
-        private Conveyor _mainConveyor;
-        private Sorter _sorter;
-        public new List<ChainLink> NextLink { get; set; } //[0] is BSU, [1] is MpaToAA
+        private ManyToManyConveyor _mainConveyor;
+        private Sorter _sorter; //PoC implementation
+        public new List<ChainLink> NextLink { get; set; } //[0] is BSU, [1] is MpaToAA //PoC implementation
 
         public Mpa(ITimerService timerService) : base(timerService)
         {
             NextLink = new List<ChainLink>();
-            _mainConveyor = new Conveyor(10, timerService);
+            _mainConveyor = new ManyToManyConveyor(10, timerService);
             _mainConveyor.Start();
             _sorter = new Sorter(timerService, this);
 
-            _mainConveyor.NextLink = _sorter;
+            _mainConveyor.NextLink = _mainConveyor;
         }
 
         public override void PassBaggage(Baggage baggage)
@@ -31,14 +31,14 @@
             {
                 this.PassBaggage(baggage);
             };
-            
+
             this.Status = NodeState.Busy;
-            if(_mainConveyor.Status == NodeState.Free)
+            if (_mainConveyor.Status == NodeState.Free)
             {
                 _mainConveyor.PassBaggage(baggage);
                 this.Status = NodeState.Free;
                 _mainConveyor.OnStatusChangedToFree -= statusIsFree;
-                
+
             }
             else
             {
@@ -46,7 +46,12 @@
             }
         }
 
-        internal class Sorter : ProcessingNode, IProcessingNode
+        public void AddConnection(int index, ChainLink nextLink) //PoC Implementation
+        {
+            _mainConveyor.connections.Add(index, nextLink);
+        }
+
+        internal class Sorter : ProcessingNode, IProcessingNode //PoC Implementation
         {
             private Mpa _mpa;
 
@@ -64,6 +69,78 @@
                 else
                 {
                     this.NextLink = _mpa.NextLink[1];
+                }
+            }
+        }
+
+        internal class ManyToManyConveyor : TransportingNode, ITransportingNode //TESTING
+        {
+            //protected new List<ChainLink> _conveyorBelt;
+            public Dictionary<int, ChainLink> connections;
+
+            public ManyToManyConveyor(int length, ITimerService timerService) : base(length, timerService)
+            {
+                connections = new Dictionary<int, ChainLink>();
+
+                //_conveyorBelt = new List<ChainLink>(length);
+                //connectChain();
+            }
+
+            //private void connectChain()
+            //{
+            //    for(int i = 0; i < _conveyorBelt.Count - 1; i++)
+            //    {
+            //        _conveyorBelt[0].NextLink = _conveyorBelt[i + 1];
+            //    }
+            //}
+
+            public override void PassBaggage(Baggage baggage)
+            {
+                base.PassBaggage(baggage);
+            }
+
+            protected override void Move()
+            {
+                _timer.Stop();
+                if (CanMove())
+                {
+                    if (LastBaggage != null)
+                    {
+                        NextLink.PassBaggage(LastBaggage);
+                        _conveyorBelt[_lastIndex] = null;
+                    }
+
+                    for (int i = _lastIndex; i > 0; i--)
+                    {
+
+                        _conveyorBelt[i] = _conveyorBelt[i - 1];
+                        _conveyorBelt[i - 1] = null;
+
+                        if (connections.ContainsKey(i) && _conveyorBelt[i] != null)
+                        {
+                            if (((Aa)connections[i].NextLink).CurrentFlight == _conveyorBelt[i].FlightNumber)
+                            {
+                                if (connections[i].NextLink.Status == NodeState.Free)
+                                {
+                                    connections[i].NextLink.PassBaggage(_conveyorBelt[i]);
+                                    _conveyorBelt[i] = null;
+                                }
+                                else
+                                {
+                                    _conveyorBelt[i] = _conveyorBelt[i - 1];
+                                    _conveyorBelt[i - 1] = null;
+                                }
+                            }
+                        }
+                    }
+
+                    NextLink.OnStatusChangedToFree -= Move;
+                    Status = NodeState.Free;
+                    _timer.Start();
+                }
+                else
+                {
+                    NextLink.OnStatusChangedToFree += Move;
                 }
             }
         }

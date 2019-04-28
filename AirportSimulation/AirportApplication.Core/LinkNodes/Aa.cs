@@ -8,6 +8,7 @@
     public class Aa : ProcessingNode, IProcessingNode
     {
         public delegate Aa Factory();
+        public string CurrentFlight { get; set; }
 
         public Aa(ITimerService timerService) : base(timerService)
         {

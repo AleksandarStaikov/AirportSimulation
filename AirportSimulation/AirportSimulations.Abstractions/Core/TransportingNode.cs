@@ -69,7 +69,7 @@
 
         private bool HasLastItem() => LastBaggage != null;
 
-        private bool CanMove()
+        protected bool CanMove()
         {
             if (NextLink.Status == NodeState.Free)
             {
@@ -84,7 +84,7 @@
             return false;
         }
 
-        private void Move()
+        protected virtual void Move()
         {
             _timer.Stop();
 
