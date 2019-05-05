@@ -8,7 +8,95 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-        <Grid Background="Transparent" localRes:GridHelper.Rows="*#30;auto" localRes:GridHelper.Columns="*#30;auto" ShowGridLines="True" MouseDown="Grid_MouseDown">
-            <TextBox Background="Red" Grid.Column="25" Grid.Row="25" Width="50" Height="50"></TextBox>
-        </Grid>
+
+    <Grid Margin="10 10 10 10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Button
+            x:Name="CheckIn"
+            Grid.Column="0" 
+            Grid.Row="0" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Check-In</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <Button 
+            x:Name="Conveyor"
+            Grid.Column="0" 
+            Grid.Row="1" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Conveyor</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <Button 
+            x:Name="PSC"
+            Grid.Column="0" 
+            Grid.Row="2" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Primary Security Check</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <Button
+            x:Name="ASC"
+            Grid.Column="0" 
+            Grid.Row="3" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Advance Security Check</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <Button 
+            x:Name="AA"
+            Grid.Column="0" 
+            Grid.Row="4" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Airport Area</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <Button
+            x:Name="PA"
+            Grid.Column="0" 
+            Grid.Row="5" 
+            Click="BuildingComponent_Click">
+            <StackPanel>
+                <TextBlock>Pickup Area</TextBlock>
+            </StackPanel>
+        </Button>
+
+        <ScrollViewer 
+            Grid.Column="1" 
+            Grid.RowSpan="6" 
+            VerticalScrollBarVisibility="Visible"
+            HorizontalScrollBarVisibility="Visible">
+            <Grid 
+                Background="Transparent" 
+                localRes:GridHelper.Rows="*#15;auto" 
+                localRes:GridHelper.Columns="*#20;auto" 
+                ShowGridLines="True" 
+                Height="1000"
+                Width="1500"
+                MouseDown="Grid_MouseDown">
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

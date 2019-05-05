@@ -54,6 +54,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildingComponentType.cs" />
     <Compile Include="Exceptions\ConveyorFullException.cs" />
     <Compile Include="Models\Baggage.cs" />
     <Compile Include="Models\BaggageEventLog.cs" />
