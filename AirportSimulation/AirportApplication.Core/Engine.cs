@@ -24,19 +24,15 @@
             _timerService.SetSettings(settings);
 
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
-            var checkInToPsc = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
+            var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
+            var checkInToPsc =
+                _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
             var psc = _chainLinkFactory.CreatePsc();
-            var PscToMpa = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
+            var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
             var mpa = _chainLinkFactory.CreateMpa();
-            var bsu = _chainLinkFactory.CreateBsu();
-            var MpaToAA = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
-            var MpaToAA2 = _chainLinkFactory.CreateConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
+            //var bsu = _chainLinkFactory.CreateBsu();
+            var MpaToAA = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
             var aa = _chainLinkFactory.CreateAa();
-            var aa2 = _chainLinkFactory.CreateAa();
-
-            aa.CurrentFlight = "FR6969";
-            aa2.CurrentFlight = "sadsa2";
-
 
 
             //EndNodes
@@ -44,24 +40,31 @@
             var bagCollector = _chainLinkFactory.CreateBagCollector();
 
             //Linking
-            checkInDispatcher.SetCheckIns(new List<CheckInDesk>() { checkIn });
-            checkIn.NextLink = checkInToPsc;
-            checkInToPsc.NextLink = psc;
-            psc.NextLink = PscToMpa;
-            PscToMpa.NextLink = mpa;
-            mpa.AddConnection(2, MpaToAA2);
-            mpa.AddConnection(5, MpaToAA);
-            bsu.NextLink = mpa;
-            MpaToAA.NextLink = aa;
-            MpaToAA2.NextLink = aa2;
-            aa.NextLink = bagCollector;
+            checkInDispatcher.SetCheckIns(new List<CheckInDesk> {checkIn});
+
+            checkIn.AddSuccessor(checkInToConveyorConnector);
+            //checkIn1.AddSuccessor(checkIn1ToConveyorConnector);
+            //checkIn2.AddSuccessor(checkIn2ToConveyorConnector);
+            checkInToConveyorConnector.SetNextNode(checkInToPsc, 0);
+            //checkIn1ToConveyorConnector.SetNextNode(checkIn2ToPsc, 1);
+            //checkIn2ToConveyorConnector.SetNextNode(checkIn2ToPsc, 2);
+
+            checkInToPsc.SetSuccessor(psc);
+
+            psc.AddSuccessor(PscToMpa);
+            PscToMpa.SetSuccessor(mpa);
+            //mpa.NextLink.Add(bsu);
+            //mpa.NextLink.Add(MpaToAA);
+            //bsu.NextLink = mpa;
+            MpaToAA.SetSuccessor(aa);
+            aa.AddSuccessor(bagCollector);
 
             //Starting
             _timerService.RunNewTimer();
             checkInToPsc.Start();
-            PscToMpa.Start();
-            MpaToAA.Start();
-            bsu.Start();
+            //PscToMpa.Start();
+            //MpaToAA.Start();
+            //bsu.Start();
             checkInDispatcher.Start();
         }
     }

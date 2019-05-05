@@ -8,12 +8,14 @@
         public Baggage()
         {
             Log = new List<BaggageEventLog>();
-            FlightNumber = "AD4324SC";
+            Flight = new Flight();
         }
 
         public BaggageType BaggageType { get; set; }
 
-        public string FlightNumber { get; set; }
+        public Flight Flight { get; set; }
+
+        public string Destination { get; set; }
 
         public string Owner { get; set; }
 

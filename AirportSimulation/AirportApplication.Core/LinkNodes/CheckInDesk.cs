@@ -16,6 +16,7 @@
         public override void Process(Baggage baggage)
         {
             baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "CheckIn processing");
+            baggage.Destination = typeof(Psc).Name;
         }
     }
 }

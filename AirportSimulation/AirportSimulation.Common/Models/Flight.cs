@@ -11,5 +11,7 @@
         public string FlightNumber { get; set; } = "FR6969";
 
         public string Gate { get; set; } = "A1";
+
+        public int DespatchedBaggagesCount { get; set; } = 0;
     }
 }

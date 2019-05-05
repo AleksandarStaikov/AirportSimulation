@@ -1,14 +1,12 @@
 ﻿namespace AirportSimulation.Core
 {
-    using Autofac;       
+    using Autofac;
     using System.Reflection;
     using System;
-    using Abstractions.Core.Contracts;
     using Autofac.Core;
     using ImportExport;
     using NLog;
     using AirportSimulation.Core.Contracts;
-    using Contracts.Services;
     using LinkNodes;
     using Services;
 
@@ -52,7 +50,9 @@
             builder.RegisterType<Mpa>();
             builder.RegisterType<BSU>();
             builder.RegisterType<Aa>();
-            builder.RegisterType<Conveyor>();
+            builder.RegisterType<OneToOneConveyor>();
+            builder.RegisterType<ManyToOneConveyor>();
+            builder.RegisterType<ConveyorConnector>();
             builder.RegisterType<CheckInDispatcher>();
             builder.RegisterType<BagCollector>();
 

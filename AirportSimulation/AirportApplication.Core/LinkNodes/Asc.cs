@@ -14,8 +14,6 @@
         {
         }
 
-        public ChainLink FailSuccessor { get; set; }
-
         public override void Process(Baggage baggage)
         {
             //TODO : Implment
@@ -23,13 +21,14 @@
 
             if (checkSuccessful)
             {
-                NextLink.PassBaggage(baggage);
+                //TODO: Global constants ?
+                _currentBaggage.Destination = typeof(Mpa).Name;
             }
             else
             {
-                FailSuccessor.PassBaggage(baggage);
+                //TODO: Global constants ?
+                _currentBaggage.Destination = typeof(BagCollector).Name;
             }
         }
-
     }
 }

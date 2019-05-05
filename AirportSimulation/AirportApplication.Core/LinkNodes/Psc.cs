@@ -1,6 +1,6 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
+    using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -14,13 +14,12 @@
         {
         }
 
-        public ChainLink FailSuccessor { get; set; }
-
         public override void Process(Baggage baggage)
         {
             baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "Primary security check processing");
             //TODO : Implment 
-        }
+            baggage.Destination = typeof(Mpa).Name; 
 
+        }
     }
 }
