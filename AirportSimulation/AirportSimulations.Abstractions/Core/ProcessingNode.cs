@@ -1,11 +1,11 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
-    using Abstractions.Contracts;
-    using Common.Models;
-    using Contracts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Abstractions.Contracts;
+    using Common.Models;
+    using Contracts;
     using CuttingEdge.Conditions;
 
     public abstract class ProcessingNode : ChainLink, IProcessingNode
@@ -17,6 +17,8 @@
         {
             _allSuccessors = new List<IChainLink>();
         }
+
+        public override string Destination => GetType().Name;
 
         public void AddSuccessor(IChainLink chainLink)
         {
@@ -33,13 +35,15 @@
             {
                 var transportationStart = baggage.TransportationStartTime ?? 0;
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
-                baggage.AddEventLog(new TimeSpan(ticks: transportingTimeElapsed), "Received in " + this.GetType().Name + " Transportation time");
+                baggage.AddEventLog(new TimeSpan(transportingTimeElapsed),
+                    "Received in " + GetType().Name + " Transportation time");
                 baggage.TransportationStartTime = null;
             }
+
             ProcessInternal(baggage);
         }
-        
-        public void ProcessInternal(Baggage baggage)
+
+        private void ProcessInternal(Baggage baggage)
         {
             Process(baggage);
 
@@ -55,12 +59,9 @@
             Move();
         }
 
-        protected abstract void DetermineNextLink();
-
-        public void Move()
+        private void Move()
         {
-            DetermineNextLink();
-            if (NextLink.Status == NodeState.Free && this._currentBaggage != null)
+            if (NextLink.Status == NodeState.Free && _currentBaggage != null)
             {
                 NextLink.OnStatusChangedToFree -= Move;
                 NextLink.PassBaggage(_currentBaggage);

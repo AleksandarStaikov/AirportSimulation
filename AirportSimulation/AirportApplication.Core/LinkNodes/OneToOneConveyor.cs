@@ -28,10 +28,10 @@
                 if (LastBaggage != null)
                 {
                     NextLink.PassBaggage(LastBaggage);
-                    _conveyorBelt[_lastIndex] = null;
+                    _conveyorBelt[LastIndex] = null;
                 }
 
-                for (int i = _lastIndex; i > 0; i--)
+                for (int i = LastIndex; i > 0; i--)
                 {
                     _conveyorBelt[i] = _conveyorBelt[i - 1];
                     _conveyorBelt[i - 1] = null;

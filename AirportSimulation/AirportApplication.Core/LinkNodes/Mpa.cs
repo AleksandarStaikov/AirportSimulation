@@ -19,11 +19,14 @@
         {
             NextLink = new List<ChainLink>();
             _mainConveyor = new OneToOneConveyor(10, timerService);
-            _mainConveyor.Start();
+            //TODO: put in a method
+            //_mainConveyor.Start();
             //_sorter = new Sorter(timerService, this);
 
             //_mainConveyor.NextLink = _sorter;
         }
+
+        public override string Destination => this.GetType().Name;
 
         public override void PassBaggage(Baggage baggage)
         {

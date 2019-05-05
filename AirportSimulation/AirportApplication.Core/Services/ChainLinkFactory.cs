@@ -1,23 +1,25 @@
 ﻿namespace AirportSimulation.Core.Services
 {
+    using System.Data;
     using Common.Models;
     using Contracts.Services;
     using LinkNodes;
-    using System.Data;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
-        private readonly CheckInDesk.Factory _checkInDeskFactory;
-        private readonly Psc.Factory _pscFactory;
-        private readonly Asc.Factory _ascFactory;
-        private readonly Mpa.Factory _mpaFactory;
-        private readonly BSU.Factory _bsuFactory;
         private readonly Aa.Factory _aaFactory;
-        private readonly OneToOneConveyor.Factory _oneToOneConveyorFactory;
-        private readonly ManyToOneConveyor.Factory _manyToOneConveyorFactory;
-        private readonly ConveyorConnector.Factory _conveyorConnectorFactory;
-        private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
+        private readonly Asc.Factory _ascFactory;
         private readonly BagCollector.Factory _bagCollectorFactory;
+        private readonly BSU.Factory _bsuFactory;
+        private readonly CheckInDesk.Factory _checkInDeskFactory;
+        private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
+        private readonly ConveyorConnector.Factory _conveyorConnectorFactory;
+        private readonly ManyToOneConveyor.Factory _manyToOneConveyorFactory;
+        private readonly Mpa.Factory _mpaFactory;
+        private readonly OneToOneConveyor.Factory _oneToOneConveyorFactory;
+        private readonly Psc.Factory _pscFactory;
+        private int _dropOffsCount;
+        private int _gatesCount;
 
         private SimulationSettings _simulationSettings;
 
@@ -44,6 +46,9 @@
             _conveyorConnectorFactory = conveyorConnectorFactory;
             _checkInDispatcherFactory = checkInDispatcherFactory;
             _bagCollectorFactory = bagCollectorFactory;
+
+            _dropOffsCount = 1;
+            _gatesCount = 1;
         }
 
         public CheckInDesk CreateCheckInDesk()
@@ -79,7 +84,7 @@
         public Aa CreateAa()
         {
             ValidateSettings();
-            return _aaFactory();
+            return _aaFactory(_gatesCount++);
         }
 
         public OneToOneConveyor CreateOneToOneConveyor(int length)
@@ -100,6 +105,19 @@
             return _conveyorConnectorFactory();
         }
 
+        public void SetSettings(SimulationSettings settings)
+        {
+            this._simulationSettings = settings;
+        }
+
+        private void ValidateSettings()
+        {
+            if (_simulationSettings == null)
+            {
+                throw new NoNullAllowedException("The simulation settings have not been set");
+            }
+        }
+
         #region EndNodes
 
         public CheckInDispatcher CreateCheckInDispatcher()
@@ -115,18 +133,5 @@
         }
 
         #endregion
-
-        public void SetSettings(SimulationSettings settings)
-        {
-            this._simulationSettings = settings;
-        }
-
-        private void ValidateSettings()
-        {
-            if (_simulationSettings == null)
-            {
-                throw new NoNullAllowedException("The simulation settings have not been set");
-            }
-        }
     }
 }

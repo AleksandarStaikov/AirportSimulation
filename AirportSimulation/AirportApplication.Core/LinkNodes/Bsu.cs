@@ -26,6 +26,8 @@
             //_robot = new RobotBSU(timerService, this); //Length is always 1 //Pass BSU as a parameter in order to access internal fields in Robot
         }
 
+        public override string Destination => this.GetType().Name;
+
         public void Start()
         {
             //_inboundConveyor.NextLink = _robot;
@@ -115,6 +117,8 @@
                 _timeToFLight.Elapsed += (sender, args) => timeToProcess();
                 
             }
+
+            public override string Destination => this.GetType().Name;
 
             //TODO Implement timeToProcess()
             private void timeToProcess()

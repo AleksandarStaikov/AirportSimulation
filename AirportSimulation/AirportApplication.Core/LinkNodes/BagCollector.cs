@@ -7,14 +7,16 @@
 
     public class BagCollector : ChainLink
     {
-        private readonly List<Baggage> _pickedUpBags;
-
         public delegate BagCollector Factory();
+
+        private readonly List<Baggage> _pickedUpBags;
 
         public BagCollector(ITimerService timerService) : base(timerService)
         {
             _pickedUpBags = new List<Baggage>();
         }
+
+        public override string Destination => this.GetType().Name;
 
         public override void PassBaggage(Baggage baggage)
         {

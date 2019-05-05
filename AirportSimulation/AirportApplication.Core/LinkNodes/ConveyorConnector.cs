@@ -8,9 +8,9 @@
 
     public class ConveyorConnector : ChainLink, IConveyorConnector
     {
-        private IManyToOneConveyor _nextNode;
-
         public delegate ConveyorConnector Factory();
+
+        private IManyToOneConveyor _nextNode;
 
         public ConveyorConnector(ITimerService timerService) : base(timerService)
         {
@@ -18,9 +18,14 @@
 
         public NodeState Status { get; set; }
 
-        public string Destination => _nextNode.Destination;
+        public override string Destination => _nextNode.Destination;
 
         public Action OnStatusChangedToFree { get; set; }
+
+        public override void PassBaggage(Baggage baggage)
+        {
+            _nextNode.PassBaggage(baggage, this);
+        }
 
         public void SetNextNode(IManyToOneConveyor conveyor, int index)
         {
@@ -28,11 +33,6 @@
             _nextNode.AddPredecessor(this, index);
             var action = _nextNode.OnStatusChangedToFree(this);
             action += this.OnStatusChangedToFree;
-        }
-
-        public override void PassBaggage(Baggage baggage)
-        {
-            _nextNode.PassBaggage(baggage, this);
         }
     }
 }

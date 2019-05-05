@@ -1,7 +1,7 @@
 ﻿namespace AirportSimulation.Abstractions.Core.Contracts
 {
-    using Common.Models;
     using System;
+    using Common.Models;
 
     public interface IManyToOneConveyor : IChainLink
     {

@@ -51,6 +51,8 @@
             builder.RegisterType<BSU>();
             builder.RegisterType<Aa>();
             builder.RegisterType<OneToOneConveyor>();
+            builder.RegisterType<ManyToOneConveyor>();
+            builder.RegisterType<ConveyorConnector>();
             builder.RegisterType<CheckInDispatcher>();
             builder.RegisterType<BagCollector>();
 
