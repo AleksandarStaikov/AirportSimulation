@@ -89,6 +89,7 @@
             }
             else
             {
+                //TODO : Not valid, if another attached.
                 if (checkIn.OnStatusChangedToFree == null)
                 {
                     checkIn.OnStatusChangedToFree += () => { PassQueuedBaggage(index); };
@@ -167,7 +168,7 @@
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
                 timer.Elapsed += (sender, e) => 
                 {
-                    if (flight.BaggageCount < flight.DespatchedBaggagesCount)
+                    if (flight.BaggageCount > flight.DespatchedBaggagesCount)
                     {
                         DispatchBaggage(flight);
                     }
