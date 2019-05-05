@@ -47,7 +47,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Grid.Row="0" Margin="25 20">
+                    <!--<Grid Grid.Column="0" Grid.Row="0" Margin="25 20">
                         <MetroChart:ClusteredColumnChart  
                 Grid.Column="1"
                 Grid.Row="0" 
@@ -71,7 +71,7 @@
                         ItemsSource="{Binding Path=Y}" />
                             </MetroChart:ClusteredColumnChart.Series>
                         </MetroChart:ClusteredColumnChart>
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </TabItem>
         </TabControl>
