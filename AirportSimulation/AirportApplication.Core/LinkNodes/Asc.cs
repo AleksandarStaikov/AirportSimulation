@@ -1,7 +1,6 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
     using System;
-    using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -23,18 +22,13 @@
             if (checkSuccessful)
             {
                 //TODO: Global constants ?
-                _currentBaggage.Destination = "Mpa";
+                _currentBaggage.Destination = typeof(Mpa).Name;
             }
             else
             {
                 //TODO: Global constants ?
-                _currentBaggage.Destination = "BagCollector";
+                _currentBaggage.Destination = typeof(BagCollector).Name;
             }
-        }
-
-        protected override void DetermineNextLink()
-        {
-            NextLink = _allSuccessors.FirstOrDefault(x => x.Destination == _currentBaggage.Destination);
         }
     }
 }

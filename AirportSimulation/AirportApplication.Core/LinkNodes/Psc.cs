@@ -1,10 +1,10 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
+    using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
-    using System.Linq;
 
     public class Psc : ProcessingNode, IProcessingNode
     {
@@ -18,12 +18,8 @@
         {
             baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "Primary security check processing");
             //TODO : Implment 
-            //TODO : Set baggage destination; 
-        }
+            baggage.Destination = typeof(Mpa).Name; 
 
-        protected override void DetermineNextLink()
-        {
-            NextLink = _allSuccessors.FirstOrDefault(x => x.Destination == _currentBaggage.Destination);
         }
     }
 }

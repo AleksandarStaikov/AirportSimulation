@@ -1,42 +1,20 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using System.Timers;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
     using CuttingEdge.Conditions;
-    using System.Timers;
 
     public abstract class TransportingNode : ChainLink, ITransportingNode
     {
         private const int ConveyorDefaultMovingTime = 1000;
 
-        protected int _lastIndex => _length - 1;
         protected readonly int _length;
         protected Baggage[] _conveyorBelt;
         protected Timer _timer;
 
-        public Baggage LastBaggage => _conveyorBelt[_lastIndex];
-
-        public IChainLink NextNode { get; set; }
-
-        public void Start()
-        {
-            _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
-            if (!_timer.Enabled)
-            {
-                _timer.Start();
-            }
-        }
-
-        public void Stop()
-        {
-            if (_timer.Enabled)
-            {
-                _timer.Stop();
-            }
-        }
-
-        protected TransportingNode(int length, ITimerService timerService) 
+        protected TransportingNode(int length, ITimerService timerService)
             : base(timerService)
         {
             _length = length;
@@ -45,6 +23,40 @@
             _timer = new Timer();
             _timer.Elapsed += (sender, args) => Move();
         }
+
+        protected int LastIndex => _length - 1;
+        protected Baggage LastBaggage => _conveyorBelt[LastIndex];
+
+        protected bool HasLastItem => LastBaggage != null;
+
+        public void Start()
+        {
+            _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
+            if (!_timer.Enabled) _timer.Start();
+        }
+
+        public void Stop()
+        {
+            if (_timer.Enabled) _timer.Stop();
+        }
+
+        public void SetSuccessor(IChainLink nextLink)
+        {
+            NextLink = nextLink;
+        }
+
+        public override string Destination => NextLink.Destination;
+
+        protected bool CanMove()
+        {
+            if (NextLink.Status == NodeState.Free) return true;
+
+            if (!HasLastItem) return true;
+
+            return false;
+        }
+
+        protected abstract void Move();
 
         #region Inserting
 
@@ -62,24 +74,5 @@
         }
 
         #endregion
-
-        private bool HasLastItem() => LastBaggage != null;
-
-        protected bool CanMove()
-        {
-            if (NextLink.Status == NodeState.Free)
-            {
-                return true;
-            }
-
-            if (!HasLastItem())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        protected abstract void Move();
     }
 }

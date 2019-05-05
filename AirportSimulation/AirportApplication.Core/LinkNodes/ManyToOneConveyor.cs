@@ -1,18 +1,18 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
+    using System;
+    using System.Collections.Generic;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
-    using System;
-    using System.Collections.Generic;
 
     public class ManyToOneConveyor : TransportingNode, IManyToOneConveyor
     {
-        private Dictionary<IConveyorConnector, int> _incomingConnections;
-        private Dictionary<int, Action> _statusChangedToFreeEvents;
-
         public delegate ManyToOneConveyor Factory(int length);
+
+        private readonly Dictionary<IConveyorConnector, int> _incomingConnections;
+        private readonly Dictionary<int, Action> _statusChangedToFreeEvents;
 
         public ManyToOneConveyor(int length, ITimerService timerService) : base(length, timerService)
         {
@@ -46,7 +46,7 @@
                 Add(baggage, index);
             }
         }
-        
+
         public override void PassBaggage(Baggage baggage)
         {
             throw new NotImplementedException();
@@ -61,10 +61,10 @@
                 if (LastBaggage != null)
                 {
                     NextLink.PassBaggage(LastBaggage);
-                    _conveyorBelt[_lastIndex] = null;
+                    _conveyorBelt[LastIndex] = null;
                 }
 
-                for (int i = _lastIndex; i > 0; i--)
+                for (int i = LastIndex; i > 0; i--)
                 {
                     _conveyorBelt[i] = _conveyorBelt[i - 1];
                     _conveyorBelt[i - 1] = null;
@@ -78,6 +78,7 @@
                         kvp.Value?.Invoke();
                     }
                 }
+
                 _timer.Start();
             }
             else
