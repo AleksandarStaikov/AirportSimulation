@@ -46,24 +46,26 @@
             //checkIn1.AddSuccessor(checkIn1ToConveyorConnector);
             //checkIn2.AddSuccessor(checkIn2ToConveyorConnector);
             checkInToConveyorConnector.SetNextNode(checkInToPsc, 0);
+            checkInToPsc.SetSuccessor(psc);
             //checkIn1ToConveyorConnector.SetNextNode(checkIn2ToPsc, 1);
             //checkIn2ToConveyorConnector.SetNextNode(checkIn2ToPsc, 2);
 
-            checkInToPsc.SetSuccessor(psc);
+            // checkInToPsc.SetSuccessor(psc);
 
             psc.AddSuccessor(PscToMpa);
             PscToMpa.SetSuccessor(mpa);
-            //mpa.NextLink.Add(bsu);
-            //mpa.NextLink.Add(MpaToAA);
-            //bsu.NextLink = mpa;
             MpaToAA.SetSuccessor(aa);
             aa.AddSuccessor(bagCollector);
+
+            mpa.AddSuccessor(MpaToAA);
 
             //Starting
             _timerService.RunNewTimer();
             checkInToPsc.Start();
-            //PscToMpa.Start();
-            //MpaToAA.Start();
+
+            PscToMpa.Start();
+            mpa.Start();
+            MpaToAA.Start();
             //bsu.Start();
             checkInDispatcher.Start();
         }

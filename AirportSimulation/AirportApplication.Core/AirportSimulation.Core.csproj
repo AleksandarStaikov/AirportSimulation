@@ -73,6 +73,7 @@
     <Compile Include="LinkNodes\CheckInDesk.cs" />
     <Compile Include="LinkNodes\CheckInDispatcher.cs" />
     <Compile Include="LinkNodes\ConveyorConnector.cs" />
+    <Compile Include="LinkNodes\ManyToManyConveyor.cs" />
     <Compile Include="LinkNodes\OneToOneConveyor.cs" />
     <Compile Include="LinkNodes\ManyToOneConveyor.cs" />
     <Compile Include="LinkNodes\Mpa.cs" />

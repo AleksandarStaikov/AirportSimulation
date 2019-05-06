@@ -75,7 +75,7 @@
 
         public void DispatchBaggage(Flight flight)
         {
-            flight.DespatchedBaggagesCount++;
+            flight.DispatchedBaggagesCount++;
             var baggage = new Baggage()
             {
                 Flight = flight,
@@ -170,7 +170,7 @@
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
                 timer.Elapsed += (sender, e) => 
                 {
-                    if (flight.BaggageCount > flight.DespatchedBaggagesCount)
+                    if (flight.BaggageCount > flight.DispatchedBaggagesCount)
                     {
                         DispatchBaggage(flight);
                     }
