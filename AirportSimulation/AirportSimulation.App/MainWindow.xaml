@@ -10,7 +10,7 @@
         mc:Ignorable="d">
     <Grid>
         <TabControl x:Name="MainTabMenu">
-            <TabItem Selector.IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Administration" />
@@ -20,7 +20,7 @@
                     <views:AdminView x:Name="AdminView"/>
                 </Grid>
             </TabItem>
-            <TabItem>
+            <TabItem Selector.IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Simulation" />

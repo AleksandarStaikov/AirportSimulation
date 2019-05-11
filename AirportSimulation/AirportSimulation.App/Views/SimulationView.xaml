@@ -9,8 +9,18 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid Margin="10 10 10 10">
+        <Grid.Resources>
+            <ImageBrush x:Key="CheckInImageBrush" ImageSource="/Resources/check-in.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="ConveyorImageBrush" ImageSource="/Resources/conveyor.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="AirplaneShapeImageBrush" ImageSource="/Resources/airplane-shape.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="PSCImageBrush" ImageSource="/Resources/PSCbaggage.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="ASCImageBrush" ImageSource="/Resources/AdvancedCheckBaggage.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png"  Stretch="Fill"/>
+        </Grid.Resources>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -29,75 +39,124 @@
             x:Name="CheckIn"
             Grid.Column="0" 
             Grid.Row="0" 
-            Click="BuildingComponent_Click">
-            <StackPanel>
-                <TextBlock>Check-In</TextBlock>
-            </StackPanel>
+            Height="90"
+            Width="100"
+            BorderThickness="0"
+            Click="BuildingComponent_Click"
+            Background="{StaticResource CheckInImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Check In</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <Button 
             x:Name="Conveyor"
             Grid.Column="0" 
             Grid.Row="1" 
+            Height="90"
+            Width="100"
+            BorderThickness="0"
+            IsEnabled="False"
             Click="BuildingComponent_Click"
-            IsEnabled="False">
-            <StackPanel>
-                <TextBlock>Conveyor</TextBlock>
-            </StackPanel>
+            Background="{StaticResource ConveyorImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Conveyor</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <Button 
             x:Name="PSC"
             Grid.Column="0" 
-            Grid.Row="2" 
+            Grid.Row="2"
+            IsEnabled="False"
+            Height="90"
+            Width="100"
+            BorderThickness="0"
             Click="BuildingComponent_Click"
-            IsEnabled="False">
-            <StackPanel>
-                <TextBlock>Primary Security Check</TextBlock>
-            </StackPanel>
+            Background="{StaticResource PSCImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Primary Security Check</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <Button
             x:Name="ASC"
-            Grid.Column="0" 
-            Grid.Row="3" 
+            Grid.Column="0"
+            Grid.Row="3"
+            Height="90"
+            IsEnabled="False"
+            Width="100"
+            BorderThickness="0"
             Click="BuildingComponent_Click"
-            IsEnabled="False">
-            <StackPanel>
-                <TextBlock>Advanced Security Check</TextBlock>
-            </StackPanel>
+            Background="{StaticResource ASCImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Advanced Security Check</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <Button 
             x:Name="AA"
             Grid.Column="0" 
-            Grid.Row="4" 
+            Grid.Row="4"
+            Height="90"
+            IsEnabled="False"
+            Width="100"
+            BorderThickness="0"
             Click="BuildingComponent_Click"
-            IsEnabled="False">
-            <StackPanel>
-                <TextBlock>Airport Area</TextBlock>
-            </StackPanel>
+            Background="{StaticResource AirplaneShapeImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Airport Area</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <Button
             x:Name="PA"
             Grid.Column="0" 
-            Grid.Row="5" 
+            Grid.Row="5"
+            IsEnabled="False"
+            Height="90"
+            Width="100"
+            BorderThickness="0"
             Click="BuildingComponent_Click"
-            IsEnabled="False">
-            <StackPanel>
-                <TextBlock>Pickup Area</TextBlock>
-            </StackPanel>
+            Background="{StaticResource PickUpImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Pick Up</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
         <ScrollViewer 
             Margin="10 10 10 10"
             Grid.Column="1" 
             Grid.RowSpan="5" 
-            Grid.ColumnSpan="4"
+            Grid.ColumnSpan="5"
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Visible">
             <Grid 
+                x:Name="SimulationGrid"
                 Background="Transparent" 
                 localRes:GridHelper.Rows="*#15;auto" 
                 localRes:GridHelper.Columns="*#20;auto" 
@@ -161,6 +220,22 @@
                 IsEnabled="False">
                 <StackPanel>
                     <TextBlock>CREATE</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel 
+            
+            Grid.Column="5" 
+            Grid.Row="5" 
+            Margin="25 20">
+            <Button 
+                Name="ClearGridButton"
+                Width="150"
+                FontSize="12"
+                Click="ClearGridButton_Click"
+                IsEnabled ="False">
+                <StackPanel>
+                    <TextBlock>CLEAR</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>

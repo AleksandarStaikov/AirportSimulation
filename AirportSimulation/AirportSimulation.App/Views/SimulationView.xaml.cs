@@ -11,6 +11,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
 
@@ -23,6 +24,8 @@
         private List<Type> _gridNeededComponents;
         private List<Button> _buttons;
         private (int, int) _previousCoordinates;
+        private const int GRID_MAX_ROWS = 20;
+        private const int GRID_MAX_COLUMNS = 15;
 
         private LinkedList<GridCellElement> _chainedElements;
 
@@ -67,7 +70,7 @@
                     ImageSource = this._buildingComponentImage
                 }
             };
-
+            
             var gridCellElement = new GridCellElement
             {
                 Element = rectangle,
@@ -93,6 +96,8 @@
             {
                 this._chainedElements.AddLast(gridCellElement);
             }
+
+            this.ValidateClearButtonVisibility();
         }
 
         private void BuildingComponent_Click(object sender, RoutedEventArgs e)
@@ -148,13 +153,15 @@
         {
             if (this._usedCells.Contains(pair))
             {
-                var elementToRemove = this._gridElements.FirstOrDefault(el => el.Cell.Key == pair.Key && el.Cell.Value == pair.Value);
-                grid.Children.Remove(elementToRemove.Element);
-                this._usedCells.Remove(pair);
-                this._gridElements.Remove(elementToRemove);
+                // TODO: Uncomment later
 
-                while (this._gridNeededComponents.Contains(elementToRemove.SimulationType))
-                    this._gridNeededComponents.Remove(elementToRemove.SimulationType);
+                //var elementToRemove = this._gridElements.FirstOrDefault(el => el.Cell.Key == pair.Key && el.Cell.Value == pair.Value);
+                //grid.Children.Remove(elementToRemove.Element);
+                //this._usedCells.Remove(pair);
+                //this._gridElements.Remove(elementToRemove);
+
+                //while (this._gridNeededComponents.Contains(elementToRemove.SimulationType))
+                //    this._gridNeededComponents.Remove(elementToRemove.SimulationType);
 
                 if (!this._gridElements.Any())
                 {
@@ -164,7 +171,7 @@
                 }
 
                 this.ValidateRunButtonVisibility();
-
+                this.ValidateClearButtonVisibility();
                 return true;
             }
 
@@ -229,7 +236,80 @@
 
         private void ShowAvailableConveyorPlaces()
         {
+            var allowedRows = new List<int>();
+            var allowedColumns = new List<int>();
+
+            var (row, column) = this._previousCoordinates;
+
+            if (row == 0 && column == 0) // LEFT TOP CORNER
+            {
+                allowedRows.Add(1);
+                allowedColumns.Add(1);
+            }
+            else if (column == 0 && row > 0 && row < GRID_MAX_COLUMNS) // LEFT MOST LINE
+            {
+                allowedRows.Add(row - 1);
+                allowedRows.Add(row + 1);
+                allowedColumns.Add(column + 1);
+            }
+            else if (column == 0 && row == GRID_MAX_ROWS) // LEFT DOWN CORNER
+            {
+                allowedRows.Add(row - 1);
+                allowedColumns.Add(column + 1);
+            }
+            else if (row == 0 && column > 0 && column < GRID_MAX_COLUMNS) // TOP MOST LINE
+            {
+                allowedRows.Add(row + 1);
+                allowedColumns.Add(column - 1);
+                allowedColumns.Add(column + 1);
+            }
+            else if (row == 0 && column > 0 && column == GRID_MAX_COLUMNS) // TOP RIGHT CORNER
+            {
+                allowedRows.Add(row + 1);
+                allowedColumns.Add(column - 1);
+            }
+            else if (column == GRID_MAX_COLUMNS && row > 0 && row < GRID_MAX_ROWS) // RIGHT MOST LINE
+            {
+                allowedRows.Add(row + 1); 
+                allowedRows.Add(row - 1);
+                allowedColumns.Add(column - 1);
+            }
+            else if (column == GRID_MAX_COLUMNS && row == GRID_MAX_ROWS) // BOTTOM RIGHT CORNER
+            {
+                allowedColumns.Add(column - 1);
+                allowedRows.Add(row - 1);
+            }
+            else if (row == GRID_MAX_ROWS && column > 0 && column < GRID_MAX_COLUMNS) // BOTTOM MOST LINE
+            {
+                allowedRows.Add(row - 1);
+                allowedColumns.Add(column - 1);
+                allowedColumns.Add(column + 1);
+            }
+            else if (row > 0 && row < GRID_MAX_ROWS && column > 0 && column < GRID_MAX_COLUMNS)
+            {
+                allowedRows.Add(row + 1);
+                allowedRows.Add(row - 1);
+                allowedColumns.Add(column + 1);
+                allowedColumns.Add(column - 1);
+            }
+
+            //var rectangle = GetBlinkingRectangle();
+            //this.SimulationGrid.Children.Add(rectangle);
             
+            for (int i = 0; i < allowedRows.Count; i++)
+            {
+                var rec = GetBlinkingRectangle();
+                Grid.SetRow(rec, allowedRows[i]);
+                Grid.SetColumn(rec, allowedRows[i]);
+                this.SimulationGrid.Children.Add(rec);
+            }
+
+            //for (int i = 0; i < allowedColumns.Count; i++)
+            //{
+            //    var rec = GetBlinkingRectangle();
+            //    Grid.SetColumn(rec, allowedColumns[i]);
+            //    this.SimulationGrid.Children.Add(rec);
+            //}
         }
 
         private void ValidateRunButtonVisibility()
@@ -242,6 +322,52 @@
                 this._gridNeededComponents.Contains(typeof(AscSettings));
 
             this.Run.GetStackPanelChildButton().IsEnabled = canStart ? true : false;
+        }
+
+        private void ValidateClearButtonVisibility()
+        {
+            if (this._gridElements.Any())
+            {
+                this.ClearGridButton.IsEnabled = true;
+            }
+            else
+            {
+                this.ClearGridButton.IsEnabled = false;
+            }
+        }
+
+        private void ClearGridButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this._gridElements.Clear();
+            this._usedCells.Clear();
+            this.SimulationGrid.Children.RemoveRange(0, this.SimulationGrid.Children.Count);
+            this.CreateButton.IsEnabled = false;
+            this.CheckIn.IsEnabled = true;
+            this._buildingComponentImage = null;
+            this.ValidateClearButtonVisibility();
+        }
+
+        private Rectangle GetBlinkingRectangle()
+        {
+            Rectangle redRectangle = new Rectangle
+            {
+                Width = 300,
+                Height = 200,
+                Fill = new SolidColorBrush(Colors.Red)
+            };
+
+            var animation = new ColorAnimation
+            {
+                From = Colors.Orange,
+                To = Colors.Gray,
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+
+            redRectangle.Fill.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            return redRectangle;
         }
     }
 }
