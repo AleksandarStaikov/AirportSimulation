@@ -39,7 +39,8 @@
             x:Name="Conveyor"
             Grid.Column="0" 
             Grid.Row="1" 
-            Click="BuildingComponent_Click">
+            Click="BuildingComponent_Click"
+            IsEnabled="False">
             <StackPanel>
                 <TextBlock>Conveyor</TextBlock>
             </StackPanel>
@@ -49,7 +50,8 @@
             x:Name="PSC"
             Grid.Column="0" 
             Grid.Row="2" 
-            Click="BuildingComponent_Click">
+            Click="BuildingComponent_Click"
+            IsEnabled="False">
             <StackPanel>
                 <TextBlock>Primary Security Check</TextBlock>
             </StackPanel>
@@ -59,7 +61,8 @@
             x:Name="ASC"
             Grid.Column="0" 
             Grid.Row="3" 
-            Click="BuildingComponent_Click">
+            Click="BuildingComponent_Click"
+            IsEnabled="False">
             <StackPanel>
                 <TextBlock>Advanced Security Check</TextBlock>
             </StackPanel>
@@ -69,7 +72,8 @@
             x:Name="AA"
             Grid.Column="0" 
             Grid.Row="4" 
-            Click="BuildingComponent_Click">
+            Click="BuildingComponent_Click"
+            IsEnabled="False">
             <StackPanel>
                 <TextBlock>Airport Area</TextBlock>
             </StackPanel>
@@ -79,7 +83,8 @@
             x:Name="PA"
             Grid.Column="0" 
             Grid.Row="5" 
-            Click="BuildingComponent_Click">
+            Click="BuildingComponent_Click"
+            IsEnabled="False">
             <StackPanel>
                 <TextBlock>Pickup Area</TextBlock>
             </StackPanel>
