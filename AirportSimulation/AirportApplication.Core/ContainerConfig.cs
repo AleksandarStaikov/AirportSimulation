@@ -50,6 +50,7 @@
             builder.RegisterType<Mpa>();
             builder.RegisterType<BSU>();
             builder.RegisterType<Aa>();
+            builder.RegisterType<PickUpArea>();
             builder.RegisterType<OneToOneConveyor>();
             builder.RegisterType<ManyToOneConveyor>();
             builder.RegisterType<ConveyorConnector>();

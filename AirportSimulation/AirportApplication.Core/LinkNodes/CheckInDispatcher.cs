@@ -85,6 +85,7 @@
             var checkIn = _checkIns[index];
             var queue = _checkInQueues[index];
 
+            baggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
             if (checkIn.Status == NodeState.Free)
             {
                 checkIn.PassBaggage(baggage);
@@ -165,7 +166,7 @@
         private void SetUpTimers()
         {
             _flightDropOffTimers = new List<Timer>();
-            foreach (var flight in _simulationSettings.Flights)
+            foreach (var flight in _simulationSettings.OutgoingFlights)
             {
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
                 timer.Elapsed += (sender, e) => 

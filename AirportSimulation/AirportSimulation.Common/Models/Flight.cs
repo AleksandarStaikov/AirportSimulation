@@ -12,6 +12,8 @@
 
         public string Gate { get; set; } = "A1";
 
+        public string PickUpArea { get; set; } = "P1";
+
         public int DispatchedBaggagesCount { get; set; } = 0;
     }
 }

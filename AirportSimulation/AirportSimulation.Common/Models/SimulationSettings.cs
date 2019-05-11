@@ -1,7 +1,6 @@
 ﻿namespace AirportSimulation.Common.Models
 {
     using Contracts;
-    using System;
     using System.Collections.Generic;
 
     public class SimulationSettings : ISimulationSettings
@@ -21,7 +20,7 @@
             ConveyorSettingsAscToMpu = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsPscToAsc = new List<ConveyorSettings>() { new ConveyorSettings() };
 
-            Flights = new List<Flight>() { new Flight(){} };
+            OutgoingFlights = new List<Flight>() { new Flight(){} };
         }
 
         #region NodesInfos
@@ -55,9 +54,11 @@
 
         #endregion
 
-        public static TimeSpan TimeToFlight = new TimeSpan(0, 2, 0);
-        //TODO : Replace the timespan above 
-        public List<Flight> Flights { get; set; }
+        public List<Flight> OutgoingFlights { get; set; }
+
+        public List<Flight> IncomingFlights { get; set; }
+
+        public int TransBaggagePercentage { get; set; }
 
         public int Multiplier { get; set; } = 1;
     }

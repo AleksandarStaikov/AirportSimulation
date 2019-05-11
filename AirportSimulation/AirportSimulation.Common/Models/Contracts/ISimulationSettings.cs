@@ -27,7 +27,11 @@
 
     public interface IFlightManagement : IMultiplierSettings
     {
-        List<Flight> Flights { get; set; }
+        List<Flight> OutgoingFlights { get; set; }
+
+        List<Flight> IncomingFlights { get; set; }
+
+        int TransBaggagePercentage { get; set; }
     }
 
     public interface IPscSettings
