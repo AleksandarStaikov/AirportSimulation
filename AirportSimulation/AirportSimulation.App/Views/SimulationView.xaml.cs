@@ -7,9 +7,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
+    using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
 
@@ -22,10 +24,14 @@
         private List<Type> _gridNeededComponents;
 
         private List<Button> _buttons;
-             
+
         public SimulationView()
         {
             InitializeComponent();
+
+         
+
+
             this._gridNeededComponents = new List<Type>();
             this._buttons = new List<Button> {
                 Conveyor,
