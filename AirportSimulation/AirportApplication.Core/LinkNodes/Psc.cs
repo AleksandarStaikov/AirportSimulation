@@ -5,22 +5,28 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
 
     public class Psc : ProcessingNode, IProcessingNode
     {
-        public delegate Psc Factory();
+        public delegate Psc Factory(IPscSettings pscSettings);
 
-        public Psc(ITimerService timerService) : base(timerService)
+        private readonly IPscSettings _pscSettings;
+        private readonly Random _randomGen;
+
+        public Psc(IPscSettings pscSettings, ITimerService timerService) : base(timerService)
         {
+            _pscSettings = pscSettings;
+            _randomGen = new Random();
         }
-
-        public ChainLink FailSuccessor { get; set; }
 
         public override void Process(Baggage baggage)
         {
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "Primary security check processing");
-            //TODO : Implment 
-        }
+            var isFail = _randomGen.Next(0, 101) < _pscSettings.PscInvalidationPercentage;
 
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(_pscSettings.ProcessingRateInMilliseconds), $"Primary security check processing - passed: {isFail}");
+
+            baggage.Destination = isFail ? typeof(Asc).Name : typeof(Mpa).Name;
+        }
     }
 }

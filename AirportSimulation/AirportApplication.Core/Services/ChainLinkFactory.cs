@@ -1,22 +1,25 @@
 ﻿namespace AirportSimulation.Core.Services
 {
+    using System.Data;
     using Common.Models;
     using Contracts.Services;
     using LinkNodes;
-    using System.Data;
-    using Common.Models.Contracts;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
-        private readonly CheckInDesk.Factory _checkInDeskFactory;
-        private readonly Psc.Factory _pscFactory;
-        private readonly Asc.Factory _ascFactory;
-        private readonly Mpa.Factory _mpaFactory;
-        private readonly BSU.Factory _bsuFactory;
         private readonly Aa.Factory _aaFactory;
-        private readonly Conveyor.Factory _conveyorFactory;
-        private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
+        private readonly Asc.Factory _ascFactory;
         private readonly BagCollector.Factory _bagCollectorFactory;
+        private readonly BSU.Factory _bsuFactory;
+        private readonly CheckInDesk.Factory _checkInDeskFactory;
+        private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
+        private readonly ConveyorConnector.Factory _conveyorConnectorFactory;
+        private readonly ManyToOneConveyor.Factory _manyToOneConveyorFactory;
+        private readonly Mpa.Factory _mpaFactory;
+        private readonly OneToOneConveyor.Factory _oneToOneConveyorFactory;
+        private readonly Psc.Factory _pscFactory;
+        private int _dropOffsCount;
+        private int _gatesCount;
 
         private SimulationSettings _simulationSettings;
 
@@ -26,7 +29,9 @@
             Mpa.Factory mpaFactory,
             BSU.Factory bsuFactory,
             Aa.Factory aaFactory,
-            Conveyor.Factory conveyorFactory,
+            OneToOneConveyor.Factory oneToOneConveyorFactory,
+            ManyToOneConveyor.Factory manyToOneConveyorFactory,
+            ConveyorConnector.Factory conveyorConnectorFactory,
             CheckInDispatcher.Factory checkInDispatcherFactory,
             BagCollector.Factory bagCollectorFactory)
         {
@@ -36,9 +41,14 @@
             _mpaFactory = mpaFactory;
             _bsuFactory = bsuFactory;
             _aaFactory = aaFactory;
-            _conveyorFactory = conveyorFactory;
+            _oneToOneConveyorFactory = oneToOneConveyorFactory;
+            _manyToOneConveyorFactory = manyToOneConveyorFactory;
+            _conveyorConnectorFactory = conveyorConnectorFactory;
             _checkInDispatcherFactory = checkInDispatcherFactory;
             _bagCollectorFactory = bagCollectorFactory;
+
+            _dropOffsCount = 1;
+            _gatesCount = 1;
         }
 
         public CheckInDesk CreateCheckInDesk()
@@ -50,13 +60,15 @@
         public Psc CreatePsc()
         {
             ValidateSettings();
-            return _pscFactory();
+            //TODO: Deal with indexes
+            return _pscFactory(_simulationSettings.Pscs[0]);
         }
 
         public Asc CreateAsc()
         {
             ValidateSettings();
-            return _ascFactory();
+            //TODO: Deal with indexes
+            return _ascFactory(_simulationSettings.Ascs[0]);
         }
 
         public Mpa CreateMpa()
@@ -74,13 +86,38 @@
         public Aa CreateAa()
         {
             ValidateSettings();
-            return _aaFactory();
+            return _aaFactory(_gatesCount++);
         }
 
-        public Conveyor CreateConveyor(int length)
+        public OneToOneConveyor CreateOneToOneConveyor(int length)
         {
             ValidateSettings();
-            return _conveyorFactory(length);
+            return _oneToOneConveyorFactory(length);
+        }
+
+        public ManyToOneConveyor CreateManyToOneConveyor(int length)
+        {
+            ValidateSettings();
+            return _manyToOneConveyorFactory(length);
+        }
+
+        public ConveyorConnector CreateConveyorConnector()
+        {
+            ValidateSettings();
+            return _conveyorConnectorFactory();
+        }
+
+        public void SetSettings(SimulationSettings settings)
+        {
+            this._simulationSettings = settings;
+        }
+
+        private void ValidateSettings()
+        {
+            if (_simulationSettings == null)
+            {
+                throw new NoNullAllowedException("The simulation settings have not been set");
+            }
         }
 
         #region EndNodes
@@ -98,18 +135,5 @@
         }
 
         #endregion
-
-        public void SetSettings(SimulationSettings settings)
-        {
-            this._simulationSettings = settings;
-        }
-
-        private void ValidateSettings()
-        {
-            if (_simulationSettings == null)
-            {
-                throw new NoNullAllowedException("The simulation settings have not been set");
-            }
-        }
     }
 }

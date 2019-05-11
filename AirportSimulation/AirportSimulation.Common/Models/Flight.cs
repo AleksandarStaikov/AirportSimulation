@@ -12,6 +12,6 @@
 
         public string Gate { get; set; } = "A1";
 
-        public int DespatchedBaggagesCount { get; set; } = 0;
+        public int DispatchedBaggagesCount { get; set; } = 0;
     }
 }

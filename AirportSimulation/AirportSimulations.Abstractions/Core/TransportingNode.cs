@@ -1,23 +1,20 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
+    using System.Timers;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
     using CuttingEdge.Conditions;
-    using System.Timers;
 
     public abstract class TransportingNode : ChainLink, ITransportingNode
     {
         private const int ConveyorDefaultMovingTime = 1000;
 
-        protected int _lastIndex => _length - 1;
         protected readonly int _length;
         protected Baggage[] _conveyorBelt;
         protected Timer _timer;
 
-        public Baggage LastBaggage => _conveyorBelt[_lastIndex];
-
-        protected TransportingNode(int length, ITimerService timerService) 
+        protected TransportingNode(int length, ITimerService timerService)
             : base(timerService)
         {
             _length = length;
@@ -27,89 +24,55 @@
             _timer.Elapsed += (sender, args) => Move();
         }
 
+        protected int LastIndex => _length - 1;
+        protected Baggage LastBaggage => _conveyorBelt[LastIndex];
+
+        protected bool HasLastItem => LastBaggage != null;
+
         public void Start()
         {
             _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
-            if (!_timer.Enabled)
-            {
-                _timer.Start();
-            }
+            if (!_timer.Enabled) _timer.Start();
         }
 
         public void Stop()
         {
-            if (_timer.Enabled)
-            {
-                _timer.Stop();
-            }
+            if (_timer.Enabled) _timer.Stop();
         }
 
-        #region Inserting
-
-        public bool CanAdd()
+        public void SetSuccessor(IChainLink nextLink)
         {
-            return _conveyorBelt[0] == null;
+            NextLink = nextLink;
         }
 
-        public void Add(Baggage baggage)
+        public override string Destination => NextLink.Destination;
+
+        protected bool CanMove()
         {
-            Condition.Requires(CanAdd(), "conveyor")
-                .IsEqualTo(true, "Trying to add to {0}, while full.");
+            if (NextLink.Status == NodeState.Free) return true;
 
-            Status = NodeState.Busy;
-            _conveyorBelt[0] = baggage;
-        }
-
-        public override void PassBaggage(Baggage baggage)
-        {
-            Add(baggage);
-        }
-
-        #endregion
-
-        private bool HasLastItem() => LastBaggage != null;
-
-        private bool CanMove()
-        {
-            if (NextLink.Status == NodeState.Free)
-            {
-                return true;
-            }
-
-            if (!HasLastItem())
-            {
-                return true;
-            }
+            if (!HasLastItem) return true;
 
             return false;
         }
 
-        private void Move()
+        protected abstract void Move();
+
+        #region Inserting
+
+        protected bool CanAdd(int index = 0)
         {
-            _timer.Stop();
-
-            if (CanMove())
-            {
-                if (LastBaggage != null)
-                {
-                    NextLink.PassBaggage(LastBaggage);
-                    _conveyorBelt[_lastIndex] = null;
-                }
-
-                for (int i = _lastIndex; i > 0; i--)
-                {
-                    _conveyorBelt[i] = _conveyorBelt[i - 1];
-                    _conveyorBelt[i - 1] = null;
-                }
-
-                NextLink.OnStatusChangedToFree -= Move;
-                Status = NodeState.Free;
-                _timer.Start();
-            }
-            else
-            {
-                NextLink.OnStatusChangedToFree += Move;
-            }
+            return _conveyorBelt[index] == null;
         }
+
+        protected void Add(Baggage baggage, int index = 0)
+        {
+            Condition.Requires(CanAdd(), "conveyor")
+                .IsEqualTo(true, "Trying to add to {0}, while full.");
+
+            _conveyorBelt[index] = baggage;
+        }
+
+        #endregion
     }
 }

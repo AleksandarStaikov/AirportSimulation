@@ -1,27 +1,27 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using Abstractions.Contracts;
-    using Abstractions.Core;
-    using Common.Models;
-    using Common.Models.Contracts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Timers;
+    using Abstractions.Contracts;
+    using Abstractions.Core;
+    using Common.Models;
+    using Common.Models.Contracts;
     using CuttingEdge.Conditions;
 
     public class CheckInDispatcher : ChainLink
     {
+        public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings);
+
         //                                                          sec * milliseconds  
         private const int DefaultMaxPreflightBufferInMilliseconds = 600 * 1000;
 
         private readonly ISimulationSettings _simulationSettings;
 
         private List<Queue<Baggage>> _checkInQueues;
-        private List<Timer> _flightDropOffTimers;
         private List<CheckInDesk> _checkIns;
-
-        public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings);
+        private List<Timer> _flightDropOffTimers;
 
         public CheckInDispatcher(ISimulationSettings simulationSettings, ITimerService timerService) : base(timerService)
         {
@@ -30,6 +30,8 @@
             SetUpTimers();
 
         }
+
+        public override string Destination => this.GetType().Name;
 
         public void SetCheckIns(List<CheckInDesk> checkIns)
         {
@@ -73,10 +75,10 @@
 
         public void DispatchBaggage(Flight flight)
         {
-            flight.DespatchedBaggagesCount++;
+            flight.DispatchedBaggagesCount++;
             var baggage = new Baggage()
             {
-                FlightNumber = flight.FlightNumber,
+                Flight = flight,
             };
 
             var index = FindMostSuitableCheckInIndex();
@@ -89,6 +91,7 @@
             }
             else
             {
+                //TODO : Not valid, if another attached.
                 if (checkIn.OnStatusChangedToFree == null)
                 {
                     checkIn.OnStatusChangedToFree += () => { PassQueuedBaggage(index); };
@@ -148,7 +151,7 @@
             var dispatchRate = timeUntillFlightWithoutPreflightBuffer / flight.BaggageCount;
             return (int)dispatchRate / _simulationSettings.Multiplier;
         }
-        
+
         private void SetUpQueues()
         {
             _checkInQueues = new List<Queue<Baggage>>();
@@ -167,7 +170,7 @@
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
                 timer.Elapsed += (sender, e) => 
                 {
-                    if (flight.BaggageCount < flight.DespatchedBaggagesCount)
+                    if (flight.BaggageCount > flight.DispatchedBaggagesCount)
                     {
                         DispatchBaggage(flight);
                     }

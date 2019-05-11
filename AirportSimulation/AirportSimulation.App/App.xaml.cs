@@ -21,14 +21,7 @@
 
                 base.OnStartup(e);
 
-                using (var container = ContainerConfig.Configure())
-                {
-                    container.BeginLifetimeScope();
-
-                    var engine = container.Resolve<IEngine>();
-                    //Pass the settings here
-                    engine.Run(new SimulationSettings());
-                }
+                ContainerConfig.Configure();
                     
                 InitializeMainWindow();
 

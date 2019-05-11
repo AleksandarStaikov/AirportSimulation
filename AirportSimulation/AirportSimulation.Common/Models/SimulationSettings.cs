@@ -1,10 +1,10 @@
 ﻿namespace AirportSimulation.Common.Models
 {
+    using Contracts;
     using System;
     using System.Collections.Generic;
-    using Contracts;
 
-    public class SimulationSettings : BaseVM, ISimulationSettings
+    public class SimulationSettings : ISimulationSettings
     {
         public SimulationSettings()
         {
@@ -67,16 +67,17 @@
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
     }
 
-    public class PscSettings
+    public class PscSettings : IPscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
+
         public int PscInvalidationPercentage { get; set; }
     }
 
-    public class AscSettings
+    public class AscSettings : IAscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
-        public int AscStaffCount { get; set; } = 2;
+        public int AscStaffCount { get; set; }
         public int AscInvalidationPercentage { get; set; }
     }
 
@@ -95,7 +96,7 @@
     public class ConveyorSettings
     {
         public int Length { get; set; } = 10;
-
+        
         public int SpeedInMilliseconds { get; set; } = 1000;
     }
 }

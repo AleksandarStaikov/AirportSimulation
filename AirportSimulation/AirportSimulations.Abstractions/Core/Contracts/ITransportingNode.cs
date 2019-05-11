@@ -1,11 +1,11 @@
 ﻿namespace AirportSimulation.Abstractions.Core.Contracts
 {
-    using System;
-    using Common.Models;
-
-    public interface ITransportingNode: IChainLink
+    public interface ITransportingNode : IChainLink
     {
-        bool CanAdd();
-        void Add(Baggage baggage);
+        void Start();
+
+        void Stop();
+
+        void SetSuccessor(IChainLink nextLink);
     }
 }

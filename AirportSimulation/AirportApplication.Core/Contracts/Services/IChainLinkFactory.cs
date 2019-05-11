@@ -11,7 +11,9 @@
         Mpa CreateMpa();
         BSU CreateBsu();
         Aa CreateAa();
-        Conveyor CreateConveyor(int length);
+        OneToOneConveyor CreateOneToOneConveyor(int length);
+        ManyToOneConveyor CreateManyToOneConveyor(int length);
+        ConveyorConnector CreateConveyorConnector();
         CheckInDispatcher CreateCheckInDispatcher();
         BagCollector CreateBagCollector();
 

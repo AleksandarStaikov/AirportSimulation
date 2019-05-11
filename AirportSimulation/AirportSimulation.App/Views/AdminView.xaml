@@ -3,16 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:AirportSimulation.App.Views"
              xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
-             xmlns:avml ="clr-namespace:AirportSimulation.Common.ViewModels"
+             xmlns:avml ="clr-namespace:AirportSimulation.Core.ViewModels;assembly=AirportSimulation.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <avml:SimulationSettingsContainerViewModel />
+    </UserControl.DataContext>
     <UserControl.Resources>
         <localRes:EnumToBoolConverter x:Key="EBConverter" />
     </UserControl.Resources>
-    <Grid x:Name="GridAdministration" Background="WhiteSmoke" DataContext="{Binding Path=SimulationSettings}">
-
+    <Grid x:Name="GridAdministration" Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -29,84 +30,68 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-
         <!-- ##########     COLUMN 0     ########## -->
-
-
 
         <StackPanel Grid.Column="0" Grid.Row="0" Background="WhiteSmoke">
             <StackPanel Margin="20 15">
                 <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15" FontWeight="Bold" FontSize="14"><Run Text="Variable set-up"/></TextBlock>
             </StackPanel>
         </StackPanel>
-
         <StackPanel Grid.Column="0" Grid.Row="1" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of Check-In Desks"/></TextBlock>
-            <TextBox Text="{Binding Path=CheckInStationsCount, Mode =TwoWay}" x:Name="checkInStationsCount" VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.CheckInStationsCount, Mode=OneWay}" x:Name="checkInStationsCount" VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="2" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of PSC Conveyors"/></TextBlock>
-            <TextBox Text="{Binding Path=PscConveyorsCount, Mode =TwoWay}" x:Name="pscConveyorsCount"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.PscCount, Mode=OneWay}" x:Name="pscConveyorsCount"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="3" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="PSC Fail Percentage"/></TextBlock>
-            <TextBox Text="{Binding Path=PscInvalidationPercentage, Mode =TwoWay}" x:Name="pscInvalidationPercentage"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.Pscs[0].PscInvalidationPercentage, Mode=TwoWay}" x:Name="pscInvalidationPercentage"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="4" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of AA"/></TextBlock>
-            <TextBox Text="{Binding Path=AaCount, Mode =TwoWay}" x:Name="aaCount"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.AaCount, Mode=OneWay}" x:Name="aaCount"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="5" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from Check-In to PSC"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromCheckInToPsc, Mode =TwoWay}" x:Name="distanceFromCheckInToPsc"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsCheckInToPsc[0].Length, Mode=TwoWay}" x:Name="distanceFromCheckInToPsc"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
-
-        <StackPanel Grid.Column="0" Grid.Row="6" Margin="25 20">
+        <StackPanel Grid.Column="2" Grid.Row="4" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from PSC to ASC"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromPscToAsc, Mode =TwoWay}" x:Name="distanceFromPscToAsc"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsPscToAsc[0].Length, Mode=TwoWay}" x:Name="distanceFromPscToAsc"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
-
-
 
         <!-- ##########     COLUMN 1     ########## -->
 
-
-
         <StackPanel Grid.Column="1" Grid.Row="1" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to AA"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromMpaToAa, Mode =TwoWay}" x:Name="distanceFromMpaToAa"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsMpaToAa[0].Length, Mode=TwoWay}" x:Name="distanceFromMpaToAa"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to Pick-Up Area"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromMpaToPickUp, Mode =TwoWay}" x:Name="distanceFromMpaToPickUp"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsMpaToPickUp[0].Length, Mode=TwoWay}" x:Name="distanceFromMpaToPickUp"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="3" Margin="25 20">
+        <!--<StackPanel Grid.Column="1" Grid.Row="3" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Drop-off Rate"/></TextBlock>
-            <TextBox Text="{Binding Path=DropOffRate, Mode =TwoWay}" x:Name="dropOffRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=DropOffRate, Mode=TwoWay}" x:Name="dropOffRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+        </StackPanel>-->
+        <StackPanel Grid.Column="1" Grid.Row="3" Margin="25 20">
+            <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Pick-up Rate"/></TextBlock>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.Aas[0].PickUpRate, Mode=TwoWay}" x:Name="pickUpRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="4" Margin="25 20">
-            <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Pick-up Rate"/></TextBlock>
-            <TextBox Text="{Binding Path=PickUpRate, Mode =TwoWay}" x:Name="pickUpRate"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from PSC to MPA"/></TextBlock>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsPscToMpa[0].Length, Mode=TwoWay}" x:Name="distanceFromPscToMpu"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="5" Margin="25 20">
-            <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from PSC to MPA"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromPscToMpu, Mode =TwoWay}" x:Name="distanceFromPscToMpu"  VerticalAlignment="Center" Foreground="#5D5C61"/>
-        </StackPanel>
-
-
-        <StackPanel Grid.Column="1" Grid.Row="6" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from ASC to MPA"/></TextBlock>
-            <TextBox Text="{Binding Path=DistanceFromAscToMpu, Mode =TwoWay}" x:Name="distanceFromAscToMpu"  VerticalAlignment="Center" Foreground="#5D5C61"/>
+            <TextBox Text="{Binding Path=SimulationSettingsViewModel.ConveyorSettingsAscToMpu[0].Length, Mode=TwoWay}" x:Name="distanceFromAscToMpu"  VerticalAlignment="Center" Foreground="#5D5C61"/>
         </StackPanel>
-
-
 
         <!-- ##########     COLUMN 2     ########## -->
 
-
-
-        <StackPanel Grid.Column="2" Grid.Row="1" Margin="25 20">
+        <!--<StackPanel Grid.Column="2" Grid.Row="1" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Type of baggage"/></TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -114,65 +99,72 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <RadioButton Name="small" Grid.Column="0" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" IsChecked="{Binding Path=BaggageType, Converter={StaticResource EBConverter}, ConverterParameter=Small, Mode=TwoWay}" Margin="0 10">Small</RadioButton>
-                <RadioButton Name="big" Grid.Column="1" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center"  Background="#5D5C61" Foreground="#5D5C61" IsChecked="{Binding Path=BaggageType, Converter={StaticResource EBConverter}, ConverterParameter=Big, Mode=TwoWay}">Big</RadioButton>
-                <RadioButton Name="large" Grid.Column="2" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" IsChecked="{Binding Path=BaggageType, Converter={StaticResource EBConverter}, ConverterParameter=Large, Mode=TwoWay}">Large</RadioButton>
+                <RadioButton 
+                    Name="small" 
+                    Grid.Column="0"
+                    Style="{StaticResource MaterialDesignRadioButton}" 
+                    VerticalAlignment="Center" 
+                    Background="#5D5C61"
+                    Foreground="#5D5C61" 
+                    IsChecked="{Binding Path=SimulationSettingsViewModel.IsSmall , 
+                        Converter={StaticResource EBConverter}, Mode=OneWayToSource}" Margin="0 10">
+                    Small
+                </RadioButton>
+                <RadioButton 
+                    Name="regular"
+                    Grid.Column="1" 
+                    Style="{StaticResource MaterialDesignRadioButton}"
+                    VerticalAlignment="Center" 
+                    Background="#5D5C61" Foreground="#5D5C61" 
+                    IsChecked="{Binding Path=SimulationSettingsViewMode.IsRegular, 
+                        Converter={StaticResource EBConverter}, Mode=OneWayToSource}">
+                    Big
+                </RadioButton>
+                <RadioButton
+                    Name="large" 
+                    Grid.Column="2" 
+                    Style="{StaticResource MaterialDesignRadioButton}"
+                    VerticalAlignment="Center"
+                    Background="#5D5C61" 
+                    Foreground="#5D5C61"
+                    IsChecked="{Binding Path=SimulationSettingsViewModel.IsLarge, 
+                        Converter={StaticResource EBConverter}, Mode=OneWayToSource}">
+                    Large
+                </RadioButton>
             </Grid>
-        </StackPanel>
-
-        <StackPanel Grid.Column="2" Grid.Row="2" Margin="25 20">
+        </StackPanel>-->
+        <StackPanel Grid.Column="2" Grid.Row="1" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="ASC Number of Employees"/></TextBlock>
-            <TextBox Name="ascStaffCount" Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=AscStaffCount, Mode=TwoWay}" FontSize="11"/>
+            <TextBox Name="ascStaffCount" Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=SimulationSettingsViewModel.Ascs[0].AscStaffCount, Mode=TwoWay}" FontSize="11"/>
         </StackPanel>
-
-        <StackPanel Grid.Column="2" Grid.Row="3" Margin="25 20">
+        <StackPanel Grid.Column="2" Grid.Row="2" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Bag Storage Capacity"/></TextBlock>
-
-            <TextBox Name="bsuCapacity" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=BsuCapacity, Mode=TwoWay}" FontSize="11"/>
+            <TextBox Name="bsuCapacity" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=SimulationSettingsViewModel.Bsu.BsuCapacity, Mode=TwoWay}" FontSize="11"/>
         </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="4" Margin="25 20">
+        <StackPanel Grid.Column="2" Grid.Row="3" Margin="25 20">
             <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Bag Storage # of Robots"/></TextBlock>
-            <TextBox Name="bsuRobotsCount" Grid.Row="2" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=BsuRobotsCount, Mode=TwoWay}" FontSize="11" Margin="0 2"/>
+            <TextBox Name="bsuRobotsCount" Grid.Row="2" VerticalAlignment="Center" Foreground="#5D5C61" Text="{Binding Path=SimulationSettingsViewModel.Bsu.BsuRobotsCount, Mode=TwoWay}" FontSize="11" Margin="0 2"/>
         </StackPanel>
-
-
 
         <!-- ##########     COLUMN 3     ########## -->
 
-
-
         <StackPanel Grid.Column="3" Grid.Row="1" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                         FontSize="12" Click="Button_Click">
-                _SAVE
+                         FontSize="12" Command="{Binding CollectSettings}">
+                RUN
             </Button>
         </StackPanel>
-
         <StackPanel Grid.Column="3" Grid.Row="2" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
                          FontSize="12">
-                _LOAD
+                EXPORT VARIABLES
             </Button>
-
         </StackPanel>
-
         <StackPanel Grid.Column="3" Grid.Row="3" Margin="25 20">
             <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
                          FontSize="12">
-                _EXPORT
+                IMPORT VARIABLES
             </Button>
-
         </StackPanel>
-
-        <StackPanel Grid.Column="3" Grid.Row="4" Margin="25 20">
-            <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                         FontSize="12">
-                _IMPORT
-            </Button>
-
-        </StackPanel>
-
-
-
     </Grid>
 </UserControl>
