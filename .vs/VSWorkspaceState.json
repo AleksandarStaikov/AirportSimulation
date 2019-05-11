@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\AirportSimulation",
+    "\\AirportSimulation\\AirportSimulation.App",
+    "\\AirportSimulation\\AirportSimulation.App\\Views"
   ],
+  "SelectedNode": "\\AirportSimulation\\AirportSimulation.App\\Views\\SimulationView.xaml",
   "PreviewInSolutionExplorer": false
 }

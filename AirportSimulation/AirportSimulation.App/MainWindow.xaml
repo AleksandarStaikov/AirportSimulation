@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:MetroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:local="clr-namespace:AirportSimulation.App"
         xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
@@ -38,40 +37,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <!--<Grid Grid.Column="0" Grid.Row="0" Margin="25 20">
-                        <MetroChart:ClusteredColumnChart  
-                Grid.Column="1"
-                Grid.Row="0" 
-                ChartTitle="Time Elapsed"
-                Palette="{Binding Path=SelectedPalette.Value}"
-                FontSize="{Binding Path=SelectedFontSize}"
-                ToolTipFormat="{Binding Path=ToolTipFormat}"
-                Foreground="{Binding Path=Foreground}" 
-                Background="{Binding Path=Background}"                 
-                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
-                            <MetroChart:ClusteredColumnChart.Series>
-                                <MetroChart:ChartSeries
-                        SeriesTitle="X"
-                        DisplayMember="Category"
-                        ValueMember="Number"
-                        ItemsSource="{Binding Path=X}" />
-                                <MetroChart:ChartSeries
-                        SeriesTitle="Y"
-                        DisplayMember="Category"
-                        ValueMember="Number"
-                        ItemsSource="{Binding Path=Y}" />
-                            </MetroChart:ClusteredColumnChart.Series>
-                        </MetroChart:ClusteredColumnChart>
-                    </Grid>-->
+                    <views:StatisticsView x:Name="StatisticsView"/>
                 </Grid>
             </TabItem>
         </TabControl>
