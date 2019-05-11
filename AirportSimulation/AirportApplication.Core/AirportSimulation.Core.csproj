@@ -82,10 +82,6 @@
     <Compile Include="Services\ChainLinkFactory.cs" />
     <Compile Include="Contracts\Services\IChainLinkFactory.cs" />
     <Compile Include="Services\TimerService.cs" />
-    <Compile Include="ViewModels\BaggageViewModel.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\ConveyorBeltViewModel.cs" />
-    <Compile Include="ViewModels\ConveyorSlotViewModel.cs" />
     <Compile Include="ViewModels\SimulationSettingsContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
