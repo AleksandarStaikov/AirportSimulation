@@ -67,6 +67,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Contracts\IEngine.cs" />
     <Compile Include="LinkNodes\Aa.cs" />
+    <Compile Include="LinkNodes\AADispatcher.cs" />
     <Compile Include="LinkNodes\BagCollector.cs" />
     <Compile Include="LinkNodes\Asc.cs" />
     <Compile Include="LinkNodes\BaggageBucket.cs" />

@@ -14,6 +14,7 @@
         private readonly BSU.Factory _bsuFactory;
         private readonly CheckInDesk.Factory _checkInDeskFactory;
         private readonly CheckInDispatcher.Factory _checkInDispatcherFactory;
+        private readonly AADispatcher.Factory _aaDispatcherFactory;
         private readonly ConveyorConnector.Factory _conveyorConnectorFactory;
         private readonly ManyToOneConveyor.Factory _manyToOneConveyorFactory;
         private readonly Mpa.Factory _mpaFactory;
@@ -35,6 +36,7 @@
             ManyToOneConveyor.Factory manyToOneConveyorFactory,
             ConveyorConnector.Factory conveyorConnectorFactory,
             CheckInDispatcher.Factory checkInDispatcherFactory,
+            AADispatcher.Factory aaDispatcherFactory,
             BagCollector.Factory bagCollectorFactory)
         {
             _checkInDeskFactory = checkInDeskFactory;
@@ -48,6 +50,7 @@
             _manyToOneConveyorFactory = manyToOneConveyorFactory;
             _conveyorConnectorFactory = conveyorConnectorFactory;
             _checkInDispatcherFactory = checkInDispatcherFactory;
+            _aaDispatcherFactory = aaDispatcherFactory;
             _bagCollectorFactory = bagCollectorFactory;
 
             _puasCount = 1;
@@ -136,6 +139,12 @@
         {
             ValidateSettings();
             return _checkInDispatcherFactory(_simulationSettings);
+        }
+
+        public AADispatcher CreateAaDispatcher()
+        {
+            ValidateSettings();
+            return _aaDispatcherFactory(_simulationSettings);
         }
 
         public BagCollector CreateBagCollector()

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -13,24 +12,25 @@
 
     public class AADispatcher : ChainLink
     {
+        public delegate AADispatcher Factory(IFlightManagement flightManagement);
+
         private readonly IFlightManagement _flightManagement;
-        private List<IChainLink> _gates;
 
         private Dictionary<IChainLink, Queue<Baggage>> _gateQueues;
+        private List<IChainLink> _gates;
 
         public AADispatcher(IFlightManagement flightManagement, ITimerService timerService) : base(timerService)
         {
             _flightManagement = flightManagement;
         }
 
+        public override string Destination { get; }
+
         public void SetUpGates(List<IChainLink> gates)
         {
             _gates = gates;
             _gateQueues = new Dictionary<IChainLink, Queue<Baggage>>();
-            foreach (var gate in gates)
-            {
-                _gateQueues.Add(gate, new Queue<Baggage>());
-            }
+            foreach (var gate in gates) _gateQueues.Add(gate, new Queue<Baggage>());
         }
 
         private IChainLink FindGate(string gateDestination)
@@ -48,18 +48,18 @@
         {
             var gate = FindGate(flight.Gate);
 
-            Random randomGen = new Random(0);
+            var randomGen = new Random(0);
 
             foreach (var i in Enumerable.Range(1, flight.BaggageCount))
             {
                 var isTrans = randomGen.Next(0, 101) < _flightManagement.TransBaggagePercentage;
 
-                var bag = new Baggage()
+                var bag = new Baggage
                 {
                     BaggageType = BaggageType.Small,
                     Destination = flight.PickUpArea,
                     Flight = flight,
-                    Owner = "Someone",
+                    Owner = "Someone"
                 };
 
                 if (isTrans)
@@ -83,7 +83,7 @@
         }
 
         private void PassOrEnqueueBaggage(IChainLink gate, Baggage bag)
-        { 
+        {
             bag.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
             if (gate.Status == NodeState.Free)
             {
@@ -92,9 +92,7 @@
             else
             {
                 if (gate.OnStatusChangedToFree == null)
-                {
                     gate.OnStatusChangedToFree += () => { PassQueuedBaggage(gate); };
-                }
                 _gateQueues[gate].Enqueue(bag);
             }
         }
@@ -103,19 +101,14 @@
         {
             var queue = _gateQueues[gate];
 
-            if (!queue.Any() || gate.Status != NodeState.Free)
-            {
-                return;
-            }
+            if (!queue.Any() || gate.Status != NodeState.Free) return;
 
             gate.PassBaggage(queue.Dequeue());
         }
 
-        public override string Destination { get; }
-
         public override void PassBaggage(Baggage baggage)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

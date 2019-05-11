@@ -55,6 +55,7 @@
             builder.RegisterType<ManyToOneConveyor>();
             builder.RegisterType<ConveyorConnector>();
             builder.RegisterType<CheckInDispatcher>();
+            builder.RegisterType<AADispatcher>();
             builder.RegisterType<BagCollector>();
 
             #endregion
