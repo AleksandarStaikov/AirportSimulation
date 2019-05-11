@@ -3,6 +3,7 @@
     using AirportSimulation.App.Resources;
     using AirportSimulation.Common;
     using AirportSimulation.Common.Models;
+    using AirportSimulation.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -18,12 +19,23 @@
         private List<GridCellElement> _gridElements = new List<GridCellElement>();
         private BitmapImage _buildingComponentImage;
         private Type _componentType;
+        private List<Type> _gridNeededComponents;
 
+        private List<Button> _buttons;
+             
         public SimulationView()
         {
             InitializeComponent();
-            this._buildingComponentImage = GetComponentImage("Resources/check-in.png");
-            this._componentType = typeof(CheckInSettings);
+            this._gridNeededComponents = new List<Type>();
+            this._buttons = new List<Button> {
+                Conveyor,
+                CheckIn,
+                AA,
+                PSC,
+                ASC,
+                PA,
+                Import.GetStackPanelChildButton(),
+                Export.GetStackPanelChildButton() };
         }
         
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -36,6 +48,9 @@
 
             if (this.IsCellAlreadyUsed(grid, pair))
                 return;
+
+            if (this._buildingComponentImage == null)
+                return;
             
             var rectangle = new Rectangle
             {
@@ -47,19 +62,21 @@
                     ImageSource = this._buildingComponentImage
                 }
             };
-
+            
             this._gridElements.Add(new GridCellElement
             {
                 Element = rectangle,
                 Cell = pair,
                 SimulationType = this._componentType
             });
+            this._gridNeededComponents.Add(this._componentType);
 
             grid.Children.Add(rectangle);
             this._usedCells.Add(pair);
 
             Grid.SetRow(rectangle, selectedRowIndex);
             Grid.SetColumn(rectangle, selectedColumnIndex);
+
 
             if (this._componentType == typeof(CheckInSettings))
             {
@@ -71,6 +88,9 @@
         {
             var componentName = (sender as Button).Name;
             var type = Enum.Parse(typeof(BuildingComponentType), componentName, true) ?? BuildingComponentType.CheckIn;
+
+            this.CreateButton.IsEnabled = true;
+            this._buttons.Where(b => b.Name != componentName).ToList().ForEach(b => b.IsEnabled = false);
 
             switch (type)
             {
@@ -121,6 +141,18 @@
                 this._usedCells.Remove(pair);
                 this._gridElements.Remove(elementToRemove);
 
+                while (this._gridNeededComponents.Contains(elementToRemove.SimulationType))
+                    this._gridNeededComponents.Remove(elementToRemove.SimulationType);
+
+                if (!this._gridElements.Any())
+                {
+                    this._buttons.ForEach(b => b.IsEnabled = true);
+                    this.CreateButton.IsEnabled = false;
+                    this._buildingComponentImage = null;
+                }
+
+                this.ValidateRunButtonVisibility();
+
                 return true;
             }
 
@@ -167,6 +199,26 @@
         private void Run_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             
+        }
+
+        private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this._buttons.ForEach(b => b.IsEnabled = true);
+            this._buildingComponentImage = null;
+
+            this.ValidateRunButtonVisibility();
+        }
+
+        private void ValidateRunButtonVisibility()
+        {
+            var canStart = this._gridNeededComponents.Contains(typeof(CheckInSettings)) &&
+                this._gridNeededComponents.Contains(typeof(ConveyorSettings)) &&
+                this._gridNeededComponents.Contains(typeof(AaSettings)) &&
+                this._gridNeededComponents.Contains(typeof(PickupAreaSettings)) &&
+                this._gridNeededComponents.Contains(typeof(PscSettings)) &&
+                this._gridNeededComponents.Contains(typeof(AscSettings));
+
+            this.Run.GetStackPanelChildButton().IsEnabled = canStart ? true : false;
         }
     }
 }
