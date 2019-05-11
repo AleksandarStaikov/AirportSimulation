@@ -15,6 +15,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -89,10 +90,11 @@
             Margin="10 10 10 10"
             Grid.Column="1" 
             Grid.RowSpan="5" 
-            Grid.ColumnSpan="4"
+            Grid.ColumnSpan="5"
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Visible">
             <Grid 
+                x:Name="SimulationGrid"
                 Background="Transparent" 
                 localRes:GridHelper.Rows="*#15;auto" 
                 localRes:GridHelper.Columns="*#20;auto" 
@@ -156,6 +158,22 @@
                 IsEnabled="False">
                 <StackPanel>
                     <TextBlock>CREATE</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel 
+            
+            Grid.Column="5" 
+            Grid.Row="5" 
+            Margin="25 20">
+            <Button 
+                Name="ClearGridButton"
+                Width="150"
+                FontSize="12"
+                Click="ClearGridButton_Click"
+                IsEnabled ="False">
+                <StackPanel>
+                    <TextBlock>CLEAR</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>

@@ -82,6 +82,7 @@
             {
 
             }
+            this.ValidateClearButtonVisibility();
         }
 
         private void BuildingComponent_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -152,7 +153,7 @@
                 }
 
                 this.ValidateRunButtonVisibility();
-
+                this.ValidateClearButtonVisibility();
                 return true;
             }
 
@@ -219,6 +220,28 @@
                 this._gridNeededComponents.Contains(typeof(AscSettings));
 
             this.Run.GetStackPanelChildButton().IsEnabled = canStart ? true : false;
+        }
+
+        private void ValidateClearButtonVisibility()
+        {
+            if (this._gridElements.Any())
+            {
+                ClearGridButton.IsEnabled = true;
+            }
+            else
+            {
+                ClearGridButton.IsEnabled = false;
+            }
+        }
+
+        private void ClearGridButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this._gridElements.Clear();
+            this._usedCells.Clear();
+            this.SimulationGrid.Children.RemoveRange(0, this.SimulationGrid.Children.Count);
+            this.CreateButton.IsEnabled = false;
+            this._buttons.ForEach(b => b.IsEnabled = true);
+            this._buildingComponentImage = null;
         }
     }
 }
