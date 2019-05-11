@@ -16,7 +16,7 @@
             _watch = new Stopwatch();
         }
 
-        public float SimulationMultiplier => _simulationSettings.Multiplier;
+        public float SimulationMultiplier => _simulationSettings.Multiplier = 8;
 
         public void RunNewTimer()
         {

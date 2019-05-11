@@ -16,7 +16,7 @@
         {
         }
 
-        public NodeState Status { get; set; }
+        public NodeState Status { get { return _nextNode.Status(this); } private set { } }
 
         public override string Destination => _nextNode.Destination;
 

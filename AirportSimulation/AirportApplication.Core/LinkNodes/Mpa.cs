@@ -6,69 +6,78 @@
     using System.Collections.Generic;
     using Common.Models;
     using System;
+    using System.Threading.Tasks;
+    using System.Linq;
 
     public class Mpa : ChainLink, IChainLink
     {
         public delegate Mpa Factory();
 
-        private OneToOneConveyor _mainConveyor;
-        //private Sorter _sorter;
-        public new List<ChainLink> NextLink { get; set; } //[0] is BSU, [1] is MpaToAA
+        private Dictionary<string, ChainLink> _allSuccessors;
+        private Dictionary<string, Queue<Baggage>> _baggageDistributors;
 
         public Mpa(ITimerService timerService) : base(timerService)
         {
-            NextLink = new List<ChainLink>();
-            _mainConveyor = new OneToOneConveyor(10, timerService);
-            //TODO: put in a method
-            //_mainConveyor.Start();
-            //_sorter = new Sorter(timerService, this);
+            _allSuccessors = new Dictionary<string, ChainLink>();
+            _baggageDistributors = new Dictionary<string, Queue<Baggage>>();
 
-            //_mainConveyor.NextLink = _sorter;
         }
 
         public override string Destination => this.GetType().Name;
 
+        public void AddSuccessor(ChainLink successor)
+        {
+            _allSuccessors[successor.Destination] = successor;
+            _baggageDistributors[successor.Destination] = new Queue<Baggage>();
+        }
+
         public override void PassBaggage(Baggage baggage)
         {
-            Action statusIsFree = () =>
+            sortToDestinationDistributor(baggage);
+
+            _baggageDistributors[baggage.Destination].Enqueue(baggage);
+        }
+
+        public void Start()
+        {
+            foreach (string destination in _baggageDistributors.Keys)
             {
-                this.PassBaggage(baggage);
-            };
-            
-            this.Status = NodeState.Busy;
-            if(_mainConveyor.Status == NodeState.Free)
-            {
-                _mainConveyor.PassBaggage(baggage);
-                this.Status = NodeState.Free;
-                _mainConveyor.OnStatusChangedToFree -= statusIsFree;
-                
-            }
-            else
-            {
-                _mainConveyor.OnStatusChangedToFree += statusIsFree;
+                Task.Factory.StartNew(() =>
+                {
+                    distributeBaggage(destination);
+                });
             }
         }
 
-        //internal class Sorter : ProcessingNode, IProcessingNode
-        //{
-        //    private Mpa _mpa;
+        private void distributeBaggage(string destination)
+        {
+            ChainLink nextNode = _allSuccessors[destination];
 
-        //    public Sorter(ITimerService timerService, Mpa mpa) : base(timerService)
-        //    {
-        //        _mpa = mpa;
-        //    }
+            nextNode.OnStatusChangedToFree += () =>
+                {
+                    if (_baggageDistributors[destination].Count > 0)
+                    {
+                        if (nextNode.Status == NodeState.Free)
+                        {
+                            nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
+                        }
+                    }
+                };
 
-        //    public override void Process(Baggage baggage)
-        //    {
-        //        if ((SimulationSettings.TimeToFlight.TotalMilliseconds - TimerService.GetTimeSinceSimulationStart().TotalMilliseconds * TimerService.SimulationMultiplier) > 30000)
-        //        {
-        //            this.NextLink = _mpa.NextLink[0];
-        //        }
-        //        else
-        //        {
-        //            this.NextLink = _mpa.NextLink[1];
-        //        }
-        //    }
-        //}
+        }
+
+        private void sortToDestinationDistributor(Baggage baggage)
+        {
+            double timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
+
+            if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
+            {
+                baggage.Destination = typeof(BSU).Name;
+            }
+            else
+            {
+                baggage.Destination = baggage.Flight.Gate;
+            }
+        }
     }
 }

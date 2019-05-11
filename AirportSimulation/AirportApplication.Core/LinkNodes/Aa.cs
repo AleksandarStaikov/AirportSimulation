@@ -4,6 +4,7 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using System.Linq;
 
     public class Aa : ProcessingNode, IProcessingNode
     {
@@ -16,11 +17,12 @@
 
         public int DropOffNumber { get; }
 
-        public override string Destination => $"Gate {DropOffNumber}";
+        public override string Destination => $"A{DropOffNumber}";
 
         public override void Process(Baggage baggage)
         {
             //TODO : Implment
+            baggage.Destination = _allSuccessors.FirstOrDefault(x => x.Destination == typeof(BagCollector).Name).Destination;
             baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), $"{Destination} processing");
         }
     }
