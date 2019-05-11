@@ -2,6 +2,7 @@
 {
     using AirportSimulation.App.Resources;
     using AirportSimulation.Common;
+    using AirportSimulation.Common.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,7 +16,8 @@
     {
         private List<KeyValuePair<int, int>> _usedCells = new List<KeyValuePair<int, int>>();
         private List<GridCellElement> _gridElements = new List<GridCellElement>();
-        private BitmapImage buildingComponentImage;
+        private BitmapImage _buildingComponentImage;
+        private Type _simulationType;
 
         public SimulationView()
         {
@@ -32,10 +34,12 @@
             {
                 var pos = e.GetPosition(grid);
                 var temp = pos.X;
+
                 for (var i = 0; i < grid.ColumnDefinitions.Count; i++)
                 {
                     var colDef = grid.ColumnDefinitions[i];
                     temp -= colDef.ActualWidth;
+
                     if (temp <= -1)
                     {
                         selectedColumnIndex = i;
@@ -44,10 +48,12 @@
                 }
 
                 temp = pos.Y;
+
                 for (var i = 0; i < grid.RowDefinitions.Count; i++)
                 {
                     var rowDef = grid.RowDefinitions[i];
                     temp -= rowDef.ActualHeight;
+
                     if (temp <= -1)
                     {
                         selectedRowIndex = i;
@@ -64,35 +70,37 @@
                 grid.Children.Remove(elementToRemove.Element);
                 this._usedCells.Remove(pair);
                 _gridElements.Remove(elementToRemove);
+
+                return;
+
             }
-            else
+
+            if (this._buildingComponentImage == null)
+                return;
+
+            var rectangle = new Rectangle
             {
-                if (this.buildingComponentImage == null)
-                    return;
-
-                var rectangle = new Rectangle
+                Width = 50,
+                Height = 50,
+                Fill = new ImageBrush
                 {
-                    Width = 50,
-                    Height = 50,
-                    Fill = new ImageBrush
-                    {
-                        Stretch = Stretch.Fill,
-                        ImageSource = this.buildingComponentImage
-                    }
-                };
+                    Stretch = Stretch.Fill,
+                    ImageSource = this._buildingComponentImage
+                }
+            };
 
-                _gridElements.Add(new GridCellElement
-                {
-                    Element = rectangle,
-                    Cell = pair
-                });
+            _gridElements.Add(new GridCellElement
+            {
+                Element = rectangle,
+                Cell = pair,
+                SimulationType = this._simulationType
+            });
 
-                grid.Children.Add(rectangle);
-                this._usedCells.Add(pair);
+            grid.Children.Add(rectangle);
+            this._usedCells.Add(pair);
 
-                Grid.SetRow(rectangle, selectedRowIndex);
-                Grid.SetColumn(rectangle, selectedColumnIndex);
-            }
+            Grid.SetRow(rectangle, selectedRowIndex);
+            Grid.SetColumn(rectangle, selectedColumnIndex);
         }
 
         private void BuildingComponent_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -103,27 +111,33 @@
             switch (type)
             {
                 case BuildingComponentType.CheckIn:
-                    this.buildingComponentImage = GetComponentImage("Resources/check-in.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/check-in.png");
+                    this._simulationType = typeof(CheckInSettings);
                     break;
 
                 case BuildingComponentType.Conveyor:
-                    this.buildingComponentImage = GetComponentImage("Resources/conveyor.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/conveyor.png");
+                    this._simulationType = typeof(ConveyorSettings);
                     break;
 
                 case BuildingComponentType.PA:
-                    this.buildingComponentImage = GetComponentImage("Resources/PickUpBaggage.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/PickUpBaggage.png");
+                    this._simulationType = typeof(PickupAreaSettings);
                     break;
 
                 case BuildingComponentType.PSC:
-                    this.buildingComponentImage = GetComponentImage("Resources/PSCbaggage.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/PSCbaggage.png");
+                    this._simulationType = typeof(PscSettings);
                     break;
 
                 case BuildingComponentType.ASC:
-                    this.buildingComponentImage = GetComponentImage("Resources/AdvancedCheckBaggage.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/AdvancedCheckBaggage.png");
+                    this._simulationType = typeof(AscSettings);
                     break;
 
                 case BuildingComponentType.AA:
-                    this.buildingComponentImage = GetComponentImage("Resources/airplane-shape.png");
+                    this._buildingComponentImage = GetComponentImage("Resources/airplane-shape.png");
+                    this._simulationType = typeof(AaSettings);
                     break;
 
                 default:
@@ -133,5 +147,10 @@
 
         private BitmapImage GetComponentImage(string fileLocation)
             => new BitmapImage(new Uri($"../../{fileLocation}", UriKind.Relative));
+
+        private void Run_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

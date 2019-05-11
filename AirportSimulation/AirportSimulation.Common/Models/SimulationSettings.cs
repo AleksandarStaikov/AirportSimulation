@@ -77,7 +77,9 @@
     public class AscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
+
         public int AscStaffCount { get; set; }
+
         public int AscInvalidationPercentage { get; set; }
     }
 
@@ -89,7 +91,9 @@
     public class BsuSettings
     {
         public int BsuCapacity { get; set; } = 100;
+
         public int BsuRobotsCount { get; set; } = 2;
+
         public int MinutesToFlightDispatchTime { get; set; } = 20;
     }
 
@@ -98,5 +102,9 @@
         public int Length { get; set; } = 10;
         
         public int SpeedInMilliseconds { get; set; } = 1000;
+    }
+
+    public class PickupAreaSettings
+    {
     }
 }
