@@ -30,7 +30,9 @@
             var psc = _chainLinkFactory.CreatePsc();
             var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
             var mpa = _chainLinkFactory.CreateMpa();
-            //var bsu = _chainLinkFactory.CreateBsu();
+            var bsu = _chainLinkFactory.CreateBsu();
+            var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(5); //Implement conveyorSettings
+            var bsuToMpa = _chainLinkFactory.CreateOneToOneConveyor(10);
             var MpaToAA = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
             var aa = _chainLinkFactory.CreateAa();
 
@@ -52,13 +54,24 @@
 
             // checkInToPsc.SetSuccessor(psc);
 
-            psc.AddSuccessor(PscToMpa);
+            
+
+            //Transporting nodes
+            mpaToBsu.SetSuccessor(bsu);
             PscToMpa.SetSuccessor(mpa);
             MpaToAA.SetSuccessor(aa);
+            bsuToMpa.SetSuccessor(mpa);
+
+            //Processing and complex nodes
+            psc.AddSuccessor(PscToMpa);
             aa.AddSuccessor(bagCollector);
-
             mpa.AddSuccessor(MpaToAA);
+            mpa.AddSuccessor(mpaToBsu);
+            bsu.SetSuccessor(bsuToMpa);
+            aa.AddSuccessor(bagCollector);
+            
 
+            
             //Starting
             _timerService.RunNewTimer();
             checkInToPsc.Start();
@@ -66,7 +79,8 @@
             PscToMpa.Start();
             mpa.Start();
             MpaToAA.Start();
-            //bsu.Start();
+            mpaToBsu.Start();
+            bsuToMpa.Start();
             checkInDispatcher.Start();
         }
     }

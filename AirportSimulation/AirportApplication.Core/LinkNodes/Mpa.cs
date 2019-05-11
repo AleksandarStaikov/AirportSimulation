@@ -7,6 +7,7 @@
     using Common.Models;
     using System;
     using System.Threading.Tasks;
+    using System.Linq;
 
     public class Mpa : ChainLink, IChainLink
     {
@@ -32,37 +33,50 @@
 
         public override void PassBaggage(Baggage baggage)
         {
-            _baggageDistributors[baggage.Flight.Gate].Enqueue(baggage);
+            sortToDestinationDistributor(baggage);
+
+            _baggageDistributors[baggage.Destination].Enqueue(baggage);
         }
 
         public void Start()
         {
-            foreach(string destination in _baggageDistributors.Keys)
+            foreach (string destination in _baggageDistributors.Keys)
             {
                 Task.Factory.StartNew(() =>
                 {
-                    distributeBaggage(destination, _baggageDistributors[destination]);
+                    distributeBaggage(destination);
                 });
             }
         }
 
-        private void distributeBaggage(string destination, Queue<Baggage> baggages)
+        private void distributeBaggage(string destination)
         {
             ChainLink nextNode = _allSuccessors[destination];
-           
-            while (true)
-            {
-                if (baggages.Count > 0)
+
+            nextNode.OnStatusChangedToFree += () =>
                 {
-                    if (nextNode.Status == NodeState.Free)
+                    if (_baggageDistributors[destination].Count > 0)
                     {
-                        nextNode.PassBaggage(baggages.Dequeue());
+                        if (nextNode.Status == NodeState.Free)
+                        {
+                            nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
+                        }
                     }
-                    else
-                    {
-                        nextNode.OnStatusChangedToFree += () => { nextNode.PassBaggage(baggages.Dequeue()); };
-                    }
-                }
+                };
+
+        }
+
+        private void sortToDestinationDistributor(Baggage baggage)
+        {
+            double timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
+
+            if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
+            {
+                baggage.Destination = typeof(BSU).Name;
+            }
+            else
+            {
+                baggage.Destination = baggage.Flight.Gate;
             }
         }
     }
