@@ -60,13 +60,15 @@
         public Psc CreatePsc()
         {
             ValidateSettings();
-            return _pscFactory();
+            //TODO: Deal with indexes
+            return _pscFactory(_simulationSettings.Pscs[0]);
         }
 
         public Asc CreateAsc()
         {
             ValidateSettings();
-            return _ascFactory();
+            //TODO: Deal with indexes
+            return _ascFactory(_simulationSettings.Ascs[0]);
         }
 
         public Mpa CreateMpa()

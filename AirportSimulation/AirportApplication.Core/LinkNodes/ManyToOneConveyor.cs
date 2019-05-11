@@ -7,7 +7,7 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
 
-    public class ManyToOneConveyor : TransportingNode, IManyToOneConveyor
+    public class  ManyToOneConveyor : TransportingNode, IManyToOneConveyor
     {
         public delegate ManyToOneConveyor Factory(int length);
 

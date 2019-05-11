@@ -62,8 +62,8 @@
             //Starting
             _timerService.RunNewTimer();
             checkInToPsc.Start();
-            //PscToMpa.Start();
-            //MpaToAA.Start();
+            PscToMpa.Start();
+            MpaToAA.Start();
             //bsu.Start();
             checkInDispatcher.Start();
         }

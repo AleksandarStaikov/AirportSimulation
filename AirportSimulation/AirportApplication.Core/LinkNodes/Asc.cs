@@ -5,30 +5,29 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
 
     public class Asc : ProcessingNode, IProcessingNode
     {
-        public delegate Asc Factory();
+        public delegate Asc Factory(IAscSettings ascSettings);
 
-        public Asc(ITimerService timerService) : base(timerService)
+        private readonly IAscSettings _ascSettings;
+        private readonly Random _randomGen;
+
+        public Asc(IAscSettings ascSettings, ITimerService timerService) : base(timerService)
         {
+            _ascSettings = ascSettings;
+            _randomGen = new Random();
         }
 
         public override void Process(Baggage baggage)
         {
-            //TODO : Implment
-            var checkSuccessful = new Random().Next(0,1) > 0;
+            var isFail = _randomGen.Next(0, 101) < _ascSettings.AscInvalidationPercentage;
 
-            if (checkSuccessful)
-            {
-                //TODO: Global constants ?
-                _currentBaggage.Destination = typeof(Mpa).Name;
-            }
-            else
-            {
-                //TODO: Global constants ?
-                _currentBaggage.Destination = typeof(BagCollector).Name;
-            }
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(_ascSettings.ProcessingRateInMilliseconds),
+                $"Advanced security check processing - passed: {isFail}");
+
+            _currentBaggage.Destination = isFail ? typeof(BagCollector).Name : typeof(Mpa).Name;
         }
     }
 }

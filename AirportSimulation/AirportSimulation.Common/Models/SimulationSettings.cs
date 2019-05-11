@@ -1,8 +1,8 @@
 ﻿namespace AirportSimulation.Common.Models
 {
+    using Contracts;
     using System;
     using System.Collections.Generic;
-    using Contracts;
 
     public class SimulationSettings : ISimulationSettings
     {
@@ -66,15 +66,15 @@
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
     }
-    
-    public class PscSettings
+
+    public class PscSettings : IPscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
 
         public int PscInvalidationPercentage { get; set; }
     }
 
-    public class AscSettings
+    public class AscSettings : IAscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
         public int AscStaffCount { get; set; }
