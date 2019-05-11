@@ -243,5 +243,6 @@
             this._buttons.ForEach(b => b.IsEnabled = true);
             this._buildingComponentImage = null;
         }
+        
     }
 }
