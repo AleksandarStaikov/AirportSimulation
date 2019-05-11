@@ -180,6 +180,10 @@
       <Project>{c23326e3-3ff3-405f-b74f-45924d828fb8}</Project>
       <Name>AirportSimulation.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AirportSimulation.Utility\AirportSimulation.Utilities.csproj">
+      <Project>{fb7f0a95-93e2-476f-8256-8a133aa8047e}</Project>
+      <Name>AirportSimulation.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

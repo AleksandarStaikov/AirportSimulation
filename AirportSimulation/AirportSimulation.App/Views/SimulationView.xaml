@@ -14,6 +14,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -60,7 +61,7 @@
             Grid.Row="3" 
             Click="BuildingComponent_Click">
             <StackPanel>
-                <TextBlock>Advance Security Check</TextBlock>
+                <TextBlock>Advanced Security Check</TextBlock>
             </StackPanel>
         </Button>
 
@@ -88,7 +89,7 @@
             Margin="10 10 10 10"
             Grid.Column="1" 
             Grid.RowSpan="5" 
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="4"
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Visible">
             <Grid 
@@ -103,6 +104,7 @@
         </ScrollViewer>
 
         <StackPanel 
+            x:Name="Run"
             Grid.Column="1" 
             Grid.Row="5"
             Margin="25 20">
@@ -115,6 +117,7 @@
             </Button>
         </StackPanel>
         <StackPanel 
+            x:Name="Export"
             Grid.Column="2" 
             Grid.Row="5" 
             Margin="25 20">
@@ -127,6 +130,7 @@
             </Button>
         </StackPanel>
         <StackPanel 
+            x:Name="Import"
             Grid.Column="3" 
             Grid.Row="5" 
             Margin="25 20">
@@ -138,5 +142,21 @@
                 </StackPanel>
             </Button>
         </StackPanel>
+        <StackPanel 
+            Grid.Column="4" 
+            Grid.Row="5" 
+            Margin="25 20">
+            <Button 
+                Name="CreateButton"
+                Width="150"
+                FontSize="12"
+                Click="CreateButton_Click"
+                IsEnabled="False">
+                <StackPanel>
+                    <TextBlock>CREATE</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
     </Grid>
 </UserControl>

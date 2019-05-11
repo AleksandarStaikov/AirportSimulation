@@ -3,6 +3,7 @@
     using AirportSimulation.App.Resources;
     using AirportSimulation.Common;
     using AirportSimulation.Common.Models;
+    using AirportSimulation.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,9 +20,21 @@
         private BitmapImage _buildingComponentImage;
         private Type _simulationType;
 
+        private List<Button> _buttons;
+             
         public SimulationView()
         {
             InitializeComponent();
+            this._buttons = new List<Button> {
+                Conveyor,
+                CheckIn,
+                AA,
+                PSC,
+                ASC,
+                PA,
+                Run.GetStackPanelChildButton(),
+                Import.GetStackPanelChildButton(),
+                Export.GetStackPanelChildButton() };
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -71,8 +84,13 @@
                 this._usedCells.Remove(pair);
                 _gridElements.Remove(elementToRemove);
 
-                return;
+                if (!this._gridElements.Any())
+                {
+                    this._buttons.ForEach(b => b.IsEnabled = true);
+                    this.CreateButton.IsEnabled = false;
+                }
 
+                return;
             }
 
             if (this._buildingComponentImage == null)
@@ -107,6 +125,9 @@
         {
             var componentName = (sender as Button).Name;
             var type = Enum.Parse(typeof(BuildingComponentType), componentName, true) ?? BuildingComponentType.CheckIn;
+
+            this.CreateButton.IsEnabled = true;
+            this._buttons.Where(b => b.Name != componentName).ToList().ForEach(b => b.IsEnabled = false);
 
             switch (type)
             {
@@ -143,6 +164,7 @@
                 default:
                     break;
             }
+            
         }
 
         private BitmapImage GetComponentImage(string fileLocation)
@@ -151,6 +173,12 @@
         private void Run_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 
+        }
+
+        private void CreateButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this._buttons.ForEach(b => b.IsEnabled = true);
+            this._buildingComponentImage = null;
         }
     }
 }
