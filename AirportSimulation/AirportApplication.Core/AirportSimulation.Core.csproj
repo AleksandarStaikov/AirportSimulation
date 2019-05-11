@@ -74,6 +74,7 @@
     <Compile Include="LinkNodes\CheckInDispatcher.cs" />
     <Compile Include="LinkNodes\Conveyor.cs" />
     <Compile Include="LinkNodes\Mpa.cs" />
+    <Compile Include="LinkNodes\PickUpArea.cs" />
     <Compile Include="LinkNodes\Psc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contracts\IService.cs" />
