@@ -32,12 +32,18 @@
         public void Start()
         {
             _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
-            if (!_timer.Enabled) _timer.Start();
+            if (!_timer.Enabled)
+            {
+                _timer.Start();
+            }
         }
 
         public void Stop()
         {
-            if (_timer.Enabled) _timer.Stop();
+            if (_timer.Enabled)
+            {
+                _timer.Stop();
+            }
         }
 
         public void SetSuccessor(IChainLink nextLink)
@@ -49,9 +55,15 @@
 
         protected bool CanMove()
         {
-            if (NextLink.Status == NodeState.Free) return true;
+            if (NextLink.Status == NodeState.Free)
+            {
+                return true;
+            }
 
-            if (!HasLastItem) return true;
+            if (!HasLastItem)
+            {
+                return true;
+            }
 
             return false;
         }
