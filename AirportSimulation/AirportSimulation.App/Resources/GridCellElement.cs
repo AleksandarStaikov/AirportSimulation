@@ -11,5 +11,7 @@
         public KeyValuePair<int, int> Cell { get; set; }
 
         public Type SimulationType { get; set; }
+
+        public bool Created { get; set; }
     }
 }
