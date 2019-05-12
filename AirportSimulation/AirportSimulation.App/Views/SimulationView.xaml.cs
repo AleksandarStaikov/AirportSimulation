@@ -24,18 +24,18 @@
         private List<Type> _gridNeededComponents;
         private List<Button> _buttons;
         private (int, int) _previousCoordinates;
-        private const int GRID_MAX_ROWS = 14;
-        private const int GRID_MAX_COLUMNS = 19;
+        private int GRID_MAX_ROWS = 14;
+        private int GRID_MAX_COLUMNS = 19;
+
+        public string GridRows => $"*#{++GRID_MAX_ROWS}";
+
+        public string GridColumns => $"*#{++GRID_MAX_COLUMNS}";
 
         private LinkedList<GridCellElement> _chainedElements;
 
         public SimulationView()
         {
             InitializeComponent();
-
-         
-
-
             this._gridNeededComponents = new List<Type>();
             this._chainedElements = new LinkedList<GridCellElement>();
             this._buttons = new List<Button> {
@@ -400,13 +400,14 @@
             {
                 Width = 300,
                 Height = 200,
-                Fill = new SolidColorBrush(Colors.Red)
+                Opacity = 0.5,
+                Fill = new SolidColorBrush(Colors.White)
             };
 
             var animation = new ColorAnimation
             {
-                From = Colors.Orange,
-                To = Colors.Gray,
+                From = Colors.White,
+                To = Colors.ForestGreen,
                 AutoReverse = true,
                 RepeatBehavior = RepeatBehavior.Forever,
                 Duration = new Duration(TimeSpan.FromSeconds(1))
