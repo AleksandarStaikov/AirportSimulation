@@ -48,22 +48,28 @@
                 Import.GetStackPanelChildButton(),
                 Export.GetStackPanelChildButton() };
         }
-        
+
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is Grid grid))
+            {
                 return;
-            
+            }
+
             var (selectedRowIndex, selectedColumnIndex) = this.GetCurrentlySelectedGridCell(grid, e);
             this._previousCoordinates = (selectedRowIndex, selectedColumnIndex);
             var pair = new KeyValuePair<int, int>(selectedRowIndex, selectedColumnIndex);
 
             if (this.IsCellAlreadyUsed(grid, pair))
+            {
                 return;
-            
+            }
+
             if (this._buildingComponentImage == null)
+            {
                 return;
-            
+            }
+
             var rectangle = new Rectangle
             {
                 Width = 50,
@@ -74,7 +80,9 @@
                     ImageSource = this._buildingComponentImage
                 }
             };
-            
+
+            Grid.SetZIndex(rectangle, 1000);
+
             var gridCellElement = new GridCellElement
             {
                 Element = rectangle,
@@ -102,6 +110,17 @@
             }
 
             this.ValidateClearButtonVisibility();
+
+            if (this._componentType == typeof(ConveyorSettings))
+            {
+                var rectanglesToRemove = this.SimulationGrid.Children.OfType<Rectangle>().Where(r => r.Uid == Constants.BLINKING_RECTANGLE_UID).ToList();
+                foreach (var rec in rectanglesToRemove)
+                {
+                    this.SimulationGrid.Children.Remove(rec);
+                }
+
+                this.ShowAvailableConveyorPlaces();
+            }
         }
 
         private void BuildingComponent_Click(object sender, RoutedEventArgs e)
@@ -186,7 +205,7 @@
         {
             var selectedColumnIndex = -1;
             var selectedRowIndex = -1;
-            
+
             var pos = e.GetPosition(grid);
             var temp = pos.X;
 
@@ -194,7 +213,7 @@
             {
                 var colDef = grid.ColumnDefinitions[i];
                 temp -= colDef.ActualWidth;
-                
+
                 if (temp <= -1)
                 {
                     selectedColumnIndex = i;
@@ -215,13 +234,13 @@
                     break;
                 }
             }
-            
+
             return (selectedRowIndex, selectedColumnIndex);
         }
 
         private void Run_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -247,12 +266,16 @@
 
             if (row == 0 && column == 0) // LEFT TOP CORNER
             {
+                if (CanPlaceBlinkingRectangle(row + 1, column))
+                {
+
+                }
                 allowedRows.Add(row + 1);
                 allowedColumns.Add(column);
 
                 allowedRows.Add(row);
                 allowedColumns.Add(column + 1);
-                
+
             }
             else if (column == 0 && row > 0 && row < GRID_MAX_ROWS) // LEFT MOST LINE
             {
@@ -338,26 +361,61 @@
                 allowedRows.Add(row);
                 allowedColumns.Add(column - 1);
             }
-            //var rectangle = GetBlinkingRectangle();
-            //this.SimulationGrid.Children.Add(rectangle);
-            //for (int j = 0; j < allowedColumns.Count; j++)
-            //{
-                for (int i = 0; i < allowedRows.Count; i++)
+
+            for (int i = 0; i < allowedRows.Count; i++)
+            {
+                var rec = GetBlinkingRectangle();
+                var currRow = allowedRows[i];
+                var currCol = allowedColumns[i];
+
+                if (CanPlaceBlinkingRectangle(currRow, currCol))
                 {
-                    var rec = GetBlinkingRectangle();
-                    Grid.SetRow(rec, allowedRows[i]);
-                    Grid.SetColumn(rec, allowedColumns[i]);
+                    Grid.SetRow(rec, currRow);
+                    Grid.SetColumn(rec, currCol);
+
+                    var pair = new KeyValuePair<int, int>(currRow, currCol);
+                    this._usedCells.Add(pair);
+                    this._gridElements.Add(new GridCellElement
+                    {
+                        Cell = pair,
+                        Element = rec
+                    });
+
                     this.SimulationGrid.Children.Add(rec);
                 }
-            //}
 
-            //for (int i = 0; i < allowedColumns.Count; i++)
-            //{
-            //    var rec = GetBlinkingRectangle();
-            //    Grid.SetColumn(rec, allowedColumns[i]);
-            //    this.SimulationGrid.Children.Add(rec);
-            //}
+                this.DisableGridNotAvailableCells();
+            }
         }
+
+        private void DisableGridNotAvailableCells()
+        {
+            var gridRows = this.SimulationGrid.RowDefinitions;
+            var gridCols = this.SimulationGrid.ColumnDefinitions;
+
+            for (int i = 0; i < gridRows.Count; i++)
+            {
+                for (int j = 0; j < gridCols.Count; j++)
+                {
+                    if (this._usedCells.Contains(new KeyValuePair<int, int>(i, j)))
+                        continue;
+
+                    var grayRectangle = new Rectangle
+                    {
+                        Width = 300,
+                        Height = 200,
+                        IsEnabled = false,
+                    };
+
+                    Grid.SetRow(grayRectangle, i);
+                    Grid.SetColumn(grayRectangle, j);
+                    this.SimulationGrid.Children.Add(grayRectangle);
+                }
+            }
+        }
+
+        private bool CanPlaceBlinkingRectangle(int row, int col)
+            => this._gridElements.All(el => el.Cell.Key != row || el.Cell.Value != col);
 
         private void ValidateRunButtonVisibility()
         {
@@ -371,37 +429,30 @@
             this.Run.GetStackPanelChildButton().IsEnabled = canStart ? true : false;
         }
 
-        private void ValidateClearButtonVisibility()
-        {
-            if (this._gridElements.Any())
-            {
-                this.ClearGridButton.IsEnabled = true;
-            }
-            else
-            {
-                this.ClearGridButton.IsEnabled = false;
-            }
-        }
+        private void ValidateClearButtonVisibility() =>
+            this.ClearGridButton.IsEnabled = this._gridElements.Any() ? true : false;
 
-        private void ClearGridButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ClearGridButton_Click(object sender, RoutedEventArgs e)
         {
             this._gridElements.Clear();
             this._usedCells.Clear();
             this.SimulationGrid.Children.RemoveRange(0, this.SimulationGrid.Children.Count);
             this.CreateButton.IsEnabled = false;
             this.CheckIn.IsEnabled = true;
+            this.Conveyor.IsEnabled = false;
             this._buildingComponentImage = null;
             this.ValidateClearButtonVisibility();
         }
 
         private Rectangle GetBlinkingRectangle()
         {
-            Rectangle redRectangle = new Rectangle
+            var redRectangle = new Rectangle
             {
                 Width = 300,
                 Height = 200,
                 Opacity = 0.5,
-                Fill = new SolidColorBrush(Colors.White)
+                Fill = new SolidColorBrush(Colors.White),
+                Uid = "BlinkingRectangle"
             };
 
             var animation = new ColorAnimation
