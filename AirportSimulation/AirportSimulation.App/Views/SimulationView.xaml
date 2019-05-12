@@ -35,10 +35,6 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Warning" VerticalAlignment="Top" Margin="0,26,0,0"/>
-
-
         <Button
             x:Name="CheckIn"
             Grid.Column="0" 
@@ -64,6 +60,7 @@
             Height="90"
             Width="100"
             BorderThickness="0"
+            IsEnabled="False"
             Click="BuildingComponent_Click"
             Background="{StaticResource ConveyorImageBrush}">
             <Button.ToolTip>
@@ -78,7 +75,8 @@
         <Button 
             x:Name="PSC"
             Grid.Column="0" 
-            Grid.Row="2" 
+            Grid.Row="2"
+            IsEnabled="False"
             Height="90"
             Width="100"
             BorderThickness="0"
@@ -95,9 +93,10 @@
 
         <Button
             x:Name="ASC"
-            Grid.Column="0" 
+            Grid.Column="0"
             Grid.Row="3"
             Height="90"
+            IsEnabled="False"
             Width="100"
             BorderThickness="0"
             Click="BuildingComponent_Click"
@@ -114,8 +113,9 @@
         <Button 
             x:Name="AA"
             Grid.Column="0" 
-            Grid.Row="4" 
+            Grid.Row="4"
             Height="90"
+            IsEnabled="False"
             Width="100"
             BorderThickness="0"
             Click="BuildingComponent_Click"
@@ -132,7 +132,8 @@
         <Button
             x:Name="PA"
             Grid.Column="0" 
-            Grid.Row="5" 
+            Grid.Row="5"
+            IsEnabled="False"
             Height="90"
             Width="100"
             BorderThickness="0"
@@ -158,8 +159,8 @@
             <Grid 
                 x:Name="SimulationGrid"
                 Background="Transparent" 
-                localRes:GridHelper.Rows="*#15;auto" 
-                localRes:GridHelper.Columns="*#20;auto" 
+                localRes:GridHelper.Rows="*#15;" 
+                localRes:GridHelper.Columns="*#20;" 
                 ShowGridLines="True" 
                 Height="1000"
                 Width="1500"
