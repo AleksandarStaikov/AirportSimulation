@@ -147,6 +147,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\manytomanyConv.png" />
+    <Resource Include="Resources\MPApng.png" />
     <Resource Include="Resources\AdvancedCheckBaggage.png" />
     <Resource Include="Resources\airplane-shape.png" />
     <Resource Include="Resources\check-in.png" />
