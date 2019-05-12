@@ -24,7 +24,8 @@
         {
             var isFail = _randomGen.Next(0, 101) < _ascSettings.AscInvalidationPercentage;
 
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(_ascSettings.ProcessingRateInMilliseconds),
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
+                TimerService.ConvertMillisecondsToTimeSpan(_ascSettings.ProcessingRateInMilliseconds),
                 $"Advanced security check processing - passed: {isFail}");
 
             _currentBaggage.Destination = isFail ? typeof(BagCollector).Name : typeof(Mpa).Name;

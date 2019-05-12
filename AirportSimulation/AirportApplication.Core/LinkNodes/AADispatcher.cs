@@ -22,6 +22,7 @@
         public AADispatcher(IFlightManagement flightManagement, ITimerService timerService) : base(timerService)
         {
             _flightManagement = flightManagement;
+            TimerService.FlightLandedEvent += DispatchFlightBaggage;
         }
 
         public override string Destination { get; }
@@ -42,8 +43,6 @@
             return gate;
         }
 
-        //TODO : Attach to the TimerService
-        //TODO : Handle bag directions in AA
         private void DispatchFlightBaggage(Flight flight)
         {
             var gate = FindGate(flight.Gate);
@@ -57,7 +56,7 @@
                 var bag = new Baggage
                 {
                     BaggageType = BaggageType.Small,
-                    Destination = flight.PickUpArea,
+                    Destination = typeof(Mpa).Name,
                     Flight = flight,
                     Owner = "Someone"
                 };
@@ -74,7 +73,6 @@
                     var transFlight = transFlights[index];
 
                     bag.Flight = transFlight;
-                    bag.Destination = transFlight.Gate;
                     transFlight.DispatchedBaggagesCount++;
                 }
 

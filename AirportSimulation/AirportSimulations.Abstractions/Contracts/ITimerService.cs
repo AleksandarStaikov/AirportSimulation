@@ -1,10 +1,13 @@
 ﻿namespace AirportSimulation.Abstractions.Contracts
 {
-    using System;
     using Common.Models;
+    using System;
 
     public interface ITimerService
     {
+        Action<Flight> FlightLandedEvent { get; set; }
+        Action<Flight> PrepareFlightEvent { get; set; }
+
         float SimulationMultiplier { get; }
         void RunNewTimer();
         void StopTimer();

@@ -70,6 +70,12 @@
         {
             double timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
 
+            if (baggage.Flight.FlightState == FlightState.Landed)
+            {
+                baggage.Destination = baggage.Flight.PickUpArea;
+                return;
+            }
+
             if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
             {
                 baggage.Destination = typeof(BSU).Name;

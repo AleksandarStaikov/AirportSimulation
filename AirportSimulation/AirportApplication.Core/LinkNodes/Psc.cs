@@ -24,7 +24,9 @@
         {
             var isFail = _randomGen.Next(0, 101) < _pscSettings.PscInvalidationPercentage;
 
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(_pscSettings.ProcessingRateInMilliseconds), $"Primary security check processing - passed: {isFail}");
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
+                TimerService.ConvertMillisecondsToTimeSpan(_pscSettings.ProcessingRateInMilliseconds),
+                $"Primary security check processing - passed: {isFail}");
 
             baggage.Destination = isFail ? typeof(Asc).Name : typeof(Mpa).Name;
         }

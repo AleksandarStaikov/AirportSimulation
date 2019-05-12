@@ -92,7 +92,6 @@
             }
             else
             {
-                //TODO : Not valid, if another attached.
                 if (checkIn.OnStatusChangedToFree == null)
                 {
                     checkIn.OnStatusChangedToFree += () => { PassQueuedBaggage(index); };

@@ -23,7 +23,9 @@
 
         public override void Process(Baggage baggage)
         {
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(_pickUpRate), "PickUpArea processings");
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
+                TimerService.ConvertMillisecondsToTimeSpan(_pickUpRate),
+                "PickUpArea processings");
             baggage.Destination = typeof(Mpa).Name;
         }
     }
