@@ -8,9 +8,19 @@
     using System;
     using System.Windows.Controls;
     using System.Linq;
+    using System.Collections.Generic;
 
     internal static class RectangleFactory
     {
+        public static List<Rectangle> GetDisabledRectangles(this Grid grid)
+        {
+            return grid
+                .Children
+                .OfType<Rectangle>()
+                .Where(x => x.Uid == Constants.DISABLED_RECTANGLE_UID)
+                .ToList();
+        }
+
         public static Rectangle CreateBlinkingRectangle(int width = 50, int height = 50)
         {
             var blinkingRectangle = CreateRectangle(width, height, true);
@@ -50,6 +60,7 @@
         {
             var disabledRectangle = CreateRectangle(width, height, true);
             disabledRectangle.Fill = new SolidColorBrush(Colors.LightSlateGray);
+            disabledRectangle.Uid = Constants.DISABLED_RECTANGLE_UID;
 
             return disabledRectangle;
         }
@@ -72,8 +83,8 @@
         {
             return new Rectangle
             {
-                Width = 50,
-                Height = 50,
+                Width = width,
+                Height = height,
                 IsEnabled = isEnabled
             };
         }

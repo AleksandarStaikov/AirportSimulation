@@ -96,6 +96,7 @@
     <Compile Include="Helpers\RectangleFactory.cs" />
     <Compile Include="Resources\GridCellElement.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
+    <Compile Include="Resources\GridDisabledCellElement.cs" />
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
