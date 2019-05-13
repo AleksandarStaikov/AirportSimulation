@@ -1,17 +1,20 @@
 ﻿namespace AirportSimulation.App.Resources
 {
-    using System;
-    using System.Collections.Generic;
+    using AirportSimulation.Common;
     using System.Windows;
 
-    public class GridCellElement
+    public class GridCell
     {
         public UIElement Element { get; set; }
 
-        public KeyValuePair<int, int> Cell { get; set; }
+        public (int, int) Cell { get; set; }
 
-        public Type SimulationType { get; set; }
+        public BuildingComponentType ElementType { get; set; }
 
         public bool Created { get; set; }
+
+        public (int?, int?) PreviousCell { get; set; }
+
+        public (int?, int?) NextCell { get; set; }
     }
 }

@@ -46,6 +46,7 @@
             Width="60"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildCheckIn, Mode=TwoWay}"
             Background="{StaticResource CheckInImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -63,8 +64,8 @@
             Height="50"
             Width="60"
             BorderThickness="0"
-            IsEnabled="False"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildConveyor, Mode=TwoWay}"
             Background="{StaticResource ConveyorImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -81,14 +82,14 @@
             Grid.Row="2" 
             Height="50"
             Width="60"
-            IsEnabled="False"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildManyToOneConveyor, Mode=TwoWay}"
             Background="{StaticResource ManyToOneConveyorImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
                     <StackPanel>
-                        <TextBlock FontWeight="Bold">Check In</TextBlock>
+                        <TextBlock FontWeight="Bold">Many to one conveyor</TextBlock>
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
@@ -98,11 +99,11 @@
             x:Name="PSC"
             Grid.Column="0" 
             Grid.Row="3"
-            IsEnabled="False"
             Height="50"
             Width="60"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPsc, Mode=TwoWay}"
             Background="{StaticResource PSCImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -119,9 +120,9 @@
             Grid.Row="4"
             Height="50"
             Width="60"
-            IsEnabled="False"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAsc, Mode=TwoWay}"
             Background="{StaticResource ASCImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -138,9 +139,9 @@
             Grid.Row="5"
             Height="50"
             Width="60"
-            IsEnabled="False"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAa, Mode=TwoWay}"
             Background="{StaticResource AirplaneShapeImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -155,11 +156,11 @@
             x:Name="PA"
             Grid.Column="0" 
             Grid.Row="6"
-            IsEnabled="False"
             Height="50"
             Width="60"
             BorderThickness="0"
             Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
             Background="{StaticResource PickUpImageBrush}">
             <Button.ToolTip>
                 <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
@@ -181,12 +182,14 @@
             <Grid 
                 x:Name="SimulationGrid"
                 Background="Transparent" 
-                localRes:GridHelper.Rows="{Binding Path=GridRows}" 
-                localRes:GridHelper.Columns="{Binding Path=GridColumns}" 
+                localRes:GridHelper.Rows="{Binding Path=SimulationGridOptions.GridRows, Mode=OneTime}" 
+                localRes:GridHelper.Columns="{Binding Path=SimulationGridOptions.GridColumns, Mode=OneTime}" 
                 ShowGridLines="True" 
                 Height="1000"
                 Width="1500"
-                MouseDown="Grid_MouseDown">
+                IsEnabled="{Binding Path=SimulationGridOptions.IsGridEnabled, Mode=TwoWay}"
+                MouseLeftButtonDown="SimulationGrid_MouseLeftButtonDown"
+                MouseRightButtonDown="SimulationGrid_MouseRightButtonDown">
             </Grid>
         </ScrollViewer>
 
@@ -199,7 +202,7 @@
                 Width="150"
                 FontSize="12" 
                 Click="Run_Click" 
-                IsEnabled="False">
+                IsEnabled="{Binding Path=SimulationGridOptions.CanRun, Mode=TwoWay}">
                 <StackPanel>
                     <TextBlock>RUN</TextBlock>
                 </StackPanel>
@@ -240,7 +243,7 @@
                 Width="150"
                 FontSize="12"
                 Click="CreateButton_Click"
-                IsEnabled="False">
+                IsEnabled="{Binding Path=SimulationGridOptions.CanCreate, Mode=TwoWay}">
                 <StackPanel>
                     <TextBlock>CREATE</TextBlock>
                 </StackPanel>
@@ -256,7 +259,7 @@
                 Width="150"
                 FontSize="12"
                 Click="ClearGridButton_Click"
-                IsEnabled ="False">
+                IsEnabled="{Binding Path=SimulationGridOptions.CanClear, Mode=TwoWay}">
                 <StackPanel>
                     <TextBlock>CLEAR</TextBlock>
                 </StackPanel>

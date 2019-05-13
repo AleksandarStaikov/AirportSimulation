@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace AirportSimulation.App.Resources
+﻿namespace AirportSimulation.App.Resources
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
     public class GridHelper
     {
         internal struct GridDefinitionInformation
@@ -16,7 +15,61 @@ namespace AirportSimulation.App.Resources
             public string SharedSizeGroup;
         }
 
-        #region helper methods
+        public static bool IsCellAlreadyUsed(Grid grid, List<(int, int)> usedCells, (int, int) cell)
+        {
+            if (!usedCells.Any())
+            {
+                return false;
+            }
+
+            if (usedCells.Contains(cell))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static (int, int) GetCurrentlySelectedGridCell(Grid grid, MouseButtonEventArgs e)
+        {
+            var selectedColumnIndex = -1;
+            var selectedRowIndex = -1;
+
+            var pos = e.GetPosition(grid);
+            var temp = pos.X;
+
+            for (var i = 0; i < grid.ColumnDefinitions.Count; i++)
+            {
+                var colDef = grid.ColumnDefinitions[i];
+                temp -= colDef.ActualWidth;
+
+                if (temp <= -1)
+                {
+                    selectedColumnIndex = i;
+                    break;
+                }
+            }
+
+            temp = pos.Y;
+
+            for (var i = 0; i < grid.RowDefinitions.Count; i++)
+            {
+                var rowDef = grid.RowDefinitions[i];
+                temp -= rowDef.ActualHeight;
+
+                if (temp <= -1)
+                {
+                    selectedRowIndex = i;
+                    break;
+                }
+            }
+
+            return (selectedRowIndex, selectedColumnIndex);
+        }
+
+        // External implementations below
+
+        #region Helper methods
 
         internal static IEnumerable<GridDefinitionInformation> Parse(string text)
         {
@@ -24,6 +77,7 @@ namespace AirportSimulation.App.Resources
             {
                 var parts = text.Split(new[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
                 var count = int.Parse(parts[1].Trim());
+
                 return Enumerable.Repeat(ParseGridDefinition(parts[0]), count);
             }
             else
@@ -35,8 +89,10 @@ namespace AirportSimulation.App.Resources
         internal static GridLength ParseGridLength(string text)
         {
             text = text.Trim();
+
             if (text.ToLower() == "auto")
                 return GridLength.Auto;
+
             if (text.Contains("*"))
             {
                 var startCount = text.ToCharArray().Count(c => c == '*');
@@ -44,7 +100,9 @@ namespace AirportSimulation.App.Resources
                 var ratio = string.IsNullOrWhiteSpace(pureNumber) ? 1 : double.Parse(pureNumber);
                 return new GridLength(startCount * ratio, GridUnitType.Star);
             }
+
             var pixelsCount = double.Parse(text);
+
             return new GridLength(pixelsCount, GridUnitType.Pixel);
         }
 
@@ -52,6 +110,7 @@ namespace AirportSimulation.App.Resources
         {
             text = text.Trim();
             var result = new GridDefinitionInformation();
+
             if (text.StartsWith("[") && text.EndsWith("]"))
             {
                 result.SharedSizeGroup = text.Substring(1, text.Length - 2); // inside the []s
@@ -65,12 +124,13 @@ namespace AirportSimulation.App.Resources
             return result;
         }
 
-        static string CalculateSharedSize(string sharedSizeGroup, string sharedSizeGroupPrefix)
+        private static string CalculateSharedSize(string sharedSizeGroup, string sharedSizeGroupPrefix)
         {
             if (sharedSizeGroup != null && sharedSizeGroupPrefix != null)
             {
                 return sharedSizeGroupPrefix + sharedSizeGroup;
             }
+
             return sharedSizeGroup;
         }
 
@@ -78,20 +138,15 @@ namespace AirportSimulation.App.Resources
 
         #region GridColumnsLayout
 
-        public static string GetColumns(DependencyObject obj)
-        {
-            return (string)obj.GetValue(ColumnsProperty);
-        }
-        public static void SetColumns(DependencyObject obj, string value)
-        {
-            obj.SetValue(ColumnsProperty, value);
-        }
+        public static string GetColumns(DependencyObject obj) => (string)obj.GetValue(ColumnsProperty);
+
+        public static void SetColumns(DependencyObject obj, string value) => obj.SetValue(ColumnsProperty, value);
 
         public static readonly DependencyProperty ColumnsProperty =
             DependencyProperty.RegisterAttached("Columns", typeof(string), typeof(GridHelper),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure, Columns_PropertyChangedCallback));
 
-        static void Columns_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void Columns_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var grid = d as Grid;
             var oldValue = e.OldValue as string;
@@ -124,6 +179,7 @@ namespace AirportSimulation.App.Resources
         {
             return (string)obj.GetValue(RowsProperty);
         }
+
         public static void SetRows(DependencyObject obj, string value)
         {
             obj.SetValue(RowsProperty, value);
@@ -133,7 +189,7 @@ namespace AirportSimulation.App.Resources
             DependencyProperty.RegisterAttached("Rows", typeof(string), typeof(GridHelper),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure, Rows_PropertyChangedCallback));
 
-        static void Rows_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void Rows_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var grid = d as Grid;
             var oldValue = e.OldValue as string;
@@ -162,20 +218,15 @@ namespace AirportSimulation.App.Resources
 
         #region Cell
 
-        public static string GetCell(DependencyObject obj)
-        {
-            return (string)obj.GetValue(CellProperty);
-        }
-        public static void SetCell(DependencyObject obj, string value)
-        {
-            obj.SetValue(CellProperty, value);
-        }
+        public static string GetCell(DependencyObject obj) => (string)obj.GetValue(CellProperty);
+
+        public static void SetCell(DependencyObject obj, string value) => obj.SetValue(CellProperty, value);
 
         public static readonly DependencyProperty CellProperty =
             DependencyProperty.RegisterAttached("Cell", typeof(string), typeof(GridHelper),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure, Cell_PropertyChangedCallback));
 
-        static void Cell_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void Cell_PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var element = d as UIElement;
             var oldValue = e.OldValue as string;
@@ -186,8 +237,7 @@ namespace AirportSimulation.App.Resources
             if (oldValue != newValue)
             {
                 var rowAndColumn = newValue.Split(new[] { ' ', ';' });
-                // only set row and/or column if they are specified
-                // "1" or "1;" for only row, ";1" for column only
+
                 if (!string.IsNullOrEmpty(rowAndColumn[0]))
                 {
                     var row = int.Parse(rowAndColumn[0]);
@@ -201,19 +251,14 @@ namespace AirportSimulation.App.Resources
                 }
             }
         }
+
         #endregion
 
         #region SharedSizeGroupPrefix
 
-        public static string GetSharedSizeGroupPrefix(DependencyObject obj)
-        {
-            return (string)obj.GetValue(SharedSizeGroupPrefixProperty);
-        }
+        public static string GetSharedSizeGroupPrefix(DependencyObject obj) => (string)obj.GetValue(SharedSizeGroupPrefixProperty);
 
-        public static void SetSharedSizeGroupPrefix(DependencyObject obj, string value)
-        {
-            obj.SetValue(SharedSizeGroupPrefixProperty, value);
-        }
+        public static void SetSharedSizeGroupPrefix(DependencyObject obj, string value) => obj.SetValue(SharedSizeGroupPrefixProperty, value);
 
         public static readonly DependencyProperty SharedSizeGroupPrefixProperty =
             DependencyProperty.RegisterAttached("SharedSizeGroupPrefix", typeof(string), typeof(GridHelper), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));

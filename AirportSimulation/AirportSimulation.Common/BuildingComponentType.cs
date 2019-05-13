@@ -7,6 +7,8 @@
         PSC,
         ASC,
         AA,
-        PA
+        PA,
+        MPA,
+        BSU
     }
 }

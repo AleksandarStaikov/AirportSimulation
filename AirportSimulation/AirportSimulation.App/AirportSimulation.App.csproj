@@ -92,8 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BuildingComponentsHelper.cs" />
+    <Compile Include="Helpers\RectangleFactory.cs" />
     <Compile Include="Resources\GridCellElement.cs" />
-    <Compile Include="Resources\GridHelper.cs" />
+    <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
