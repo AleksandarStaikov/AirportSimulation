@@ -44,6 +44,9 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,13 +57,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildingComponentType.cs" />
     <Compile Include="Exceptions\ConveyorFullException.cs" />
     <Compile Include="Models\Baggage.cs" />
     <Compile Include="Models\BaggageEventLog.cs" />
     <Compile Include="Models\BaggageType.cs" />
     <Compile Include="Models\Contracts\ISimulationSettings.cs" />
+    <Compile Include="Models\ConveyorBelt.cs" />
+    <Compile Include="Models\ConveyorSlot.cs" />
     <Compile Include="Models\Flight.cs" />
+    <Compile Include="Models\GridNode.cs" />
     <Compile Include="Models\NodeState.cs" />
+    <Compile Include="Models\SimulationGridOptions.cs" />
     <Compile Include="Models\SimulationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
