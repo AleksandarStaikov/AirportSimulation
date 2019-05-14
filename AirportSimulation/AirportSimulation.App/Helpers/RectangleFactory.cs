@@ -65,7 +65,7 @@
             return disabledRectangle;
         }
 
-        public static void RemoveBlinkingRectangles(Grid grid)
+        public static void RemoveBlinkingRectangles(Grid grid, List<(int, int)> externalList)
         {
             var blinkingRectangles = grid
                     .Children
@@ -77,7 +77,9 @@
             {
                 grid.Children.Remove(rectangle);
             }
-        }
+
+			externalList.Clear();
+		}
 
         private static Rectangle CreateRectangle(int width, int height, bool isEnabled)
         {

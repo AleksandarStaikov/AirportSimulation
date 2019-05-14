@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.App.Resources
+﻿namespace AirportSimulation.App.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
 
-    public class GridHelper
+	public class GridHelper
     {
         internal struct GridDefinitionInformation
         {
@@ -15,20 +15,16 @@
             public string SharedSizeGroup;
         }
 
-        public static bool IsCellAlreadyUsed(Grid grid, List<(int, int)> usedCells, (int, int) cell)
-        {
-            if (!usedCells.Any())
-            {
-                return false;
-            }
+		public static bool IsCellDisabled(List<(int, int)> gridDisabledCells, (int, int) cell) =>
+			IsCellCondition(gridDisabledCells, cell);
 
-            if (usedCells.Contains(cell))
-            {
-                return true;
-            }
+		public static bool IsCellAlreadyUsed(List<(int, int)> usedCells, (int, int) cell) =>
+			IsCellCondition(usedCells, cell);
 
-            return false;
-        }
+		private static bool IsCellCondition<T>(ICollection<T> list, T obj)
+		{
+			return list.Any() && list.Contains(obj);
+		}
 
         public static (int, int) GetCurrentlySelectedGridCell(Grid grid, MouseButtonEventArgs e)
         {
