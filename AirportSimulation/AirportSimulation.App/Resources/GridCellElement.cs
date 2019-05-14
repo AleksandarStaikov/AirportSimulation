@@ -5,6 +5,8 @@
 
     public class GridCell
     {
+		public string Id { get; set; }
+
         public UIElement Element { get; set; }
 
         public (int, int) Cell { get; set; }

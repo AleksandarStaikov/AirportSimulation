@@ -73,6 +73,7 @@
 			var rectangle = RectangleFactory.CreateBuildingComponentRectangle(_currentBuildingComponentImage);
 			var gridCellElement = new GridCell
 			{
+				Id = $"X{selectedRowIndex}Y{selectedColumnIndex}",
 				Element = rectangle,
 				Cell = _lastCoordinates,
 				ElementType = _currentBuildingComponentType,
