@@ -21,7 +21,7 @@
             ConveyorSettingsPscToAsc = new List<ConveyorSettings>() { new ConveyorSettings() };
 
             OutgoingFlights = new List<Flight>() { new Flight(){} };
-            OutgoingFlights = new List<Flight>() { new Flight()
+			IncomingFlights = new List<Flight>() { new Flight()
             {
                 Gate = "A2",
                 FlightState = FlightState.Incoming

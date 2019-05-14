@@ -91,7 +91,7 @@
                     flight.FlightState = FlightState.Landed;
                     _mainThread.BeginInvoke((Action)(() =>
                     {
-                        FlightLandedEvent(flight);
+                        FlightLandedEvent?.Invoke(flight);
                     }));
                 }
             }
@@ -108,7 +108,7 @@
                     flight.FlightState = FlightState.InPreparation;
                     _mainThread.BeginInvoke((Action)(() =>
                     {
-                        PrepareFlightEvent(flight);
+                        PrepareFlightEvent?.Invoke(flight);
                     }));
                 }
             }

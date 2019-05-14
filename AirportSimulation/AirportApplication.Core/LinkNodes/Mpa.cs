@@ -5,11 +5,9 @@
     using Abstractions.Core.Contracts;
     using System.Collections.Generic;
     using Common.Models;
-    using System;
-    using System.Threading.Tasks;
-    using System.Linq;
+	using System.Threading.Tasks;
 
-    public class Mpa : ChainLink, IChainLink
+	public class Mpa : ChainLink, IChainLink
     {
         public delegate Mpa Factory();
 
@@ -20,7 +18,6 @@
         {
             _allSuccessors = new Dictionary<string, ChainLink>();
             _baggageDistributors = new Dictionary<string, Queue<Baggage>>();
-
         }
 
         public override string Destination => this.GetType().Name;
@@ -33,53 +30,54 @@
 
         public override void PassBaggage(Baggage baggage)
         {
-            sortToDestinationDistributor(baggage);
+            SortToDestinationDistributor(baggage);
 
             _baggageDistributors[baggage.Destination].Enqueue(baggage);
         }
 
         public void Start()
         {
-            foreach (string destination in _baggageDistributors.Keys)
+            foreach (var destination in _baggageDistributors.Keys)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
-                    distributeBaggage(destination);
+                    DistributeBaggage(destination);
                 });
             }
         }
 
-        private void distributeBaggage(string destination)
+        private void DistributeBaggage(string destination)
         {
-            ChainLink nextNode = _allSuccessors[destination];
+            var nextNode = _allSuccessors[destination];
 
-            nextNode.OnStatusChangedToFree += () =>
-                {
-                    if (_baggageDistributors[destination].Count > 0)
-                    {
-                        if (nextNode.Status == NodeState.Free)
-                        {
-                            nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
-                        }
-                    }
-                };
+			nextNode.OnStatusChangedToFree += () =>
+			{
+				if (_baggageDistributors[destination].Count > 0)
+				{
+					if (nextNode.Status == NodeState.Free)
+					{
+						nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
+					}
+				}
+			};
+		}
 
-        }
-
-        private void sortToDestinationDistributor(Baggage baggage)
+        private void SortToDestinationDistributor(Baggage baggage)
         {
-            double timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
+            var timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
 
             if (baggage.Flight.FlightState == FlightState.Landed)
             {
-                baggage.Destination = baggage.Flight.PickUpArea;
-                return;
+				//baggage.Destination = baggage.Flight.PickUpArea;
+				baggage.Destination = baggage.Flight.Gate;
+				return;
             }
 
             if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
             {
-                baggage.Destination = typeof(BSU).Name;
-            }
+				//baggage.Destination = typeof(BSU).Name;
+				baggage.Destination = baggage.Flight.Gate;
+			}
             else
             {
                 baggage.Destination = baggage.Flight.Gate;

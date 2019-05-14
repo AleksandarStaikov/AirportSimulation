@@ -11,6 +11,8 @@
 	using System.Windows.Controls;
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
+	using Core;
+	using Core.Contracts;
 	using Utility;
 
 	public partial class SimulationView : UserControl
@@ -213,7 +215,16 @@
 
 		private void Run_Click(object sender, RoutedEventArgs e)
 		{
+			var engine = ContainerConfig.Resolve<IEngine>();
+			var simulationSettings = new SimulationSettings();
 
+			foreach (var belt in _chainedBelts)
+			{
+				var conveyorSettings = new ConveyorSettings { Length = belt.ConveyorSlots.Count };
+				simulationSettings.ConveyorSettingsMpaToAa.Add(conveyorSettings);
+			}
+
+			engine.RunDemo(simulationSettings);
 		}
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)

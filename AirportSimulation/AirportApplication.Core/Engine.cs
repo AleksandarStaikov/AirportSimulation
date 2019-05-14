@@ -118,11 +118,10 @@
             checkInToPsc.Start();
             mpaToAA.Start();
             pscToMpa.Start();
+			mpa.Start();
 
             _timerService.RunNewTimer();
             checkInDisp.Start();
-            
         }
-
     }
 }
