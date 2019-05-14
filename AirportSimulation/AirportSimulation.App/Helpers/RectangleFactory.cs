@@ -1,8 +1,8 @@
-﻿namespace AirportSimulation.App.HelperMethods
+﻿namespace AirportSimulation.App.Helpers
 {
     using System.Windows.Shapes;
     using System.Windows.Media;
-    using AirportSimulation.Utility;
+    using Utility;
     using System.Windows.Media.Animation;
     using System.Windows;
     using System;

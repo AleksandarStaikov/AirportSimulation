@@ -16,12 +16,12 @@
         }
 
 		public static bool IsCellDisabled(List<(int, int)> gridDisabledCells, (int, int) cell) =>
-			IsCellCondition(gridDisabledCells, cell);
+			CellCondition(gridDisabledCells, cell);
 
 		public static bool IsCellAlreadyUsed(List<(int, int)> usedCells, (int, int) cell) =>
-			IsCellCondition(usedCells, cell);
+			CellCondition(usedCells, cell);
 
-		private static bool IsCellCondition<T>(ICollection<T> list, T obj)
+		private static bool CellCondition<T>(ICollection<T> list, T obj)
 		{
 			return list.Any() && list.Contains(obj);
 		}

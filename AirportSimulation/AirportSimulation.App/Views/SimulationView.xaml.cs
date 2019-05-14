@@ -1,6 +1,5 @@
 ﻿namespace AirportSimulation.App.Views
 {
-	using HelperMethods;
 	using Helpers;
 	using Resources;
 	using Common;
