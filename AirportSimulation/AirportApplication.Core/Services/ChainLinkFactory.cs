@@ -97,7 +97,6 @@
 
         public PickUpArea CreatePua()
         {
-
             ValidateSettings();
             return _puaFactory(_puasCount++);
         }

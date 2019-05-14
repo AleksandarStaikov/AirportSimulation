@@ -11,6 +11,7 @@
         Mpa CreateMpa();
         BSU CreateBsu();
         Aa CreateAa();
+        PickUpArea CreatePua();
         OneToOneConveyor CreateOneToOneConveyor(int length);
         ManyToOneConveyor CreateManyToOneConveyor(int length);
         ConveyorConnector CreateConveyorConnector();
