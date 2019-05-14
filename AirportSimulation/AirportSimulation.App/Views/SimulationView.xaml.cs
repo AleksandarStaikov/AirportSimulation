@@ -98,7 +98,8 @@
 			ShowAvailableBuildingComponentPlaces();
 
 			_previousBuildingComponentImage = _currentBuildingComponentImage;
-			if (_currentBuildingComponentType != BuildingComponentType.Conveyor)
+			if (_currentBuildingComponentType != BuildingComponentType.Conveyor &&
+				_currentBuildingComponentType != BuildingComponentType.ManyToOneConveyor)
 			{
 				_currentBuildingComponentImage = null;
 			}
@@ -206,7 +207,7 @@
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)
 		{
-			SimulationGridOptions.CanBuildConveyor = true;
+			SimulationGridOptions.CanBuildManyToOneConveyor = true;
 
 			if (_fullPathBuilt)
 			{

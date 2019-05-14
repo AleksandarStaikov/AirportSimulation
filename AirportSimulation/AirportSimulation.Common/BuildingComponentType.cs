@@ -9,6 +9,7 @@
         AA,
         PA,
         MPA,
-        BSU
-    }
+        BSU,
+		ManyToOneConveyor
+	}
 }

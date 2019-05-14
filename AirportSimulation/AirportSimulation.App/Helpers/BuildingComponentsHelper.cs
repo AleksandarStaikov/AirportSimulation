@@ -16,7 +16,8 @@
             { BuildingComponentType.PSC, "Resources/PSCbaggage.png" },
             { BuildingComponentType.ASC, "Resources/AdvancedCheckBaggage.png" },
             { BuildingComponentType.AA, "Resources/airplane-shape.png" },
-            { BuildingComponentType.MPA, "Resources/MPApng.png" }
+            { BuildingComponentType.MPA, "Resources/MPApng.png" },
+			{ BuildingComponentType.ManyToOneConveyor, "Resources/manytomanyConv.png" }
         };
 
         public BitmapImage GetBuildingComponentImage (BuildingComponentType type) => 
