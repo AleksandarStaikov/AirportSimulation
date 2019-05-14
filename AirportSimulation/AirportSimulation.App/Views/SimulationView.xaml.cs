@@ -16,6 +16,8 @@
 	public partial class SimulationView : UserControl
 	{
 		private BuildingComponentsHelper _buildingComponentHelper = new BuildingComponentsHelper();
+		private LinkedList<ConveyorBelt> _chainedBelts = new LinkedList<ConveyorBelt>();
+		private ConveyorBelt _conveyorBelt = new ConveyorBelt();
 
 		private List<(int, int)> _usedCells = new List<(int, int)>();
 		private List<GridDisabledCellElement> _disabledCells = new List<GridDisabledCellElement>();
@@ -29,6 +31,7 @@
 
 		private (int, int) _lastCoordinates;
 		private static int _hintCount;
+		private static int _slotIndex;
 
 		private bool _fullPathBuilt = false;
 		private readonly (int?, int?) _nullTuple = Tuple.Create<int?, int?>(null, null).ToValueTuple();
@@ -103,6 +106,13 @@
 				_currentBuildingComponentType != BuildingComponentType.ManyToOneConveyor)
 			{
 				_currentBuildingComponentImage = null;
+			}
+			else
+			{
+				_conveyorBelt.ConveyorSlots.Add(new ConveyorSlot
+				{
+					SlotIndex = _slotIndex++
+				});
 			}
 
 			if (++_hintCount < 2)
@@ -222,8 +232,15 @@
 
 			_currentBuildingComponentImage = null;
 
+			if (_conveyorBelt.ConveyorSlots.Any())
+			{
+				_chainedBelts.AddLast(_conveyorBelt);
+				_slotIndex = 0;
+				_conveyorBelt = new ConveyorBelt();
+			}
+
 			// TODO: ValidateRunButtonVisibility();
-		}
+			}
 
 		private void ShowAvailableBuildingComponentPlaces()
 		{
@@ -328,7 +345,6 @@
 				allowedRows.Add(row);
 				allowedColumns.Add(column - 1);
 			}
-
 
 			for (int i = 0; i < allowedRows.Count; i++)
 			{

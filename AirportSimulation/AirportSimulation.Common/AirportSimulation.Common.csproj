@@ -63,7 +63,8 @@
     <Compile Include="Models\BaggageEventLog.cs" />
     <Compile Include="Models\BaggageType.cs" />
     <Compile Include="Models\Contracts\ISimulationSettings.cs" />
-    <Compile Include="Models\Conveyor.cs" />
+    <Compile Include="Models\ConveyorBelt.cs" />
+    <Compile Include="Models\ConveyorSlot.cs" />
     <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\GridNode.cs" />
     <Compile Include="Models\NodeState.cs" />

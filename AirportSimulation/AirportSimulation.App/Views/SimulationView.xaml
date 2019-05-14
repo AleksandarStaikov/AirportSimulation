@@ -11,13 +11,13 @@
 
     <Grid Margin="10 10 10 10">
         <Grid.Resources>
-            <ImageBrush x:Key="CheckInImageBrush" ImageSource="/Resources/check-in.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="ConveyorImageBrush" ImageSource="/Resources/conveyor.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="AirplaneShapeImageBrush" ImageSource="/Resources/airplane-shape.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="PSCImageBrush" ImageSource="/Resources/PSCbaggage.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="ASCImageBrush" ImageSource="/Resources/AdvancedCheckBaggage.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png"  Stretch="Fill"/>
-            <ImageBrush x:Key="ManyToOneConveyorImageBrush" ImageSource="/Resources/manytomanyConv.png"  Stretch="Fill"/>
+            <ImageBrush x:Key="CheckInImageBrush" ImageSource="/Resources/check-in.png" Stretch="Fill"/>
+            <ImageBrush x:Key="ConveyorImageBrush" ImageSource="/Resources/conveyor.png" Stretch="Fill"/>
+            <ImageBrush x:Key="AirplaneShapeImageBrush" ImageSource="/Resources/airplane-shape.png" Stretch="Fill"/>
+            <ImageBrush x:Key="PSCImageBrush" ImageSource="/Resources/PSCbaggage.png" Stretch="Fill"/>
+            <ImageBrush x:Key="ASCImageBrush" ImageSource="/Resources/AdvancedCheckBaggage.png" Stretch="Fill"/>
+            <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png" Stretch="Fill"/>
+            <ImageBrush x:Key="ManyToOneConveyorImageBrush" ImageSource="/Resources/manytomanyConv.png" Stretch="Fill"/>
         </Grid.Resources>
         
         <Grid.ColumnDefinitions>
