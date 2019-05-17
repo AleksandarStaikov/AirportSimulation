@@ -31,7 +31,7 @@
             _watch.Restart();
             int m = (int)(1000 / SimulationMultiplier);
             _landingFlightsWatcher = new Timer(CheckForIncomingFlights, _simulationSettings.IncomingFlights, m, m);
-            _preparationFlightsWatcher = new Timer(CheckForFlightBeginPreparations, _simulationSettings.OutgoingFlights, m, m);
+            _preparationFlightsWatcher = new Timer(CheckForFlightPreparations, _simulationSettings.OutgoingFlights, m, m);
         }
 
         public void StopTimer()
@@ -97,7 +97,7 @@
             }
         }
 
-        private void CheckForFlightBeginPreparations(object state)
+        private void CheckForFlightPreparations(object state)
         {
             var outgoingFlights = (List<Flight>)state;
             foreach (var flight in outgoingFlights.Where(f => f.FlightState == FlightState.WaitingForPreparation))
@@ -110,6 +110,14 @@
                     {
                         PrepareFlightEvent?.Invoke(flight);
                     }));
+                }
+            }
+
+            foreach (var flight in outgoingFlights.Where(f => f.FlightState == FlightState.InPreparation))
+            {
+                if (flight.TimeToFlightSinceSimulationStart < GetTimeSinceSimulationStart())
+                {
+                    flight.FlightState = FlightState.Departed;
                 }
             }
         }

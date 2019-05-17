@@ -27,7 +27,7 @@
 
             baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
                 TimerService.ConvertMillisecondsToTimeSpan(_pscSettings.ProcessingRateInMilliseconds),
-                $"Primary security check processing - { (isFail ? Constants.PcsCheckFailed : Constants.PcsCheckSucceeded)}");
+                $"Primary security check ID-{NodeId} processing - { (isFail ? LoggingConstants.PscCheckFailed : LoggingConstants.PscCheckSucceeded)}");
 
             baggage.Destination = isFail ? typeof(Asc).Name : typeof(Mpa).Name;
         }
