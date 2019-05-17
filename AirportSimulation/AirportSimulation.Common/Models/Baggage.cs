@@ -5,10 +5,14 @@
 
     public class Baggage
     {
+        public static List<Baggage> AllBaggage = new List<Baggage>();
+
         public Baggage()
         {
             Log = new List<BaggageEventLog>();
             Flight = new Flight();
+
+            AllBaggage.Add(this);
         }
 
         public BaggageType BaggageType { get; set; }

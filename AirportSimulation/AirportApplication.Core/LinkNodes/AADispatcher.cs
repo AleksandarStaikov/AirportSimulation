@@ -12,14 +12,15 @@
 
     public class AADispatcher : ChainLink
     {
-        public delegate AADispatcher Factory(IFlightManagement flightManagement);
+        public delegate AADispatcher Factory(IFlightManagement flightManagement, string nodeId);
 
         private readonly IFlightManagement _flightManagement;
 
         private Dictionary<IChainLink, Queue<Baggage>> _gateQueues;
         private List<IChainLink> _gates;
 
-        public AADispatcher(IFlightManagement flightManagement, ITimerService timerService) : base(timerService)
+        public AADispatcher(IFlightManagement flightManagement, string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _flightManagement = flightManagement;
             TimerService.FlightLandedEvent += DispatchFlightBaggage;

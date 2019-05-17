@@ -9,12 +9,13 @@
 
     public class Psc : ProcessingNode, IProcessingNode
     {
-        public delegate Psc Factory(IPscSettings pscSettings);
+        public delegate Psc Factory(IPscSettings pscSettings, string nodeId);
 
         private readonly IPscSettings _pscSettings;
         private readonly Random _randomGen;
 
-        public Psc(IPscSettings pscSettings, ITimerService timerService) : base(timerService)
+        public Psc(IPscSettings pscSettings, string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _pscSettings = pscSettings;
             _randomGen = new Random();
@@ -24,9 +25,9 @@
         {
             var isFail = _randomGen.Next(0, 101) < _pscSettings.PscInvalidationPercentage;
 
-            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
                 TimerService.ConvertMillisecondsToTimeSpan(_pscSettings.ProcessingRateInMilliseconds),
-                $"Primary security check processing - passed: {isFail}");
+                $"Primary security check processing - { (isFail ? Constants.PcsCheckFailed : Constants.PcsCheckSucceeded)}");
 
             baggage.Destination = isFail ? typeof(Asc).Name : typeof(Mpa).Name;
         }

@@ -9,12 +9,12 @@
 
 	public class Mpa : ChainLink, IChainLink
     {
-        public delegate Mpa Factory();
+        public delegate Mpa Factory(string nodeId);
 
         private Dictionary<string, ChainLink> _allSuccessors;
         private Dictionary<string, Queue<Baggage>> _baggageDistributors;
 
-        public Mpa(ITimerService timerService) : base(timerService)
+        public Mpa(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
             _allSuccessors = new Dictionary<string, ChainLink>();
             _baggageDistributors = new Dictionary<string, Queue<Baggage>>();

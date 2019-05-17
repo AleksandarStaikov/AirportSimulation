@@ -9,15 +9,18 @@
     {
         private NodeState _status;
 
-        public ChainLink(ITimerService timerService)
+        public ChainLink(string nodeId, ITimerService timerService)
         {
             TimerService = timerService;
             _status = NodeState.Free;
+            NodeId = nodeId;
         }
 
         protected ITimerService TimerService { get; }
 
         protected IChainLink NextLink { get; set; }
+
+        public string NodeId { get; set; }
 
         public abstract string Destination { get; }
 

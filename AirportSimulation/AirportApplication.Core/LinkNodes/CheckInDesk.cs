@@ -7,9 +7,10 @@
 
     public class CheckInDesk : ProcessingNode, IProcessingNode
     {
-        public delegate CheckInDesk Factory();
+        public delegate CheckInDesk Factory(string nodeId);
 
-        public CheckInDesk(ITimerService timerService) : base(timerService)
+        public CheckInDesk(string nodeId, ITimerService timerService) 
+            : base(nodeId, timerService)
         {
         }
 

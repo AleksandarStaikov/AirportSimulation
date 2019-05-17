@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Abstractions.Contracts;
@@ -9,15 +10,16 @@
 
     public class BSU : ChainLink, IChainLink
     {
-        public delegate BSU Factory();
+        public delegate BSU Factory(string nodeId);
 
         private readonly Dictionary<string, BaggageBucket> _baggageBuckets;
         private readonly Robot robot;
 
-        public BSU(ITimerService timerService) : base(timerService)
+        public BSU(string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _baggageBuckets = new Dictionary<string, BaggageBucket>();
-            robot = new Robot(timerService);
+            robot = new Robot(Guid.NewGuid().ToString(), timerService);
             TimerService.PrepareFlightEvent += f => OnTimeToLoad(f.FlightNumber);
         }
 
@@ -60,7 +62,7 @@
                 .TotalMilliseconds;
             timeUntilLoading = timeUntilLoading == 0 ? 0 : timeUntilLoading;
 
-            var temp = new BaggageBucket(flight.FlightNumber, timeUntilLoading, TimerService);
+            var temp = new BaggageBucket(flight.FlightNumber, timeUntilLoading, Guid.NewGuid().ToString(), TimerService);
             temp.SetSuccessor(robot);
             temp.timeToLoad += OnTimeToLoad;
             robot.AddSuccessor(temp);

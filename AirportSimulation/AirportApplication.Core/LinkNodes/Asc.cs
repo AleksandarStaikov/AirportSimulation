@@ -9,12 +9,13 @@
 
     public class Asc : ProcessingNode, IProcessingNode
     {
-        public delegate Asc Factory(IAscSettings ascSettings);
+        public delegate Asc Factory(IAscSettings ascSettings, string nodeId);
 
         private readonly IAscSettings _ascSettings;
         private readonly Random _randomGen;
 
-        public Asc(IAscSettings ascSettings, ITimerService timerService) : base(timerService)
+        public Asc(IAscSettings ascSettings, string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _ascSettings = ascSettings;
             _randomGen = new Random();

@@ -11,8 +11,8 @@
     {
         public Action<string> timeToLoad;
 
-        public BaggageBucket(string flightNumber, double timeUntilLoading, ITimerService timerService) : base(
-            timerService)
+        public BaggageBucket(string flightNumber, double timeUntilLoading, string nodeId, ITimerService timerService) 
+            : base(nodeId, timerService)
         {
             FlightNumber = flightNumber;
             Baggages = new Queue<Baggage>();

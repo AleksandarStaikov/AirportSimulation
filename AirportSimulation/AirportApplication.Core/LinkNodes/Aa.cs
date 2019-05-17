@@ -7,9 +7,9 @@
 
     public class Aa : ProcessingNode, IProcessingNode
     {
-        public delegate Aa Factory(int dropOffNumber);
+        public delegate Aa Factory(int dropOffNumber, string nodeId);
 
-        public Aa(int dropOffNumber, ITimerService timerService) : base(timerService)
+        public Aa(int dropOffNumber, string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
             DropOffNumber = dropOffNumber;
         }

@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core.Services
 {
+    using System;
     using System.Data;
     using Common.Models;
     using Contracts.Services;
@@ -60,63 +61,63 @@
         public CheckInDesk CreateCheckInDesk()
         {
             ValidateSettings();
-            return _checkInDeskFactory();
+            return _checkInDeskFactory(Guid.NewGuid().ToString());
         }
 
         public Psc CreatePsc()
         {
             ValidateSettings();
             //TODO: Deal with indexes
-            return _pscFactory(_simulationSettings.Pscs[0]);
+            return _pscFactory(_simulationSettings.Pscs[0], Guid.NewGuid().ToString());
         }
 
         public Asc CreateAsc()
         {
             ValidateSettings();
             //TODO: Deal with indexes
-            return _ascFactory(_simulationSettings.Ascs[0]);
+            return _ascFactory(_simulationSettings.Ascs[0], Guid.NewGuid().ToString());
         }
 
         public Mpa CreateMpa()
         {
             ValidateSettings();
-            return _mpaFactory();
+            return _mpaFactory(Guid.NewGuid().ToString());
         }
 
         public BSU CreateBsu()
         {
             ValidateSettings();
-            return _bsuFactory();
+            return _bsuFactory(Guid.NewGuid().ToString());
         }
 
         public Aa CreateAa()
         {
             ValidateSettings();
-            return _aaFactory(_gatesCount++);
+            return _aaFactory(_gatesCount++, Guid.NewGuid().ToString());
         }
 
         public PickUpArea CreatePua()
         {
             ValidateSettings();
-            return _puaFactory(_puasCount++);
+            return _puaFactory(_puasCount++, Guid.NewGuid().ToString());
         }
 
         public OneToOneConveyor CreateOneToOneConveyor(int length)
         {
             ValidateSettings();
-            return _oneToOneConveyorFactory(length);
+            return _oneToOneConveyorFactory(length, Guid.NewGuid().ToString());
         }
 
         public ManyToOneConveyor CreateManyToOneConveyor(int length)
         {
             ValidateSettings();
-            return _manyToOneConveyorFactory(length);
+            return _manyToOneConveyorFactory(length, Guid.NewGuid().ToString());
         }
 
         public ConveyorConnector CreateConveyorConnector()
         {
             ValidateSettings();
-            return _conveyorConnectorFactory();
+            return _conveyorConnectorFactory(Guid.NewGuid().ToString());
         }
 
         public void SetSettings(SimulationSettings settings)
@@ -137,19 +138,19 @@
         public CheckInDispatcher CreateCheckInDispatcher()
         {
             ValidateSettings();
-            return _checkInDispatcherFactory(_simulationSettings);
+            return _checkInDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
         }
 
         public AADispatcher CreateAaDispatcher()
         {
             ValidateSettings();
-            return _aaDispatcherFactory(_simulationSettings);
+            return _aaDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
         }
 
         public BagCollector CreateBagCollector()
         {
             ValidateSettings();
-            return _bagCollectorFactory();
+            return _bagCollectorFactory(Guid.NewGuid().ToString());
         }
 
         #endregion

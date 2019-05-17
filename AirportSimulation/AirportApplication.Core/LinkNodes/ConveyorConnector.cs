@@ -1,22 +1,24 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using System;
 
     public class ConveyorConnector : ChainLink, IConveyorConnector
     {
-        public delegate ConveyorConnector Factory();
+        public delegate ConveyorConnector Factory(string nodeId);
 
         private IManyToOneConveyor _nextNode;
 
-        public ConveyorConnector(ITimerService timerService) : base(timerService)
+        public ConveyorConnector(string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
         }
 
-        public NodeState Status { get { return _nextNode.Status(this); } private set { } }
+        //TODO : Pardon the fuck, looks weird
+        public NodeState Status => _nextNode.Status(this);
 
         public override string Destination => _nextNode.Destination;
 

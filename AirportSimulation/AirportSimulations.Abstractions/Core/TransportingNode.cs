@@ -14,8 +14,8 @@
         protected Baggage[] _conveyorBelt;
         protected Timer _timer;
 
-        protected TransportingNode(int length, ITimerService timerService)
-            : base(timerService)
+        protected TransportingNode(int length, string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _length = length;
             _conveyorBelt = new Baggage[_length];

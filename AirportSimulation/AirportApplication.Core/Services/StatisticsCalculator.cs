@@ -6,12 +6,14 @@
 
     public class StatisticsCalculator
     {
-        public StatisticsData CalculateStatistics(List<Baggage> baggages)
+        public StatisticsData CalculateStatistics()
         {
+            var baggage = Baggage.AllBaggage;
+
             var statisticsData = new StatisticsData();
 
-            SetDispatchedTimes(statisticsData, baggages);
-            SetCollectedTimes(statisticsData, baggages);
+            SetDispatchedTimes(statisticsData, baggage);
+            SetCollectedTimes(statisticsData, baggage);
 
             return statisticsData;
         }

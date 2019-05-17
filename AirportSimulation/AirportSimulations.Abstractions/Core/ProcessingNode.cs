@@ -13,7 +13,7 @@
         protected List<IChainLink> _allSuccessors;
         protected Baggage _currentBaggage;
 
-        protected ProcessingNode(ITimerService timerService) : base(timerService)
+        protected ProcessingNode(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
             _allSuccessors = new List<IChainLink>();
         }
