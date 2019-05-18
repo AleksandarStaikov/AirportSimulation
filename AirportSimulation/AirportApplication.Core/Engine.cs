@@ -31,8 +31,8 @@
             var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
             var mpa = _chainLinkFactory.CreateMpa();
             var bsu = _chainLinkFactory.CreateBsu();
-            var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(5); //Implement conveyorSettings
-            var bsuToMpa = _chainLinkFactory.CreateOneToOneConveyor(10);
+            var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
+            var bsuToMpa = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
             var MpaToAA = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
             var aa = _chainLinkFactory.CreateAa();
 

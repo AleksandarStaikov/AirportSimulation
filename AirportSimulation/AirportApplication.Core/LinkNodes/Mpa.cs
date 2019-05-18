@@ -33,7 +33,13 @@
 
         public override void PassBaggage(Baggage baggage)
         {
+
+            AddTransportationLog(baggage);
+
             sortToDestinationDistributor(baggage);
+
+            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000),
+                "MPA processing. Sorted to Gate " + baggage.Destination + ". Enqueuing for distribution.");
 
             _baggageDistributors[baggage.Destination].Enqueue(baggage);
         }
@@ -59,7 +65,10 @@
                     {
                         if (nextNode.Status == NodeState.Free)
                         {
-                            nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
+                            var tempBaggage = _baggageDistributors[destination].Dequeue();
+                            tempBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
+
+                            nextNode.PassBaggage(tempBaggage);
                         }
                     }
                 };
@@ -77,6 +86,18 @@
             else
             {
                 baggage.Destination = baggage.Flight.Gate;
+            }
+        }
+
+        private void AddTransportationLog(Baggage baggage)
+        {
+            if (baggage.TransportationStartTime != null)
+            {
+                var transportationStart = baggage.TransportationStartTime ?? 0;
+                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
+                baggage.AddEventLog(new TimeSpan(transportingTimeElapsed),
+                    "Received in " + GetType().Name + " Transportation time");
+                baggage.TransportationStartTime = null;
             }
         }
     }
