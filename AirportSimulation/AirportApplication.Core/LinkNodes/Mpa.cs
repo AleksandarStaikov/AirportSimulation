@@ -79,14 +79,13 @@
             if (baggage.Flight.FlightState == FlightState.Landed)
             {
 				baggage.Destination = baggage.Flight.PickUpArea;
-				return;
+				
             }
-
-            if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
+            else if (baggage.Flight.FlightState == FlightState.WaitingForPreparation) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
             {
 				baggage.Destination = typeof(BSU).Name;
 			}
-            else
+            else if(baggage.Flight.FlightState == FlightState.InPreparation || baggage.Flight.FlightState == FlightState.Departed)
             {
                 baggage.Destination = baggage.Flight.Gate;
             }

@@ -9,6 +9,8 @@
 
     public class BaggageBucket : ChainLink, IChainLink
     {
+        public bool isDistributing { get; set; } = false;
+
         public BaggageBucket(string flightNumber, string nodeId, ITimerService timerService) 
             : base(nodeId, timerService)
         {
@@ -32,7 +34,10 @@
             {
                 if (NextLink.Status == NodeState.Free)
                 {
-                    NextLink.PassBaggage(Baggages.Dequeue());
+                    var _currentBaggage = Baggages.Dequeue();
+                    _currentBaggage.Destination = typeof(Mpa).Name;
+
+                    NextLink.PassBaggage(_currentBaggage);
                 }
             }
         }

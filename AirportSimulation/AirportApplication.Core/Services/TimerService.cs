@@ -102,7 +102,6 @@
             var outgoingFlights = (List<Flight>)state;
             foreach (var flight in outgoingFlights.Where(f => f.FlightState == FlightState.WaitingForPreparation))
             {
-                //TODO : Think of logic
                 if (flight.TimeToFlightPreparationSinceSimulationStart < GetTimeSinceSimulationStart())
                 {
                     flight.FlightState = FlightState.InPreparation;
