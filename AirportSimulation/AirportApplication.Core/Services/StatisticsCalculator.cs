@@ -4,7 +4,9 @@
     using Common.Models;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows;
     using Common.Models.Contracts;
+    using LinkNodes;
 
     public class StatisticsCalculator
     {
@@ -20,6 +22,7 @@
             SetAscSucceededAndFailed(statisticsData, baggage);
             SetFlightDelays(statisticsData, baggage);
             SetTransferredBagsCount(statisticsData, baggage);
+            SetBsuRelatedStatistics(statisticsData, baggage);
 
             return statisticsData;
         }
@@ -69,6 +72,29 @@
             data.TotalTransferredBags = baggages.Where(bag =>
                 bag.Log.Any(log => log.Description.Contains(LoggingConstants.BagRedirectedToAnotherFlight))).ToList();
         }
+
+        private void SetBsuRelatedStatistics(StatisticsData data, List<Baggage> baggages)
+        {
+            data.TotalBagsThatWentToBsu =
+                baggages.Where(bag => bag.Log.Any(log => log.Description.Contains(typeof(BSU).Name))).ToList();
+
+            data.AverageBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Average(GetBsuStayTime);
+
+            data.MinBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Min(GetBsuStayTime);
+
+            data.MaxBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Max(GetBsuStayTime);
+        }
+
+        private double GetBsuStayTime(Baggage bag)
+        {
+            var receivedInBsuText = string.Format(LoggingConstants.BagReceivedInTemplate, typeof(BSU).Name);
+            var receivedInRobotFromBucket = string.Format(LoggingConstants.ReceivedInRobotSendingTo, typeof(Mpa).Name);
+
+            var startTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInBsuText)).LogCreated;
+            var endTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInRobotFromBucket)).LogCreated;
+
+            return (endTime - startTime).TotalMinutes;
+        }
     }
 
     public class StatisticsData
@@ -98,6 +124,10 @@
 
         public List<Baggage> TotalTransferredBags { get; set; }
 
+        public List<Baggage> TotalBagsThatWentToBsu { get; set; }
 
+        public double AverageBsuStayTimeInMinutes { get; set; }
+        public double MinBsuStayTimeInMinutes { get; set; }
+        public double MaxBsuStayTimeInMinutes { get; set; } 
     }
 }

@@ -13,10 +13,9 @@
 
         public override void Process(Baggage baggage)
         {
-            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
-                TimerService.ConvertMillisecondsToTimeSpan(1000), 
-                "Robot processing. Sending to " + 
-                (baggage.Destination == typeof(Mpa).Name ? baggage.Destination : "BaggageBucket #" + baggage.Destination));
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                TimerService.ConvertMillisecondsToTimeSpan(1000),
+                string.Format(LoggingConstants.ReceivedInRobotSendingTo, (baggage.Destination == typeof(Mpa).Name ? baggage.Destination : $"{typeof(BaggageBucket).Name} #" + baggage.Destination)));
         }
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
@@ -97,7 +98,7 @@
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
                 baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
                     new TimeSpan(transportingTimeElapsed),
-                    "Received in " + Destination + " Transportation time");
+                    string.Format(LoggingConstants.BagReceivedInTemplate, Destination) + " Transportation time");
                 baggage.TransportationStartTime = null;
             }
         }
