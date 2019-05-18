@@ -97,5 +97,7 @@
         public Dictionary<Flight, double> DelaysPerFlight { get; set; }
 
         public List<Baggage> TotalTransferredBags { get; set; }
+
+
     }
 }
