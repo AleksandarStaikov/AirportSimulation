@@ -9,5 +9,7 @@
         public TimeSpan TimeElapsed { get; set; }
 
         public string Description { get; set; }
+
+        public double? LateForFlight { get; set; }
     }
 }

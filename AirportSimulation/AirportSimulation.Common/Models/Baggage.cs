@@ -36,5 +36,16 @@
                 TimeElapsed = timeElapsed 
             });
         }
+
+        public void AddEventLog(TimeSpan logCreationTime, TimeSpan timeElapsed, string description, double lateWithMinutes)
+        {
+            Log.Add(new BaggageEventLog()
+            {
+                LogCreated = logCreationTime,
+                Description = description, 
+                TimeElapsed = timeElapsed,
+                LateForFlight = lateWithMinutes
+            });
+        }
     }
 }

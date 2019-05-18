@@ -4,10 +4,11 @@
     using Common.Models;
     using System.Collections.Generic;
     using System.Linq;
+    using Common.Models.Contracts;
 
     public class StatisticsCalculator
     {
-        public StatisticsData CalculateStatistics()
+        public StatisticsData CalculateStatistics(ISimulationSettings simulationSettings)
         {
             var baggage = Baggage.AllBaggage;
 
@@ -17,6 +18,8 @@
             SetCollectedTimes(statisticsData, baggage);
             SetPscSucceededAndFailed(statisticsData, baggage);
             SetAscSucceededAndFailed(statisticsData, baggage);
+            SetFlightDelays(statisticsData, baggage);
+            SetTransferredBagsCount(statisticsData, baggage);
 
             return statisticsData;
         }
@@ -51,19 +54,20 @@
 
         private void SetFlightDelays(StatisticsData data, List<Baggage> baggages)
         {
-            data.TotalBagsArrivedLateAtAA = baggages.Where(b =>
-                b.Log.Any(log => log.Description.Contains(LoggingConstants.BagArrivedLateAtAirportArea))).ToList();
+            data.TotalBagsArrivedLateAtAa = baggages.Where(b =>
+                b.Log.Any(log => log.LateForFlight.HasValue)).ToList();
 
-            data.BaggsLateForFlightPerFlight = data.TotalBagsArrivedLateAtAA.GroupBy(b => b.Flight);
+            data.BagsLateForFlightPerFlight = data.TotalBagsArrivedLateAtAa.GroupBy(b => b.Flight);
 
-            //Its fucked up, I know but that's the query, if you can make it more readable or faster, go ahead
             data.DelaysPerFlight = data
-                .BaggsLateForFlightPerFlight
-                .ToDictionary(x => x.Key, y =>
-                    y.Max(bag =>
-                        double.Parse(bag.Log
-                            .FirstOrDefault(x => x.Description.Contains(LoggingConstants.BagArrivedLateAtAirportArea))
-                            .Description.Split(new string[] { " with ", " minutes" }, StringSplitOptions.RemoveEmptyEntries)[1])));
+                .BagsLateForFlightPerFlight
+                .ToDictionary(x => x.Key, y => y.Max(bag => bag.Log.FirstOrDefault(log => log.LateForFlight.HasValue).LateForFlight.Value));
+        }
+
+        private void SetTransferredBagsCount(StatisticsData data, List<Baggage> baggages)
+        {
+            data.TotalTransferredBags = baggages.Where(bag =>
+                bag.Log.Any(log => log.Description.Contains(LoggingConstants.BagRedirectedToAnotherFlight))).ToList();
         }
     }
 
@@ -86,10 +90,12 @@
         public double AscInvalidationPercentage =>
             (100D / (double)(AscSucceededBags.Count + AscFailedBags.Count)) * AscFailedBags.Count;
 
-        public List<Baggage> TotalBagsArrivedLateAtAA { get; set; }
+        public List<Baggage> TotalBagsArrivedLateAtAa { get; set; }
 
-        public IEnumerable<IGrouping<Flight, Baggage>> BaggsLateForFlightPerFlight { get; set; }
+        public IEnumerable<IGrouping<Flight, Baggage>> BagsLateForFlightPerFlight { get; set; }
 
         public Dictionary<Flight, double> DelaysPerFlight { get; set; }
+
+        public List<Baggage> TotalTransferredBags { get; set; }
     }
 }

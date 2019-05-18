@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
+    using System.Reflection;
     using System.Windows.Media;
     using Abstractions.Contracts;
     using Abstractions.Core;
@@ -25,18 +26,22 @@
 
             if (baggage.Destination != typeof(Mpa).Name)
             {
+                baggage.Destination = typeof(BagCollector).Name;
                 if (baggage.Flight.FlightState == FlightState.Departed)
                 {
-                    logMessage += LoggingConstants.BagArrivedLateAtAirportArea + $" with {(TimerService.GetTimeSinceSimulationStart() - baggage.Flight.TimeToFlightSinceSimulationStart).TotalMinutes:F2} minutes";
+                    double delayInMinutes =
+                        (TimerService.GetTimeSinceSimulationStart() - baggage.Flight.TimeToFlightSinceSimulationStart)
+                        .TotalMinutes;
+                    logMessage += LoggingConstants.BagArrivedLateAtAirportArea + $" with {delayInMinutes:F2} minutes";
+                    baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                        TimerService.ConvertMillisecondsToTimeSpan(1000), logMessage, delayInMinutes);
                 }
                 else
                 {
                     logMessage += LoggingConstants.BagArrivedOnTimeAtAirportArea;
+                    baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                        TimerService.ConvertMillisecondsToTimeSpan(1000), logMessage);
                 }
-
-                baggage.Destination = typeof(BagCollector).Name;
-                baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
-                    TimerService.ConvertMillisecondsToTimeSpan(1000), logMessage);
             }
             else
             {
