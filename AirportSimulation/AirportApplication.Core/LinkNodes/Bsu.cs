@@ -28,6 +28,8 @@
         public override void PassBaggage(Baggage baggage)
         {
             Status = NodeState.Busy;
+            AddTransportationLog(baggage);
+
             if (baggage.Destination == Destination)
             {
                 AssignBucket(baggage);
@@ -85,6 +87,19 @@
             NextLink = nextLink;
 
             robot.AddSuccessor(NextLink);
+        }
+
+        private void AddTransportationLog(Baggage baggage)
+        {
+            if (baggage.TransportationStartTime != null)
+            {
+                var transportationStart = baggage.TransportationStartTime ?? 0;
+                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
+                baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                    new TimeSpan(transportingTimeElapsed),
+                    "Received in " + Destination + " Transportation time");
+                baggage.TransportationStartTime = null;
+            }
         }
     }
 }

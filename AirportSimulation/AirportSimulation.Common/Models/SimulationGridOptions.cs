@@ -4,17 +4,18 @@
 
     public class SimulationGridOptions : INotifyPropertyChanged
     {
-        private bool _canBuildCheckIn = true;
-		private bool _canBuildConveyor = true;
+        private bool _canBuildCheckIn;
+		private bool _canBuildConveyor;
         private bool _canBuildManyToOneConveyor;
         private bool _canBuildAsc;
-		private bool _canBuildPsc = true;
-		private bool _canBuildAa = true;
+		private bool _canBuildPsc;
+		private bool _canBuildAa;
         private bool _canBuildPickUp;
+		private bool _canBuildMpa;
         private bool _isGridEnabled = true;
         private bool _canCreate;
         private bool _canClear;
-		private bool _canRun = true;
+		private bool _canRun;
 
         public int GRID_MAX_ROWS = 14;
         public int GRID_MAX_COLUMNS = 19;
@@ -63,7 +64,17 @@
             }
         }
 
-        public bool CanBuildCheckIn
+		public bool CanBuildMpa
+		{
+			get => _canBuildMpa;
+			set
+			{
+				_canBuildMpa = value;
+				OnPropertyRaised(nameof(CanBuildMpa));
+			}
+		}
+
+		public bool CanBuildCheckIn
         {
             get => _canBuildCheckIn;
             set

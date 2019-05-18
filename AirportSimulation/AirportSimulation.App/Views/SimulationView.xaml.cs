@@ -34,6 +34,7 @@
 		private (int, int) _lastCoordinates;
 		private static int _hintCount;
 		private static int _slotIndex;
+		private static int _step = 1;
 
 		private bool _fullPathBuilt = false;
 		private readonly (int?, int?) _nullTuple = Tuple.Create<int?, int?>(null, null).ToValueTuple();
@@ -41,6 +42,11 @@
 		public SimulationView()
 		{
 			InitializeComponent();
+
+			(_currentBuildingComponentType, _currentBuildingComponentImage) =
+				_buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, _step,
+					true);
+
 			_mpaBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.MPA);
 		}
 
@@ -103,18 +109,18 @@
 			RectangleFactory.RemoveBlinkingRectangles(grid, _blinkingRectanglesCells);
 			ShowAvailableBuildingComponentPlaces();
 
-			_previousBuildingComponentImage = _currentBuildingComponentImage;
-			if (_currentBuildingComponentType != BuildingComponentType.Conveyor &&
-				_currentBuildingComponentType != BuildingComponentType.ManyToOneConveyor)
-			{
-				_currentBuildingComponentImage = null;
-			}
-			else
+			if (_currentBuildingComponentType == BuildingComponentType.Conveyor ||
+				_currentBuildingComponentType == BuildingComponentType.ManyToOneConveyor)
 			{
 				_conveyorBelt.ConveyorSlots.Add(new ConveyorSlot
 				{
 					SlotIndex = _slotIndex++
 				});
+			}
+			else
+			{
+				_currentBuildingComponentImage = null;
+				_buildingComponentHelper.DisableComponentsButtons(SimulationGridOptions);
 			}
 
 			if (++_hintCount < 2)
@@ -137,7 +143,7 @@
 
 			var cell = GridHelper.GetCurrentlySelectedGridCell(grid, e).ToTuple();
 			var buildingComponent = _gridBuildingComponents.FirstOrDefault(x => x.Cell.Item1 == cell.Item1 && x.Cell.Item2 == cell.Item2);
-			_currentBuildingComponentImage = _previousBuildingComponentImage;
+			(_currentBuildingComponentType, _currentBuildingComponentImage) = _buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, _step);
 
 			if (buildingComponent == null)
 			{
@@ -229,19 +235,22 @@
 
 		private void CreateButton_Click(object sender, RoutedEventArgs e)
 		{
-			SimulationGridOptions.CanBuildManyToOneConveyor = true;
-
-			if (_fullPathBuilt)
-			{
-				ResetBuildingPossibilitesAfterClearOrCreate();
-			}
-
 			_gridBuildingComponents
 				.Where(x => !x.Created)
 				.ToList()
 				.ForEach(x => x.Created = true);
 
-			_currentBuildingComponentImage = null;
+			_fullPathBuilt = _step == 7;
+
+			if (_fullPathBuilt)
+			{
+				ResetBuildingPossibilitesAfterClearOrCreate();
+			}
+			else
+			{
+				(_currentBuildingComponentType, _currentBuildingComponentImage) =
+					_buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, ++_step);
+			}
 
 			if (_conveyorBelt.ConveyorSlots.Any())
 			{
@@ -449,10 +458,7 @@
 
 		private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
-			_previousBuildingComponentImage = null;
-			_currentBuildingComponentImage =
-				_buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn);
-
+			(_currentBuildingComponentType, _currentBuildingComponentImage) = _buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
 			ResetBuildingPossibilitesAfterClearOrCreate();
 			UpdateCanCreateAndCanClearValues();
 
@@ -460,6 +466,7 @@
 			_disabledCells.Clear();
 			_gridBuildingComponents.Clear();
 
+			_step = 1;
 			RectangleFactory.RemoveBlinkingRectangles(SimulationGrid, _blinkingRectanglesCells);
 			SimulationGrid.Children.RemoveRange(0, SimulationGrid.Children.Count);
 		}
@@ -472,13 +479,17 @@
 
 		private void ResetBuildingPossibilitesAfterClearOrCreate()
 		{
-			SimulationGridOptions.CanBuildCheckIn = true;
-			SimulationGridOptions.CanBuildConveyor = false;
-			SimulationGridOptions.CanBuildAa = false;
-			SimulationGridOptions.CanBuildAsc = false;
-			SimulationGridOptions.CanBuildManyToOneConveyor = false;
-			SimulationGridOptions.CanBuildPickUp = false;
-			SimulationGridOptions.CanBuildPsc = false;
+			foreach (var disabledCell in _disabledCells)
+			{
+				SimulationGrid.Children.Remove(disabledCell.DisabledElement);
+			}
+
+			_step = 1;
+
+			_disabledCells.Clear();
+			RectangleFactory.RemoveBlinkingRectangles(SimulationGrid, _blinkingRectanglesCells);
+			UpdateCanCreateAndCanClearValues();
+			(_currentBuildingComponentType, _currentBuildingComponentImage) =_buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
 		}
 	}
 }

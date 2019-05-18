@@ -6,8 +6,9 @@
     using System.Collections.Generic;
     using Common.Models;
 	using System.Threading.Tasks;
+    using System;
 
-	public class Mpa : ChainLink, IChainLink
+    public class Mpa : ChainLink, IChainLink
     {
         public delegate Mpa Factory(string nodeId);
 
@@ -30,7 +31,13 @@
 
         public override void PassBaggage(Baggage baggage)
         {
+
+            AddTransportationLog(baggage);
+
             SortToDestinationDistributor(baggage);
+
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), TimerService.ConvertMillisecondsToTimeSpan(1000),
+                "MPA processing. Sorted to Gate " + baggage.Destination + ". Enqueuing for distribution.");
 
             _baggageDistributors[baggage.Destination].Enqueue(baggage);
         }
@@ -50,37 +57,51 @@
         {
             var nextNode = _allSuccessors[destination];
 
-			nextNode.OnStatusChangedToFree += () =>
-			{
-				if (_baggageDistributors[destination].Count > 0)
-				{
-					if (nextNode.Status == NodeState.Free)
-					{
-						nextNode.PassBaggage(_baggageDistributors[destination].Dequeue());
-					}
-				}
-			};
-		}
+            nextNode.OnStatusChangedToFree += () =>
+                {
+                    if (_baggageDistributors[destination].Count > 0)
+                    {
+                        if (nextNode.Status == NodeState.Free)
+                        {
+                            var tempBaggage = _baggageDistributors[destination].Dequeue();
+                            tempBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
 
+                            nextNode.PassBaggage(tempBaggage);
+                        }
+                    }
+                };
+        }
+        
         private void SortToDestinationDistributor(Baggage baggage)
         {
             var timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
 
             if (baggage.Flight.FlightState == FlightState.Landed)
             {
-				//baggage.Destination = baggage.Flight.PickUpArea;
-				baggage.Destination = baggage.Flight.Gate;
+				baggage.Destination = baggage.Flight.PickUpArea;
 				return;
             }
 
             if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
             {
-				//baggage.Destination = typeof(BSU).Name;
-				baggage.Destination = baggage.Flight.Gate;
+				baggage.Destination = typeof(BSU).Name;
 			}
             else
             {
                 baggage.Destination = baggage.Flight.Gate;
+            }
+        }
+
+        private void AddTransportationLog(Baggage baggage)
+        {
+            if (baggage.TransportationStartTime != null)
+            {
+                var transportationStart = baggage.TransportationStartTime ?? 0;
+                var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
+                baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                    new TimeSpan(transportingTimeElapsed),
+                    "Received in " + Destination + " Transportation time");
+                baggage.TransportationStartTime = null;
             }
         }
     }
