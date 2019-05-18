@@ -1,18 +1,18 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Timers;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Common.Models;
     using Common.Models.Contracts;
     using CuttingEdge.Conditions;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Timers;
 
     public class CheckInDispatcher : ChainLink
     {
-        public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings);
+        public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings, string nodeId);
 
         //                                                          sec * milliseconds  
         private const int DefaultMaxPreflightBufferInMilliseconds = 600 * 1000;
@@ -23,7 +23,8 @@
         private List<CheckInDesk> _checkIns;
         private List<Timer> _flightDropOffTimers;
 
-        public CheckInDispatcher(ISimulationSettings simulationSettings, ITimerService timerService) : base(timerService)
+        public CheckInDispatcher(ISimulationSettings simulationSettings,string nodeId,  ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _simulationSettings = simulationSettings;
             SetUpQueues();
@@ -85,13 +86,13 @@
             var checkIn = _checkIns[index];
             var queue = _checkInQueues[index];
 
+            baggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
             if (checkIn.Status == NodeState.Free)
             {
                 checkIn.PassBaggage(baggage);
             }
             else
             {
-                //TODO : Not valid, if another attached.
                 if (checkIn.OnStatusChangedToFree == null)
                 {
                     checkIn.OnStatusChangedToFree += () => { PassQueuedBaggage(index); };
@@ -165,10 +166,10 @@
         private void SetUpTimers()
         {
             _flightDropOffTimers = new List<Timer>();
-            foreach (var flight in _simulationSettings.Flights)
+            foreach (var flight in _simulationSettings.OutgoingFlights)
             {
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
-                timer.Elapsed += (sender, e) => 
+                timer.Elapsed += (sender, e) =>
                 {
                     if (flight.BaggageCount > flight.DispatchedBaggagesCount)
                     {

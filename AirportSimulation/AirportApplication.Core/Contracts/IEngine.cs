@@ -5,5 +5,6 @@
     public interface IEngine
     {
         void Run(SimulationSettings settings);
+        void RunDemo(SimulationSettings settings);
     }
 }

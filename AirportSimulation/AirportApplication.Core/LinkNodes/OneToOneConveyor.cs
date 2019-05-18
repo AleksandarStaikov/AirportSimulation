@@ -6,10 +6,10 @@
 
     public class OneToOneConveyor : TransportingNode
     {
-        public delegate OneToOneConveyor Factory(int length);
+        public delegate OneToOneConveyor Factory(int length, string nodeId);
 
-        public OneToOneConveyor(int length, ITimerService timerService)
-            : base(length, timerService)
+        public OneToOneConveyor(int length, string nodeId, ITimerService timerService)
+            : base(length, nodeId, timerService)
         {
         }
 

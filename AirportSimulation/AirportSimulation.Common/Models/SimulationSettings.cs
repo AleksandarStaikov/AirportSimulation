@@ -1,8 +1,7 @@
 ﻿namespace AirportSimulation.Common.Models
 {
-    using System;
-    using System.Collections.Generic;
     using Contracts;
+    using System.Collections.Generic;
 
     public class SimulationSettings : ISimulationSettings
     {
@@ -21,7 +20,12 @@
             ConveyorSettingsAscToMpu = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsPscToAsc = new List<ConveyorSettings>() { new ConveyorSettings() };
 
-            Flights = new List<Flight>() { new Flight(){} };
+            OutgoingFlights = new List<Flight>() { new Flight(){} };
+			IncomingFlights = new List<Flight>() { new Flight()
+            {
+                Gate = "A2",
+                FlightState = FlightState.Incoming
+            } };
         }
 
         #region NodesInfos
@@ -55,9 +59,11 @@
 
         #endregion
 
-        public static TimeSpan TimeToFlight = new TimeSpan(0, 2, 0);
-        //TODO : Replace the timespan above 
-        public List<Flight> Flights { get; set; }
+        public List<Flight> OutgoingFlights { get; set; }
+
+        public List<Flight> IncomingFlights { get; set; }
+
+        public int TransBaggagePercentage { get; set; }
 
         public int Multiplier { get; set; } = 1;
     }
@@ -66,18 +72,20 @@
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
     }
-    
-    public class PscSettings
+
+    public class PscSettings : IPscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
 
         public int PscInvalidationPercentage { get; set; }
     }
 
-    public class AscSettings
+    public class AscSettings : IAscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
+
         public int AscStaffCount { get; set; }
+
         public int AscInvalidationPercentage { get; set; }
     }
 
@@ -89,7 +97,9 @@
     public class BsuSettings
     {
         public int BsuCapacity { get; set; } = 100;
+
         public int BsuRobotsCount { get; set; } = 2;
+
         public int MinutesToFlightDispatchTime { get; set; } = 20;
     }
 
@@ -98,5 +108,9 @@
         public int Length { get; set; } = 10;
         
         public int SpeedInMilliseconds { get; set; } = 1000;
+    }
+
+    public class PickupAreaSettings
+    {
     }
 }

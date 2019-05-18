@@ -67,6 +67,7 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Contracts\IEngine.cs" />
     <Compile Include="LinkNodes\Aa.cs" />
+    <Compile Include="LinkNodes\AADispatcher.cs" />
     <Compile Include="LinkNodes\BagCollector.cs" />
     <Compile Include="LinkNodes\Asc.cs" />
     <Compile Include="LinkNodes\BaggageBucket.cs" />
@@ -78,17 +79,15 @@
     <Compile Include="LinkNodes\OneToOneConveyor.cs" />
     <Compile Include="LinkNodes\ManyToOneConveyor.cs" />
     <Compile Include="LinkNodes\Mpa.cs" />
+    <Compile Include="LinkNodes\PickUpArea.cs" />
     <Compile Include="LinkNodes\Psc.cs" />
     <Compile Include="LinkNodes\Robot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contracts\IService.cs" />
     <Compile Include="Services\ChainLinkFactory.cs" />
     <Compile Include="Contracts\Services\IChainLinkFactory.cs" />
+    <Compile Include="Services\StatisticsCalculator.cs" />
     <Compile Include="Services\TimerService.cs" />
-    <Compile Include="ViewModels\BaggageViewModel.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\ConveyorBeltViewModel.cs" />
-    <Compile Include="ViewModels\ConveyorSlotViewModel.cs" />
     <Compile Include="ViewModels\SimulationSettingsContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

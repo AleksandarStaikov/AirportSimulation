@@ -7,15 +7,18 @@
 
     public class CheckInDesk : ProcessingNode, IProcessingNode
     {
-        public delegate CheckInDesk Factory();
+        public delegate CheckInDesk Factory(string nodeId);
 
-        public CheckInDesk(ITimerService timerService) : base(timerService)
+        public CheckInDesk(string nodeId, ITimerService timerService) 
+            : base(nodeId, timerService)
         {
         }
 
         public override void Process(Baggage baggage)
         {
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000), "CheckIn processing");
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
+                TimerService.ConvertMillisecondsToTimeSpan(1000),
+                "CheckIn processing");
             baggage.Destination = typeof(Psc).Name;
         }
     }

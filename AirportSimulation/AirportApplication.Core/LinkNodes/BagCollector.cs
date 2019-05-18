@@ -1,17 +1,18 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System.Collections.Generic;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Common.Models;
+    using System.Collections.Generic;
 
     public class BagCollector : ChainLink
     {
-        public delegate BagCollector Factory();
+        public delegate BagCollector Factory(string nodeId);
 
         private readonly List<Baggage> _pickedUpBags;
 
-        public BagCollector(ITimerService timerService) : base(timerService)
+        public BagCollector(string nodeId, ITimerService timerService)
+            : base(nodeId, timerService)
         {
             _pickedUpBags = new List<Baggage>();
         }

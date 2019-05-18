@@ -1,20 +1,21 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
-    using System.Collections.Generic;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using System;
+    using System.Collections.Generic;
 
     public class ManyToOneConveyor : TransportingNode, IManyToOneConveyor
     {
-        public delegate ManyToOneConveyor Factory(int length);
+        public delegate ManyToOneConveyor Factory(int length, string nodeId);
 
         private readonly Dictionary<IConveyorConnector, int> _incomingConnections;
         private readonly Dictionary<int, Action> _statusChangedToFreeEvents;
 
-        public ManyToOneConveyor(int length, ITimerService timerService) : base(length, timerService)
+        public ManyToOneConveyor(int length, string nodeId, ITimerService timerService)
+            : base(length, nodeId, timerService)
         {
             _incomingConnections = new Dictionary<IConveyorConnector, int>();
             _statusChangedToFreeEvents = new Dictionary<int, Action>();

@@ -5,22 +5,20 @@
     using Abstractions.Core.Contracts;
     using System.Collections.Generic;
     using Common.Models;
+	using System.Threading.Tasks;
     using System;
-    using System.Threading.Tasks;
-    using System.Linq;
 
     public class Mpa : ChainLink, IChainLink
     {
-        public delegate Mpa Factory();
+        public delegate Mpa Factory(string nodeId);
 
         private Dictionary<string, ChainLink> _allSuccessors;
         private Dictionary<string, Queue<Baggage>> _baggageDistributors;
 
-        public Mpa(ITimerService timerService) : base(timerService)
+        public Mpa(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
             _allSuccessors = new Dictionary<string, ChainLink>();
             _baggageDistributors = new Dictionary<string, Queue<Baggage>>();
-
         }
 
         public override string Destination => this.GetType().Name;
@@ -36,9 +34,9 @@
 
             AddTransportationLog(baggage);
 
-            sortToDestinationDistributor(baggage);
+            SortToDestinationDistributor(baggage);
 
-            baggage.AddEventLog(TimerService.ConvertMillisecondsToTimeSpan(1000),
+            baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), TimerService.ConvertMillisecondsToTimeSpan(1000),
                 "MPA processing. Sorted to Gate " + baggage.Destination + ". Enqueuing for distribution.");
 
             _baggageDistributors[baggage.Destination].Enqueue(baggage);
@@ -46,18 +44,18 @@
 
         public void Start()
         {
-            foreach (string destination in _baggageDistributors.Keys)
+            foreach (var destination in _baggageDistributors.Keys)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
-                    distributeBaggage(destination);
+                    DistributeBaggage(destination);
                 });
             }
         }
 
-        private void distributeBaggage(string destination)
+        private void DistributeBaggage(string destination)
         {
-            ChainLink nextNode = _allSuccessors[destination];
+            var nextNode = _allSuccessors[destination];
 
             nextNode.OnStatusChangedToFree += () =>
                 {
@@ -72,17 +70,22 @@
                         }
                     }
                 };
-
         }
-
-        private void sortToDestinationDistributor(Baggage baggage)
+        
+        private void SortToDestinationDistributor(Baggage baggage)
         {
-            double timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
+            var timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
+
+            if (baggage.Flight.FlightState == FlightState.Landed)
+            {
+				baggage.Destination = baggage.Flight.PickUpArea;
+				return;
+            }
 
             if (timeToFlight > baggage.Flight.TimeToFlightSinceSimulationStart.TotalMilliseconds * 0.2) //If timeToFlight is bigger than 1/5 of total timeToFlight //Make customizable?/Calculate?
             {
-                baggage.Destination = typeof(BSU).Name;
-            }
+				baggage.Destination = typeof(BSU).Name;
+			}
             else
             {
                 baggage.Destination = baggage.Flight.Gate;
@@ -95,8 +98,9 @@
             {
                 var transportationStart = baggage.TransportationStartTime ?? 0;
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
-                baggage.AddEventLog(new TimeSpan(transportingTimeElapsed),
-                    "Received in " + GetType().Name + " Transportation time");
+                baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
+                    new TimeSpan(transportingTimeElapsed),
+                    "Received in " + Destination + " Transportation time");
                 baggage.TransportationStartTime = null;
             }
         }

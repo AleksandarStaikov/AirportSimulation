@@ -27,6 +27,23 @@
 
     public interface IFlightManagement : IMultiplierSettings
     {
-        List<Flight> Flights { get; set; }
+        List<Flight> OutgoingFlights { get; set; }
+
+        List<Flight> IncomingFlights { get; set; }
+
+        int TransBaggagePercentage { get; set; }
+    }
+
+    public interface IPscSettings
+    {
+        int ProcessingRateInMilliseconds { get; set; }
+        int PscInvalidationPercentage { get; set; }
+    }
+
+    public interface IAscSettings
+    {
+        int ProcessingRateInMilliseconds { get; set; }
+        int AscStaffCount { get; set; }
+        int AscInvalidationPercentage { get; set; }
     }
 }

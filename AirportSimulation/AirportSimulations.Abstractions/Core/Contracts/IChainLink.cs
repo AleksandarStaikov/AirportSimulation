@@ -5,6 +5,7 @@
 
     public interface IChainLink
     {
+        string NodeId { get; set; }
         NodeState Status { get; set; }
         string Destination { get; }
         Action OnStatusChangedToFree { get; set; }
