@@ -100,7 +100,7 @@
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
                 baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
                     new TimeSpan(transportingTimeElapsed),
-                    "Received in " + Destination + " Transportation time");
+                    string.Format(LoggingConstants.ReceivedInRobotSendingTo, Destination));
                 baggage.TransportationStartTime = null;
             }
         }

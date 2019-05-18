@@ -83,6 +83,23 @@
             data.MinBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Min(GetBsuStayTime);
 
             data.MaxBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Max(GetBsuStayTime);
+
+            data.LongestSystemStayWithoutBsu = baggages.Max(bag =>
+                (bag.Log.Last().LogCreated - bag.Log.Last().LogCreated).TotalMinutes - GetBsuStayTime(bag));
+
+            data.ShortestSystemStayWithoutBsu = baggages.Min(bag =>
+                (bag.Log.Last().LogCreated - bag.Log.Last().LogCreated).TotalMinutes - GetBsuStayTime(bag));
+        }
+
+        private void SetTransportingTimeRelatedData(StatisticsData data, List<Baggage> baggages)
+        {
+            data.LongestTransportingTime = baggages.Max(bag =>
+                bag.Log.Where(log => log.Description.Contains(LoggingConstants.BagReceivedText))
+                       .Max(log => log.TimeElapsed.TotalMinutes));
+
+            data.ShortestTransportingTime = baggages.Min(bag =>
+                bag.Log.Where(log => log.Description.Contains(LoggingConstants.BagReceivedText))
+                    .Min(log => log.TimeElapsed.TotalMinutes));
         }
 
         private double GetBsuStayTime(Baggage bag)
@@ -90,8 +107,8 @@
             var receivedInBsuText = string.Format(LoggingConstants.BagReceivedInTemplate, typeof(BSU).Name);
             var receivedInRobotFromBucket = string.Format(LoggingConstants.ReceivedInRobotSendingTo, typeof(Mpa).Name);
 
-            var startTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInBsuText)).LogCreated;
-            var endTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInRobotFromBucket)).LogCreated;
+            var startTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInBsuText))?.LogCreated ?? TimeSpan.Zero;
+            var endTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInRobotFromBucket))?.LogCreated ?? TimeSpan.Zero;
 
             return (endTime - startTime).TotalMinutes;
         }
@@ -128,6 +145,12 @@
 
         public double AverageBsuStayTimeInMinutes { get; set; }
         public double MinBsuStayTimeInMinutes { get; set; }
-        public double MaxBsuStayTimeInMinutes { get; set; } 
+        public double MaxBsuStayTimeInMinutes { get; set; }
+
+        public double LongestSystemStayWithoutBsu { get; set; }
+        public double ShortestSystemStayWithoutBsu { get; set; }
+
+        public double LongestTransportingTime { get; set; }
+        public double ShortestTransportingTime { get; set; }
     }
 }
