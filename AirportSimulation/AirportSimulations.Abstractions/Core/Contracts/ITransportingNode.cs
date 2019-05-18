@@ -2,6 +2,10 @@
 {
     public interface ITransportingNode : IChainLink
     {
+        int Length { get; }
+
+        double MoveTime { get; }
+
         void Start();
 
         void Stop();

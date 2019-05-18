@@ -29,9 +29,13 @@
 
         protected bool HasLastItem => LastBaggage != null;
 
+        public int Length => _length;
+
+        public double MoveTime => ConveyorDefaultMovingTime;
+
         public void Start()
         {
-            _timer.Interval = ConveyorDefaultMovingTime / TimerService.SimulationMultiplier;
+            _timer.Interval = MoveTime / TimerService.SimulationMultiplier;
             if (!_timer.Enabled)
             {
                 _timer.Start();

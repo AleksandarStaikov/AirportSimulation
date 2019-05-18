@@ -5,10 +5,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
+    using Abstractions.Core.Contracts;
     using Common.Models.Contracts;
+    using Contracts.Services;
     using LinkNodes;
 
-    public class StatisticsCalculator
+    public class StatisticsCalculator : IStatisticsCalculator
     {
         public StatisticsData CalculateStatistics(ISimulationSettings simulationSettings)
         {
@@ -23,6 +25,7 @@
             SetFlightDelays(statisticsData, baggage);
             SetTransferredBagsCount(statisticsData, baggage);
             SetBsuRelatedStatistics(statisticsData, baggage);
+            SetTransportingTimeRelatedData(statisticsData, baggage);
 
             return statisticsData;
         }
@@ -93,13 +96,41 @@
 
         private void SetTransportingTimeRelatedData(StatisticsData data, List<Baggage> baggages)
         {
-            data.LongestTransportingTime = baggages.Max(bag =>
-                bag.Log.Where(log => log.Description.Contains(LoggingConstants.BagReceivedText))
-                       .Max(log => log.TimeElapsed.TotalMinutes));
+            var allTransportingLogs = baggages.SelectMany(b => b.Log)
+                .Where(log => log.Description.Contains(LoggingConstants.BagReceivedText));
 
-            data.ShortestTransportingTime = baggages.Min(bag =>
-                bag.Log.Where(log => log.Description.Contains(LoggingConstants.BagReceivedText))
-                    .Min(log => log.TimeElapsed.TotalMinutes));
+            data.LongestTransportingTime = allTransportingLogs.Max(log => log.TimeElapsed.TotalMinutes);
+
+            data.ShortestTransportingTime = allTransportingLogs.Min(log => log.TimeElapsed.TotalMinutes);
+
+            var nodes = ChainLinkFactory.Nodes.OfType<ITransportingNode>().ToList();
+            var transportationWaits = allTransportingLogs.Select(log => CalculateLogWait(log, nodes)).OrderBy(t => t.Item2);
+
+            data.MinWaitingTimeAtTransporterOrQueue = transportationWaits.First();
+            data.MaxWaitingTimeAtTransporterOrQueue = transportationWaits.Last();
+
+            data.AverageWaitingTimePerTransporterOrQueue = transportationWaits
+                .GroupBy(pair => pair.Item1, pair => pair.Item2)
+                .Select(g => new KeyValuePair<string, double>(g.Key, g.Average(v => v)))
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        private Tuple<string, double> CalculateLogWait(BaggageEventLog log, IEnumerable<ITransportingNode> nodes)
+        {
+            var transporterIdentifier = log.Description.Split(new[] { LoggingConstants.BagTransporterIdText }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList()[1];
+            if (log.Description.Contains("Queue"))
+            {
+                return new Tuple<string, double>(transporterIdentifier, log.TimeElapsed.TotalMinutes);
+            }
+            else
+            {
+                var transportingNode = nodes.FirstOrDefault(n => n.NodeId == transporterIdentifier);
+                var transporterNominalTimeInMilliseconds = transportingNode.Length * transportingNode.MoveTime;
+                var actualTransportingTime = log.TimeElapsed.Milliseconds;
+                var transportationOverload = actualTransportingTime - transporterNominalTimeInMilliseconds;
+                return new Tuple<string, double>(transporterIdentifier,
+                    TimeSpan.FromMilliseconds(transportationOverload).TotalMinutes);
+            }
         }
 
         private double GetBsuStayTime(Baggage bag)
@@ -152,5 +183,9 @@
 
         public double LongestTransportingTime { get; set; }
         public double ShortestTransportingTime { get; set; }
+
+        public Tuple<string, double> MinWaitingTimeAtTransporterOrQueue { get; set; }
+        public Tuple<string, double> MaxWaitingTimeAtTransporterOrQueue { get; set; } 
+        public Dictionary<string, double> AverageWaitingTimePerTransporterOrQueue { get; set; }
     }
 }
