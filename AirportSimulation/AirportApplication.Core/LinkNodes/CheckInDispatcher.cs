@@ -87,6 +87,7 @@
             var queue = _checkInQueues[index];
 
             baggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
+            baggage.TransporterId = "Queue CheckIn";
             if (checkIn.Status == NodeState.Free)
             {
                 checkIn.PassBaggage(baggage);

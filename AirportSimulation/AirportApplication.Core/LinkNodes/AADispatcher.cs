@@ -84,6 +84,7 @@
         private void PassOrEnqueueBaggage(IChainLink gate, Baggage bag)
         {
             bag.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
+            bag.TransporterId = "Queue AA";
             if (gate.Status == NodeState.Free)
             {
                 gate.PassBaggage(bag);

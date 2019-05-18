@@ -16,6 +16,7 @@
         public override void PassBaggage(Baggage baggage)
         {
             Status = NodeState.Busy;
+            baggage.TransporterId = NodeId;
             Add(baggage);
         }
 

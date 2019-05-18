@@ -1,13 +1,17 @@
 ﻿namespace AirportSimulation.Core.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
+    using Abstractions.Core.Contracts;
     using Common.Models;
     using Contracts.Services;
     using LinkNodes;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
+        private static List<IChainLink> Nodes = new List<IChainLink>();
+
         private readonly Aa.Factory _aaFactory;
         private readonly PickUpArea.Factory _puaFactory;
         private readonly Asc.Factory _ascFactory;
@@ -61,63 +65,83 @@
         public CheckInDesk CreateCheckInDesk()
         {
             ValidateSettings();
-            return _checkInDeskFactory(Guid.NewGuid().ToString());
+            var checkInDesk = _checkInDeskFactory(Guid.NewGuid().ToString());
+            Nodes.Add(checkInDesk);
+            return checkInDesk;
         }
 
         public Psc CreatePsc()
         {
             ValidateSettings();
             //TODO: Deal with indexes
-            return _pscFactory(_simulationSettings.Pscs[0], Guid.NewGuid().ToString());
+            var psc = _pscFactory(_simulationSettings.Pscs[0], Guid.NewGuid().ToString());
+            Nodes.Add(psc);
+            return psc;
         }
 
         public Asc CreateAsc()
         {
             ValidateSettings();
             //TODO: Deal with indexes
-            return _ascFactory(_simulationSettings.Ascs[0], Guid.NewGuid().ToString());
+            var asc = _ascFactory(_simulationSettings.Ascs[0], Guid.NewGuid().ToString());
+            Nodes.Add(asc);
+            return asc;
         }
 
         public Mpa CreateMpa()
         {
             ValidateSettings();
-            return _mpaFactory(Guid.NewGuid().ToString());
+            var mpa = _mpaFactory(Guid.NewGuid().ToString());
+            Nodes.Add(mpa);
+            return mpa;
         }
 
         public BSU CreateBsu()
         {
             ValidateSettings();
-            return _bsuFactory(Guid.NewGuid().ToString());
+            var bsu = _bsuFactory(Guid.NewGuid().ToString());
+            Nodes.Add(bsu);
+            return bsu;
         }
 
         public Aa CreateAa()
         {
             ValidateSettings();
-            return _aaFactory(_gatesCount++, Guid.NewGuid().ToString());
+            var aa = _aaFactory(_gatesCount++, Guid.NewGuid().ToString());
+            Nodes.Add(aa);
+            return aa;
         }
 
         public PickUpArea CreatePua()
         {
             ValidateSettings();
-            return _puaFactory(_puasCount++, Guid.NewGuid().ToString());
+            var pickUpArea = _puaFactory(_puasCount++, Guid.NewGuid().ToString());
+            Nodes.Add(pickUpArea);
+            return pickUpArea;
         }
 
         public OneToOneConveyor CreateOneToOneConveyor(int length)
         {
             ValidateSettings();
-            return _oneToOneConveyorFactory(length, Guid.NewGuid().ToString());
+            var oneToOneConveyor = _oneToOneConveyorFactory(length, Guid.NewGuid().ToString());
+            Nodes.Add(oneToOneConveyor);
+            return oneToOneConveyor;
         }
 
         public ManyToOneConveyor CreateManyToOneConveyor(int length)
         {
             ValidateSettings();
-            return _manyToOneConveyorFactory(length, Guid.NewGuid().ToString());
+            var manyToOneConveyor = _manyToOneConveyorFactory(length, Guid.NewGuid().ToString());
+            Nodes.Add(manyToOneConveyor);
+            return manyToOneConveyor;
         }
 
         public ConveyorConnector CreateConveyorConnector()
         {
             ValidateSettings();
-            return _conveyorConnectorFactory(Guid.NewGuid().ToString());
+            var conveyorConnector = _conveyorConnectorFactory(Guid.NewGuid().ToString());
+            Nodes.Add(conveyorConnector);
+            return conveyorConnector;
         }
 
         public void SetSettings(SimulationSettings settings)
@@ -138,19 +162,25 @@
         public CheckInDispatcher CreateCheckInDispatcher()
         {
             ValidateSettings();
-            return _checkInDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
+            var checkInDispatcher = _checkInDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
+            Nodes.Add(checkInDispatcher);
+            return checkInDispatcher;
         }
 
         public AADispatcher CreateAaDispatcher()
         {
             ValidateSettings();
-            return _aaDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
+            var aaDispatcher = _aaDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
+            Nodes.Add(aaDispatcher);
+            return aaDispatcher;
         }
 
         public BagCollector CreateBagCollector()
         {
             ValidateSettings();
-            return _bagCollectorFactory(Guid.NewGuid().ToString());
+            var bagCollector = _bagCollectorFactory(Guid.NewGuid().ToString());
+            Nodes.Add(bagCollector);
+            return bagCollector;
         }
 
         #endregion

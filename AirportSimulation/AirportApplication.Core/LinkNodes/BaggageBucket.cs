@@ -9,9 +9,7 @@
 
     public class BaggageBucket : ChainLink, IChainLink
     {
-        public Action<string> timeToLoad;
-
-        public BaggageBucket(string flightNumber, double timeUntilLoading, string nodeId, ITimerService timerService) 
+        public BaggageBucket(string flightNumber, string nodeId, ITimerService timerService) 
             : base(nodeId, timerService)
         {
             FlightNumber = flightNumber;
@@ -28,7 +26,7 @@
             Baggages.Enqueue(baggage);
         }
 
-        public void DistributeBaggage() //refine
+        public void DistributeBaggage()
         {
             if (Baggages.Count > 0)
             {

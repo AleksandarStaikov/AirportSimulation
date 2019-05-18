@@ -38,13 +38,19 @@
 
             if (robot.Status == NodeState.Free)
             {
-                robot.PassBaggage(baggage);
+                PassToRobot(baggage);
             }
             else
             {
-                robot.OnStatusChangedToFree += () => { PassBaggage(baggage); };
+                robot.OnStatusChangedToFree += () => { PassToRobot(baggage); };
             }
 
+        }
+
+        private void PassToRobot(Baggage baggage)
+        {
+            robot.OnStatusChangedToFree = null;
+            robot.PassBaggage(baggage);
             Status = NodeState.Free;
         }
 
@@ -60,27 +66,24 @@
 
         private void AddBaggageBucket(Flight flight) //TODO: Do this on flightScheduled
         {
-            var timeUntilLoading =
-                (flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart())
-                .TotalMilliseconds;
-            timeUntilLoading = timeUntilLoading == 0 ? 0 : timeUntilLoading;
+            var bucket = new BaggageBucket(flight.FlightNumber, Guid.NewGuid().ToString(), TimerService);
+            bucket.SetSuccessor(robot);
+            robot.AddSuccessor(bucket);
 
-            var temp = new BaggageBucket(flight.FlightNumber, timeUntilLoading, Guid.NewGuid().ToString(), TimerService);
-            temp.SetSuccessor(robot);
-            temp.timeToLoad += OnTimeToLoad;
-            robot.AddSuccessor(temp);
-
-            _baggageBuckets.Add(temp.FlightNumber, temp);
+            _baggageBuckets.Add(bucket.FlightNumber, bucket);
         }
 
         private void OnTimeToLoad(string flightNumber)
         {
-            foreach (var b in _baggageBuckets[flightNumber].Baggages)
+            if (_baggageBuckets.ContainsKey(flightNumber))
             {
-                b.Destination = NextLink.Destination;
-            }
+                foreach (var baggage in _baggageBuckets[flightNumber].Baggages)
+                {
+                    baggage.Destination = NextLink.Destination;
+                }
 
-            NextLink.OnStatusChangedToFree += _baggageBuckets[flightNumber].DistributeBaggage;
+                NextLink.OnStatusChangedToFree += _baggageBuckets[flightNumber].DistributeBaggage;
+            }
         }
 
         public void SetSuccessor(IChainLink nextLink)
@@ -98,7 +101,7 @@
                 var transportingTimeElapsed = TimerService.GetTicksSinceSimulationStart() - transportationStart;
                 baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(),
                     new TimeSpan(transportingTimeElapsed),
-                    string.Format(LoggingConstants.BagReceivedInTemplate, Destination) + " Transportation time");
+                    string.Format(LoggingConstants.BagReceivedInTemplate, Destination, baggage.TransporterId) + " Transportation time");
                 baggage.TransportationStartTime = null;
             }
         }

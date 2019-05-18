@@ -27,6 +27,8 @@
 
         public long? TransportationStartTime { get; set; }
 
+        public string TransporterId { get; set; }
+
         public void AddEventLog(TimeSpan logCreationTime, TimeSpan timeElapsed, string description)
         {
             Log.Add(new BaggageEventLog()

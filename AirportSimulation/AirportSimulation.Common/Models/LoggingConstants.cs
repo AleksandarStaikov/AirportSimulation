@@ -8,12 +8,13 @@
         public static string AscCheckSucceeded => "AscCheckSucceeded";
 
         public static string BagArrivedLateAtAirportArea => "Bag is delaying the flight";
-        public static string BagArrivedOnTimeAtAirportArea => "Bag bag arrived on time for the flight";
+        public static string BagArrivedOnTimeAtAirportArea => "Bag arrived on time for the flight";
 
         public static string BagRedirectedToAnotherFlight => "Bag sent to be transferred to another flight";
 
         public static string BagReceivedText = "Bag received in";
-        public static string BagReceivedInTemplate = BagReceivedText + " {0}";
+        public static string BagTransporterIdText = "TransporterId";
+        public static string BagReceivedInTemplate = BagReceivedText + " {0}, " + BagTransporterIdText + " {1}";
 
         public static string ReceivedInRobotSendingTo = "Robot processing. Sending to {0}";
     }

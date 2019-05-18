@@ -44,6 +44,7 @@
             var index = _incomingConnections[predecessor];
             if (CanAdd(index))
             {
+                baggage.TransporterId = NodeId;
                 Add(baggage, index);
             }
         }
