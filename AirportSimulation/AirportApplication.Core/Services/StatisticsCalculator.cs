@@ -81,11 +81,11 @@
             data.TotalBagsThatWentToBsu =
                 baggages.Where(bag => bag.Log.Any(log => log.Description.Contains(typeof(BSU).Name))).ToList();
 
-            data.AverageBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Average(GetBsuStayTime);
+            data.AverageBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Average(b => GetBsuStayTime(b));
 
-            data.MinBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Min(GetBsuStayTime);
+            data.MinBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Min(b => GetBsuStayTime(b));
 
-            data.MaxBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Max(GetBsuStayTime);
+            data.MaxBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.Max(b => GetBsuStayTime(b));
 
             data.LongestSystemStayWithoutBsu = baggages.Max(bag =>
                 (bag.Log.Last().LogCreated - bag.Log.Last().LogCreated).TotalMinutes - GetBsuStayTime(bag));

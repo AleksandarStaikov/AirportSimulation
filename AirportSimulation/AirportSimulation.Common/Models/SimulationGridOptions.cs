@@ -4,14 +4,14 @@
 
     public class SimulationGridOptions : INotifyPropertyChanged
     {
-        private bool _canBuildCheckIn;
-		private bool _canBuildConveyor;
-        private bool _canBuildManyToOneConveyor;
-        private bool _canBuildAsc;
-		private bool _canBuildPsc;
-		private bool _canBuildAa;
-        private bool _canBuildPickUp;
-		private bool _canBuildMpa;
+        private bool _canBuildCheckIn = true;
+		private bool _canBuildConveyor = true;
+        private bool _canBuildManyToOneConveyor = true;
+        private bool _canBuildAsc = true;
+        private bool _canBuildPsc = true;
+        private bool _canBuildAa = true;
+        private bool _canBuildPickUp = true;
+        private bool _canBuildMpa = true;
         private bool _isGridEnabled = true;
         private bool _canCreate;
         private bool _canClear;
