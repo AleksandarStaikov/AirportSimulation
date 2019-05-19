@@ -147,23 +147,27 @@
 
     public class StatisticsData
     {
+        //Colum Chart
         public Baggage FirstDispatchedBag { get; set; }
         public Baggage LastDispatchedBag { get; set; }
-
         public Baggage FirstCollectedBag { get; set; }
         public Baggage LastCollectedBag { get; set; }
 
+        //Pie chart
         public List<Baggage> PscFailedBags { get; set; }
         public List<Baggage> PscSucceededBags { get; set; }
 
+        //Pie chart
         public List<Baggage> AscFailedBags { get; set; }
         public List<Baggage> AscSucceededBags { get; set; }
 
+        //Pie Chart
         public double PscInvalidationPercentage =>
             (100D / (double)(PscSucceededBags.Count + PscFailedBags.Count)) * PscFailedBags.Count;
         public double AscInvalidationPercentage =>
             (100D / (double)(AscSucceededBags.Count + AscFailedBags.Count)) * AscFailedBags.Count;
 
+        //Column Chart
         public List<Baggage> TotalBagsArrivedLateAtAa { get; set; }
 
         public IEnumerable<IGrouping<Flight, Baggage>> BagsLateForFlightPerFlight { get; set; }
@@ -174,13 +178,14 @@
 
         public List<Baggage> TotalBagsThatWentToBsu { get; set; }
 
+        //Column
         public double AverageBsuStayTimeInMinutes { get; set; }
         public double MinBsuStayTimeInMinutes { get; set; }
         public double MaxBsuStayTimeInMinutes { get; set; }
 
+        //Column
         public double LongestSystemStayWithoutBsu { get; set; }
         public double ShortestSystemStayWithoutBsu { get; set; }
-
         public double LongestTransportingTime { get; set; }
         public double ShortestTransportingTime { get; set; }
 
