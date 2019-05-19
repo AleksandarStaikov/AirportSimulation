@@ -10,7 +10,7 @@
 
     public class ChainLinkFactory : IChainLinkFactory
     {
-        private static List<IChainLink> Nodes = new List<IChainLink>();
+        public static List<IChainLink> Nodes = new List<IChainLink>();
 
         private readonly Aa.Factory _aaFactory;
         private readonly PickUpArea.Factory _puaFactory;
