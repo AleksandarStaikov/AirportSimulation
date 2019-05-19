@@ -65,6 +65,15 @@
             return disabledRectangle;
         }
 
+        public static Rectangle CreateEnabledRectangle(int width = 50, int height = 50)
+        {
+            var enabledRectangle = CreateRectangle(width, height, true);
+            enabledRectangle.Fill = new SolidColorBrush(Colors.Transparent);
+            enabledRectangle.Uid = Constants.ENABLED_RECTANGLE_UID;
+
+            return enabledRectangle;
+        }
+
         public static void RemoveBlinkingRectangles(Grid grid, List<(int, int)> externalList)
         {
             var blinkingRectangles = grid
