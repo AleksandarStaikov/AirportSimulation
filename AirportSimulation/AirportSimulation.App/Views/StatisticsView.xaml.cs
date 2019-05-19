@@ -20,7 +20,7 @@
             ChartSeries series = new ChartSeries();
             series.DisplayMember = "Category";
             series.ValueMember = "Number";
-            series.Caption = "Testing";
+            
             series.ItemsSource = null;
             pieChart.Series.Add(series);
             ObservableCollection<ChartData> myData = new ObservableCollection<ChartData>();
