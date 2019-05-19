@@ -3,11 +3,7 @@
     using System.Windows.Controls;
     using System.Collections.ObjectModel;
     using De.TorstenMandelkow.MetroChart;
-    using Core;
     using Core.Services;
-    using System.Collections.Generic;
-    using System;
-    using AirportSimulation.Common.Models;
 
     /// <summary>
     /// Interaction logic for StatisticsView.xaml
@@ -24,18 +20,21 @@
             ChartSeries series = new ChartSeries();
             series.DisplayMember = "Category";
             series.ValueMember = "Number";
+            series.Caption = "Testing";
             series.ItemsSource = null;
             pieChart.Series.Add(series);
             ObservableCollection<ChartData> myData = new ObservableCollection<ChartData>();
             series.ItemsSource = myData;
 
-            myData.Add(new ChartData() { Category = "PSC Failed Bags", Number = 5});
+            myData.Add(new ChartData() { Category = "PSC Failed Bags", Number = 6});
             myData.Add(new ChartData() { Category = "PSC Successfull Bags", Number = 4 });
         }
 
 
+        
 
         private object selectedItem = null;
+
         public object SelectedItem
         {
             get
@@ -48,6 +47,8 @@
                 selectedItem = value;
             }
         }
+        
+
     }
 
 
