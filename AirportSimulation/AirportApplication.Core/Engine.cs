@@ -25,10 +25,12 @@
 
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
             var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
-            var checkInToPsc =
-                _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
+            var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
             var psc = _chainLinkFactory.CreatePsc();
             var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
+            var PscToAsc = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToAsc[0].Length);
+            var asc = _chainLinkFactory.CreateAsc();
+            var ascToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsAscToMpu[0].Length);
             var mpa = _chainLinkFactory.CreateMpa();
             var bsu = _chainLinkFactory.CreateBsu();
             var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
@@ -60,11 +62,16 @@
             //Transporting nodes
             mpaToBsu.SetSuccessor(bsu);
             PscToMpa.SetSuccessor(mpa);
+            PscToAsc.SetSuccessor(asc);
+            ascToMpa.SetSuccessor(mpa);
             MpaToAA.SetSuccessor(aa);
             bsuToMpa.SetSuccessor(mpa);
 
             //Processing and complex nodes
             psc.AddSuccessor(PscToMpa);
+            psc.AddSuccessor(PscToAsc);
+            asc.AddSuccessor(ascToMpa);
+            asc.AddSuccessor(bagCollector);
             aa.AddSuccessor(bagCollector);
             mpa.AddSuccessor(MpaToAA);
             mpa.AddSuccessor(mpaToBsu);

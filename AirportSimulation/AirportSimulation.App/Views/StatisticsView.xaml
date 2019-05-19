@@ -8,12 +8,12 @@
              mc:Ignorable="d"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
-        <chart:PieChart
+        <!--<chart:PieChart
         Style="{StaticResource MinimalChartStyle}"
         ChartTitle="Minimal Pie Chart"
         ChartSubTitle="Chart with fixed width and height"
-        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
-        <chart:PieChart.Series>
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+            <chart:PieChart.Series>
             <chart:ChartSeries
                 
                 DisplayMember="Category"
@@ -21,7 +21,15 @@
                 ItemsSource="{Binding Path=Errors}"
                 />
         </chart:PieChart.Series>
-    </chart:PieChart>
+    </chart:PieChart>-->
+
+        <chart:PieChart Name="pieChart" ChartTitle="Test"
+                              ChartSubTitle="(800)"
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+            <chart:PieChart.Series>
+                <chart:ChartSeries/>
+            </chart:PieChart.Series>
+        </chart:PieChart>
     </Grid>
 
 </UserControl>

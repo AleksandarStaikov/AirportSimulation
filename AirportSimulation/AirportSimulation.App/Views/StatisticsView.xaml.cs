@@ -1,20 +1,13 @@
 ﻿namespace AirportSimulation.App.Views
 {
-    using Helpers;
-    using Resources;
-    using Common;
-    using Common.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
     using System.Windows.Controls;
     using System.Collections.ObjectModel;
-    using System.Windows.Input;
-    using System.Windows.Media.Imaging;
+    using De.TorstenMandelkow.MetroChart;
     using Core;
-    using Core.Contracts;
-    using Utility;
+    using Core.Services;
+    using System.Collections.Generic;
+    using System;
+    using AirportSimulation.Common.Models;
 
     /// <summary>
     /// Interaction logic for StatisticsView.xaml
@@ -22,18 +15,22 @@
     /// 
     public partial class StatisticsView : UserControl
     {
-        public ObservableCollection<TestClass> Errors { get; private set; }
+        public StatisticsData statisticsData = new StatisticsData();
 
         public StatisticsView()
         {
             InitializeComponent();
 
-            Errors = new ObservableCollection<TestClass>();
-            Errors.Add(new TestClass() { Category = "Globalization", Number = 75 });
-            Errors.Add(new TestClass() { Category = "Features", Number = 2 });
-            Errors.Add(new TestClass() { Category = "ContentTypes", Number = 12 });
-            Errors.Add(new TestClass() { Category = "Correctness", Number = 83 });
-            Errors.Add(new TestClass() { Category = "Best Practices", Number = 29 });
+            ChartSeries series = new ChartSeries();
+            series.DisplayMember = "Category";
+            series.ValueMember = "Number";
+            series.ItemsSource = null;
+            pieChart.Series.Add(series);
+            ObservableCollection<ChartData> myData = new ObservableCollection<ChartData>();
+            series.ItemsSource = myData;
+
+            myData.Add(new ChartData() { Category = "PSC Failed Bags", Number = 5});
+            myData.Add(new ChartData() { Category = "PSC Successfull Bags", Number = 4 });
         }
 
 
@@ -53,8 +50,10 @@
         }
     }
 
+
+
     // class which represent a data point in the chart
-    public class TestClass
+    public class ChartData
     {
         public string Category { get; set; }
 
