@@ -92,11 +92,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
-    <Compile Include="Helpers\RectangleFactory.cs" />
-    <Compile Include="Resources\GridCellElement.cs" />
+    <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\GenericBuildingComponent.cs" />
+    <Compile Include="Infrastructure\RectangleFactory.cs" />
+    <Compile Include="Models\GridCell.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
-    <Compile Include="Resources\GridDisabledCellElement.cs" />
+    <Compile Include="Models\GridDisabledCellElement.cs" />
+    <Compile Include="Models\SingleCellBuildingComponent.cs" />
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
@@ -118,7 +122,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Resources\EnumToBoolConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

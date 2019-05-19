@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.App.Helpers
+﻿namespace AirportSimulation.App.Infrastructure
 {
     using System.Windows.Shapes;
     using System.Windows.Media;

@@ -17,8 +17,8 @@
         private bool _canClear;
 		private bool _canRun;
 
-        public int GRID_MAX_ROWS = 14;
-        public int GRID_MAX_COLUMNS = 19;
+        public static int GRID_MAX_ROWS = 14;
+        public static int GRID_MAX_COLUMNS = 19;
 
         public string GridRows => $"*#{++GRID_MAX_ROWS}";
 

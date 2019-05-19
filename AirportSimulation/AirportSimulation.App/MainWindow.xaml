@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AirportSimulation.App"
-        xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
         mc:Ignorable="d">
     <Grid>
