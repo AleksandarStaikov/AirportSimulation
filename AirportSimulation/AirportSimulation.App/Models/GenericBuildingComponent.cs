@@ -8,16 +8,19 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using AirportSimulation.App.Infrastructure;
 using System.Windows;
+using AirportSimulation.App.Helpers;
 
 namespace AirportSimulation.App.Models
 {
-    public abstract class GenericBuildingComponent : GridCell
+    internal abstract class GenericBuildingComponent : GridCell
     {
         public BuildingComponentType Type { get; }
 
         public string NodeId { get; }
 
         public List<GridCell> PossibleNeighbours { get; set; }
+
+        protected ISucceedable successorEnabler;
 
         public GenericBuildingComponent(BuildingComponentType type, string nodeId, (int, int) cell) : base(cell)
         {
@@ -26,7 +29,5 @@ namespace AirportSimulation.App.Models
 
             PossibleNeighbours = new List<GridCell>();
         }
-
-        protected abstract void PopulatePossibleNeighbours();
     }
 }

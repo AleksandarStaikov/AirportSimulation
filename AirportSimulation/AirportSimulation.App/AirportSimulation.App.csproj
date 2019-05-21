@@ -95,6 +95,7 @@
     <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\BlinkingCell.cs" />
     <Compile Include="Models\GenericBuildingComponent.cs" />
     <Compile Include="Infrastructure\RectangleFactory.cs" />
     <Compile Include="Models\GridCell.cs" />

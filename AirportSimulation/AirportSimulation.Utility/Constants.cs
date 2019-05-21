@@ -8,5 +8,6 @@
 
         public static string ENABLED_RECTANGLE_UID => "EnabledRectangle";
 
+        public static string COMPONENT_RECTANGLE_UID => "ComponentRectangle";
     }
 }

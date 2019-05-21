@@ -7,9 +7,30 @@
 	using System.Windows.Media.Imaging;
 	using Common.Models;
 
-	internal class BuildingComponentsHelper
+	internal static class BuildingComponentsHelper
 	{
-		private readonly Dictionary<BuildingComponentType, string> _buildingComponentsImages =
+        private static readonly Dictionary<BuildingComponentType, List<BuildingComponentType>> _allowedSingleCellComponentsPerComponent
+            = new Dictionary<BuildingComponentType, List<BuildingComponentType>>()
+            {
+                {
+                    BuildingComponentType.CheckIn,
+                    new List<BuildingComponentType>(){ BuildingComponentType.PSC }
+                },
+                {
+                    BuildingComponentType.PSC,
+                    new List<BuildingComponentType>(){ BuildingComponentType.MPA, BuildingComponentType.ASC }
+                },
+                {
+                    BuildingComponentType.ASC,
+                    new List<BuildingComponentType>(){ BuildingComponentType.MPA }
+                },
+                {
+                    BuildingComponentType.MPA,
+                    new List<BuildingComponentType>(){ BuildingComponentType.AA }
+                },
+            };
+
+		private static readonly Dictionary<BuildingComponentType, string> _buildingComponentsImages =
 			new Dictionary<BuildingComponentType, string>
 			{
 				{BuildingComponentType.CheckIn, "Resources/check-in.png"},
@@ -22,7 +43,7 @@
 				{BuildingComponentType.ManyToOneConveyor, "Resources/manytomanyConv.png"}
 			};
 
-		private readonly Dictionary<int, BuildingComponentType> _buildingComponentsSteps =
+		private static readonly Dictionary<int, BuildingComponentType> _buildingComponentsSteps =
 			new Dictionary<int, BuildingComponentType>
 			{
 				{1, BuildingComponentType.CheckIn},
@@ -34,7 +55,7 @@
 				{7, BuildingComponentType.AA }
 			};
 
-		public (BuildingComponentType, BitmapImage) EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions simulationGridOptions, int step, bool isFirstTime = false)
+		public static (BuildingComponentType, BitmapImage) EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions simulationGridOptions, int step, bool isFirstTime = false)
 		{
 			if (!isFirstTime)
 			{
@@ -69,7 +90,7 @@
 			return GetNextBuildingComponentTypeAndImage(step);
 		}
 
-		public void DisableComponentsButtons(SimulationGridOptions simulationGridOptions)
+		public static void DisableComponentsButtons(SimulationGridOptions simulationGridOptions)
 		{
 			var properties = simulationGridOptions.GetType().GetProperties().ToList();
 			var canBuildProperties = properties.Where(x => x.Name.Contains("Build")).ToList();
@@ -80,13 +101,18 @@
 			}
 		}
 
-		public BitmapImage GetBuildingComponentImage(BuildingComponentType type) =>
+        public static List<BuildingComponentType> GetAllowedComponents(BuildingComponentType predecessorType)
+        {
+            return _allowedSingleCellComponentsPerComponent[predecessorType];
+        }
+
+		public static BitmapImage GetBuildingComponentImage(BuildingComponentType type) =>
 			GetComponentImage(_buildingComponentsImages[type]);
 
-		private (BuildingComponentType, BitmapImage) GetNextBuildingComponentTypeAndImage(int step)
+		private static (BuildingComponentType, BitmapImage) GetNextBuildingComponentTypeAndImage(int step)
 			=> (_buildingComponentsSteps[step], GetBuildingComponentImage(_buildingComponentsSteps[step]));
 
-		private static BitmapImage GetComponentImage(string fileLocation)
+		public static BitmapImage GetComponentImage(string fileLocation)
 			=> new BitmapImage(new Uri($"../../{fileLocation}", UriKind.Relative));
 	}
 }

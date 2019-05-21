@@ -12,15 +12,6 @@
 
     internal static class RectangleFactory
     {
-        public static List<Rectangle> GetDisabledRectangles(this Grid grid)
-        {
-            return grid
-                .Children
-                .OfType<Rectangle>()
-                .Where(x => x.Uid == Constants.DISABLED_RECTANGLE_UID)
-                .ToList();
-        }
-
         public static Rectangle CreateBlinkingRectangle(int width = 50, int height = 50)
         {
             var blinkingRectangle = CreateRectangle(width, height, true);
@@ -45,13 +36,14 @@
         public static Rectangle CreateBuildingComponentRectangle(ImageSource imageSource, int width = 50, int height = 50)
         {
             var buildingComponentRectangle = CreateRectangle(width, height, true);
+            buildingComponentRectangle.Uid = Constants.COMPONENT_RECTANGLE_UID;
             buildingComponentRectangle.Fill = new ImageBrush
             {
                 Stretch = Stretch.Fill,
                 ImageSource = imageSource
             };
 
-            Grid.SetZIndex(buildingComponentRectangle, 1000);
+            //Grid.SetZIndex(buildingComponentRectangle, 1000);
 
             return buildingComponentRectangle;
         }
@@ -74,20 +66,13 @@
             return enabledRectangle;
         }
 
-        public static void RemoveBlinkingRectangles(Grid grid, List<(int, int)> externalList)
+        public static void RemoveBlinkingRectangles(this Grid grid)
         {
-            var blinkingRectangles = grid
-                    .Children
-                    .OfType<Rectangle>()
-                    .Where(r => r.Uid == Constants.BLINKING_RECTANGLE_UID)
-                    .ToList();
-
-            foreach (var rectangle in blinkingRectangles)
-            {
-                grid.Children.Remove(rectangle);
-            }
-
-			externalList.Clear();
+            grid.Children
+                .OfType<Rectangle>()
+                .Where(r => r.Uid == Constants.BLINKING_RECTANGLE_UID)
+                .ToList()
+                .ForEach(x => grid.Children.Remove(x));
 		}
 
         private static Rectangle CreateRectangle(int width, int height, bool isEnabled)

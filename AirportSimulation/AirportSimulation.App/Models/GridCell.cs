@@ -6,7 +6,7 @@
     {
         public UIElement UIElement { get; set; }
 
-        public (int X, int Y) Cell { get; set; }
+        public (int Row, int Column) Cell { get; set; }
 
         public GridCell((int, int) cell)
         {
