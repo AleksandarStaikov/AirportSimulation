@@ -1,4 +1,5 @@
 ﻿using AirportSimulation.App.Helpers;
+using AirportSimulation.App.Infrastructure;
 using AirportSimulation.Common;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,29 @@ using System.Windows.Media;
 
 namespace AirportSimulation.App.Models
 {
-    class EnabledCell : GridCell
+    class EnabledCell : GridCell, IClickable
     {
         public EnabledCell((int, int) cell) : base(cell)
         {
         }
 
-        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            sender.Content = new CheckIn("asda", sender.Cell);
-            sender.Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(type));
+            if(type == BuildingComponentType.CheckIn)
+            {
+                var content = new SingleCellComponentFactory().CreateComponent(type, Cell);
+                sender.ChangeContent(content);
+            }
+        }
+
+        public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)
+        {
+            if(type != BuildingComponentType.CheckIn)
+            {
+                var content = new DisabledCell(Cell);
+                content.Fill = RectangleFactory.CreateDisabledRectangle().Fill;
+                sender.ChangeContent(content);
+            }
         }
     }
 }

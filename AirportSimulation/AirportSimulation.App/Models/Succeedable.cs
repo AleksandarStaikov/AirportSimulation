@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using AirportSimulation.Common.Models;
     using AirportSimulation.App.Infrastructure;
+    using AirportSimulation.App.Helpers;
 
     class Succeedable : ISucceedable //TODO: Delete Succeedable
     {
@@ -19,13 +20,24 @@
 
         private BlinkingCell GetBlinkingCell((int, int) cell)
         {
-            return new BlinkingCell(_succeedableComponent, cell);
+            return new BlinkingCell(_succeedableComponent as IParent, cell);
+        }
+
+        public void HideBlinkingCells()
+        {
+            foreach(int index in Enumerable.Range(0, _succeedableComponent.PossibleNeighbours.Count))
+            {
+                var cell = _succeedableComponent.PossibleNeighbours[index].Cell;
+                _succeedableComponent.PossibleNeighbours[index] = new DisabledCell(_succeedableComponent, cell);
+            }
+
+            BlinkingCellsPainter.PaintChildrenCells(_succeedableComponent.PossibleNeighbours);
         }
 
         public void PopulateBlinkingCells()
         {
             var (x, y) = _succeedableComponent.Cell;
-            BlinkingCell gridCell = null;
+            GridCell gridCell = null;
 
             if (x > 0)
             {
@@ -50,6 +62,8 @@
                 gridCell = GetBlinkingCell((x, y - 1));
                 _succeedableComponent.PossibleNeighbours.Add(gridCell); //Left rectangle
             }
+
+            BlinkingCellsPainter.PaintChildrenCells(_succeedableComponent.PossibleNeighbours);
         }
     }
 }

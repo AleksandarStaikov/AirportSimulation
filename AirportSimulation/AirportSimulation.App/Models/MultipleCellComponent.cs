@@ -7,11 +7,11 @@ using AirportSimulation.Common;
 
 namespace AirportSimulation.App.Models
 {
-    internal class Pa : SingleCellBuildingComponent
+    class MultipleCellComponent : GenericBuildingComponent
     {
-        public Pa(string nodeId, (int, int) cell) : base(BuildingComponentType.PA, nodeId, cell)
+        public MultipleCellComponent(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
         {
-        }
 
+        }
     }
 }

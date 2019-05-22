@@ -13,9 +13,9 @@ namespace AirportSimulation.App.Models
         {
         }
 
-        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -19,10 +19,5 @@ namespace AirportSimulation.App.Models
         {
             successorEnabler = new Succeedable(this);
         }
-
-        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

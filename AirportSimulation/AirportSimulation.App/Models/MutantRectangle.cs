@@ -41,12 +41,29 @@ namespace AirportSimulation.App.Models
 
         private void ContentClicked(MutantRectangle sender, BuildingComponentType type)
         {
-            Content.ClickHandler(sender, type);
+            if(Content is IClickable)
+            {
+                ((IClickable)Content).ClickHandler(sender, type);
+            }
         }
 
         public void On_Click(BuildingComponentType type)
         {
             ContentClicked(this, type);
+        }
+
+        public void ChangeContent(GridCell content)
+        {
+            Content = content;
+            Fill = content.Fill;
+        }
+
+        public void On_BuildingComponentClicked(BuildingComponentType type)
+        {
+            if(Content is IClickable)
+            {
+                ((IClickable)Content).ComponentSelectedHandler(this, type);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@
     public partial class SimulationView : UserControl
 	{
         private Action<BuildingComponentType> buildingComponentClicked = delegate { };
-        private BlinkigCellsPainter cellsPainter;
+        private BlinkingCellsPainter cellsPainter;
 		//private BuildingComponentsHelper _buildingComponentHelper = new BuildingComponentsHelper();
 		private LinkedList<ConveyorBelt> _chainedBelts = new LinkedList<ConveyorBelt>();
 		private ConveyorBelt _conveyorBelt = new ConveyorBelt();
@@ -55,7 +55,7 @@
 
             //_currentBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn);
 			_mpaBuildingComponentImage = BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.MPA);
-            cellsPainter = new BlinkigCellsPainter(SimulationGrid);
+            cellsPainter = new BlinkingCellsPainter(SimulationGrid);
             InitializeClickableGridCells();
 		}
 
@@ -71,6 +71,7 @@
                     var enabledRectangle = new MutantRectangle((i, j));
 
                     enabledRectangle.MouseDown += EnabledRectangle_MouseDown;
+                    buildingComponentClicked += enabledRectangle.On_BuildingComponentClicked;
                     Grid.SetColumn(enabledRectangle, j);
                     Grid.SetRow(enabledRectangle, i);
 

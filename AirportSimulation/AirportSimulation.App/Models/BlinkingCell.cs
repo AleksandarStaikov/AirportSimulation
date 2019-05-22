@@ -10,37 +10,44 @@
     using AirportSimulation.App.Infrastructure;
     using System.Windows.Shapes;
     using System.Windows.Media;
+    using System.Windows.Input;
 
-    class BlinkingCell : GridCell
+    internal class BlinkingCell : GridCell, IClickable
     {
-        public readonly GenericBuildingComponent ParentComponent;
+        public readonly IParent ParentComponent;
 
-        public BlinkingCell(GenericBuildingComponent parent, (int, int) cell) : base(cell)
+        public BlinkingCell(IParent parent, (int, int) cell) : base(cell)
         {
             ParentComponent = parent;
             UIElement = RectangleFactory.CreateBlinkingRectangle();
         }
 
-        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            
-        }
-
-        public void HideBlinkingCellBasedOnComponentType(BuildingComponentType selectedType)
-        {
-            if (TypeAllowed(selectedType))
+            if (IsConveyor(type))
             {
-                UIElement = RectangleFactory.CreateBlinkingRectangle();
-            }
-            else
-            {
-                UIElement = RectangleFactory.CreateDisabledRectangle();
+                var content = new SingleCellComponentFactory().CreateComponent(type, Cell);
+                sender.ChangeContent(content);
             }
         }
 
-        public bool TypeAllowed(BuildingComponentType type)
+        public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            return ParentComponent.AllowedSuccessors.Contains(type);
+            ParentComponent.ShowBlinkingChildren(type);
+        }
+
+        private bool IsConveyor(BuildingComponentType type)
+        {
+            if (type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool SuccessorAllowed(BuildingComponentType type)
+        {
+            return ((GenericBuildingComponent)ParentComponent).AllowedNonConveyorSuccessors.Contains(type);
         }
     }
 }

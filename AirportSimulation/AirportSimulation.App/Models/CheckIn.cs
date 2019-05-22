@@ -11,58 +11,31 @@
     using AirportSimulation.App.Helpers;
     using System.Windows.Media;
 
-    internal class CheckIn : SingleCellBuildingComponent, ISucceedable
+    internal class CheckIn : SingleCellBuildingComponent, IParent
     {
+        private Succeedable _succeedable;
         public CheckIn(string nodeId, (int, int) cell) : base(BuildingComponentType.CheckIn, nodeId, cell)
         {
-            AllowedSuccessors = new List<BuildingComponentType>()
+            AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
                 BuildingComponentType.PSC,
             };
 
-            PopulateBlinkingCells();
+            _succeedable = new Succeedable(this);
+
+            _succeedable.PopulateBlinkingCells();
         }
 
-        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        public void ShowBlinkingChildren(BuildingComponentType type)
         {
-            
-        }
-
-        private BlinkingCell GetBlinkingCell((int, int) cell)
-        {
-            return new BlinkingCell(this, cell);
-        }
-
-        public void PopulateBlinkingCells()
-        {
-            var (x, y) = Cell;
-            BlinkingCell gridCell = null;
-
-            if (x > 0)
+            if(type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
             {
-                gridCell = GetBlinkingCell((x - 1, y));
-                PossibleNeighbours.Add(gridCell); //Top rectangle
+                _succeedable.PopulateBlinkingCells();
             }
-
-            if (SimulationGridOptions.GRID_MAX_COLUMNS > y + 1)
+            else
             {
-                gridCell = GetBlinkingCell((x, y + 1));
-                PossibleNeighbours.Add(gridCell); //Right rectangle
+                _succeedable.HideBlinkingCells();
             }
-
-            if (SimulationGridOptions.GRID_MAX_ROWS > x + 1)
-            {
-                gridCell = GetBlinkingCell((x + 1, y));
-                PossibleNeighbours.Add(gridCell); //Bottom rectangle
-            }
-
-            if (y > 0)
-            {
-                gridCell = GetBlinkingCell((x, y - 1));
-                PossibleNeighbours.Add(gridCell); //Left rectangle
-            }
-
-            BlinkigCellsPainter.PopulateBlinkingCells(PossibleNeighbours);
         }
     }
 }

@@ -46,7 +46,7 @@
   <Class Name="AirportSimulation.App.Infrastructure.SingleCellComponentFactory" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="16.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAABAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAABAA=</HashCode>
       <FileName>Infrastructure\SingleCellComponentFactory.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -54,31 +54,29 @@
   <Class Name="AirportSimulation.App.Models.Aa" Collapsed="true">
     <Position X="7.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Aa.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AirportSimulation.App.Models.Asc" Collapsed="true">
     <Position X="9.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Models\Asc.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AirportSimulation.App.Models.BlinkingCell">
     <Position X="14" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAAAAAAAAAAAAAAAAAAIAAAAACAAAAAAACAAAAA=</HashCode>
+      <HashCode>AICABAAAAAAAAAAAgAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\BlinkingCell.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="ParentComponent" />
-    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="AirportSimulation.App.Models.CheckIn" Collapsed="true">
     <Position X="11.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAQAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAIAAAAAAAAAAAA=</HashCode>
       <FileName>Models\CheckIn.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -86,21 +84,22 @@
   <Class Name="AirportSimulation.App.Models.EnabledCell">
     <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\EnabledCell.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="AirportSimulation.App.Models.GenericBuildingComponent" Collapsed="true">
     <Position X="7.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgIAAAAAAAAAAAAAAAAAAAAACAAAAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>AAgIAAAAAAAAAAAAAAAAAAAAACAAAAAAAQACAAAAAAA=</HashCode>
       <FileName>Models\GenericBuildingComponent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AirportSimulation.App.Models.GridCell" Collapsed="true">
     <Position X="7.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAABAEAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAABAEAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\GridCell.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -114,7 +113,7 @@
   <Class Name="AirportSimulation.App.Models.MutantRectangle">
     <Position X="13.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAoAAAAACAABAAAAAAAgAAAAAAAAAAEAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAoAAAAACAABAAAAAAAgAAAAAAAAggEAAAAA=</HashCode>
       <FileName>Models\MutantRectangle.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -124,14 +123,14 @@
   <Class Name="AirportSimulation.App.Models.Pa" Collapsed="true">
     <Position X="2.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Pa.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AirportSimulation.App.Models.Psc" Collapsed="true">
     <Position X="5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Models\Psc.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -148,9 +147,6 @@
       <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAgAAQAAA=</HashCode>
       <FileName>Models\Succeedable.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="_succeedableComponent" />
-    </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="AirportSimulation.App.Properties.Resources" Collapsed="true">
@@ -176,7 +172,7 @@
   <Class Name="AirportSimulation.App.Views.SimulationView" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="21.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAAMQgCoktCkICAAAgAJCAAABACAEAAAACAmCAAABI=</HashCode>
+      <HashCode>IAAAMUgCokpCkACAAAgAJCAAABACAEAAAACAmCAAABI=</HashCode>
       <FileName>Views\SimulationView.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />

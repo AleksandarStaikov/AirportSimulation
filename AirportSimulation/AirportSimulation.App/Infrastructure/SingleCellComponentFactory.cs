@@ -8,6 +8,7 @@
     using AirportSimulation.Common;
     using AirportSimulation.App.Models;
     using AirportSimulation.App.Helpers;
+    using System.Windows.Media;
 
     internal class SingleCellComponentFactory : IBuildingComponentFactory
     {
@@ -22,6 +23,10 @@
             {
                 return CreateCheckIn(cell);
             }
+            else if(type == BuildingComponentType.PSC)
+            {
+                return CreatePsc(cell);
+            }
 
             return null;
         }
@@ -30,8 +35,16 @@
         {
             return new CheckIn("asdas", cell)
             {
-                UIElement = RectangleFactory.CreateBuildingComponentRectangle(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn))
+                Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn))
             };
         } 
+
+        private Psc CreatePsc((int, int) cell)
+        {
+            return new Psc("asda", cell)
+            {
+                Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.PSC))
+            };
+        }
     }
 }

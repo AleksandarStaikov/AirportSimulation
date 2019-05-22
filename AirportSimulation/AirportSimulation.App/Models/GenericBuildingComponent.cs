@@ -18,9 +18,9 @@ namespace AirportSimulation.App.Models
 
         public string NodeId { get; }
 
-        public List<BlinkingCell> PossibleNeighbours { get; set; }
+        public List<GridCell> PossibleNeighbours { get; set; }
 
-        public List<BuildingComponentType> AllowedSuccessors { get; protected set; }
+        public List<BuildingComponentType> AllowedNonConveyorSuccessors { get; protected set; }
 
         protected ISucceedable successorEnabler;
 
@@ -29,7 +29,8 @@ namespace AirportSimulation.App.Models
             Type = type;
             NodeId = nodeId;
 
-            PossibleNeighbours = new List<BlinkingCell>();
+            PossibleNeighbours = new List<GridCell>();
         }
     }
 }
+ 
