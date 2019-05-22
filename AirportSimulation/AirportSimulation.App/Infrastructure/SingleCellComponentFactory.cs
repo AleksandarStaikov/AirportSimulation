@@ -11,24 +11,27 @@
 
     internal class SingleCellComponentFactory : IBuildingComponentFactory
     {
-        private BuildingComponentsHelper _buildingComponentsHelper;
-
         public SingleCellComponentFactory()
         {
-            _buildingComponentsHelper = new BuildingComponentsHelper();
+            
         }
 
-        public void CreateMultipleCellComponent(BuildingComponentType type)
+        public GenericBuildingComponent CreateComponent(BuildingComponentType type, (int, int) cell)
         {
-            throw new NotImplementedException();
-        }
-
-        public SingleCellBuildingComponent CreateSingleCellComponent(BuildingComponentType type, string nodeId, (int, int) cell)
-        {
-            return new SingleCellBuildingComponent(type, nodeId, cell)
+            if(type == BuildingComponentType.CheckIn)
             {
-                UIElement = RectangleFactory.CreateBuildingComponentRectangle(_buildingComponentsHelper.GetBuildingComponentImage(type))
-            };
+                return CreateCheckIn(cell);
+            }
+
+            return null;
         }
+
+        private CheckIn CreateCheckIn((int, int) cell)
+        {
+            return new CheckIn("asdas", cell)
+            {
+                UIElement = RectangleFactory.CreateBuildingComponentRectangle(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn))
+            };
+        } 
     }
 }

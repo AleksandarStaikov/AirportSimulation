@@ -9,8 +9,13 @@ namespace AirportSimulation.App.Models
 {
     internal class Pa : SingleCellBuildingComponent
     {
-        public Pa(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
+        public Pa(string nodeId, (int, int) cell) : base(BuildingComponentType.PA, nodeId, cell)
         {
+        }
+
+        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

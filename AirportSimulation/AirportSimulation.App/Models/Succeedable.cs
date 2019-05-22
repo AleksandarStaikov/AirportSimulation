@@ -8,7 +8,7 @@
     using AirportSimulation.Common.Models;
     using AirportSimulation.App.Infrastructure;
 
-    class Succeedable : ISucceedable
+    class Succeedable : ISucceedable //TODO: Delete Succeedable
     {
         private GenericBuildingComponent _succeedableComponent;
 
@@ -19,16 +19,13 @@
 
         private BlinkingCell GetBlinkingCell((int, int) cell)
         {
-            return new BlinkingCell(_succeedableComponent, cell)
-            {
-                UIElement = RectangleFactory.CreateBlinkingRectangle()
-            };
+            return new BlinkingCell(_succeedableComponent, cell);
         }
 
         public void PopulateBlinkingCells()
         {
             var (x, y) = _succeedableComponent.Cell;
-            GridCell gridCell = null;
+            BlinkingCell gridCell = null;
 
             if (x > 0)
             {

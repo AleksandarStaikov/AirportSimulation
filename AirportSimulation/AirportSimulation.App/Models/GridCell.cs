@@ -1,10 +1,12 @@
 ﻿namespace AirportSimulation.App.Models
 {
+    using AirportSimulation.Common;
     using System.Windows;
+    using System.Windows.Shapes;
 
-    public class GridCell
+    public abstract class GridCell
     {
-        public UIElement UIElement { get; set; }
+        public Rectangle UIElement { get; set; }
 
         public (int Row, int Column) Cell { get; set; }
 
@@ -12,5 +14,7 @@
         {
             Cell = cell;
         }
+
+        public abstract void ClickHandler(MutantRectangle sender, BuildingComponentType type);
     }
 }

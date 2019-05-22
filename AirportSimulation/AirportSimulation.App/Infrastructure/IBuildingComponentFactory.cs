@@ -11,7 +11,7 @@
 
     internal interface IBuildingComponentFactory
     {
-        SingleCellBuildingComponent CreateSingleCellComponent(BuildingComponentType type, string nodeId, (int, int) cell);
-        void CreateMultipleCellComponent(BuildingComponentType type);
+        GenericBuildingComponent CreateComponent(BuildingComponentType type, (int, int) cell);
+        
     }
 }

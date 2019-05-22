@@ -15,9 +15,14 @@ namespace AirportSimulation.App.Models
                 BuildingComponentType.ASC, BuildingComponentType.MPA
             };
 
-        public Asc(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
+        public Asc(string nodeId, (int, int) cell) : base(BuildingComponentType.ASC, nodeId, cell)
         {
             successorEnabler = new Succeedable(this);
+        }
+
+        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

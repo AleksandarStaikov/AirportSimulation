@@ -22,14 +22,15 @@
     public partial class SimulationView : UserControl
 	{
         private Action<BuildingComponentType> buildingComponentClicked = delegate { };
-		private BuildingComponentsHelper _buildingComponentHelper = new BuildingComponentsHelper();
+        private BlinkigCellsPainter cellsPainter;
+		//private BuildingComponentsHelper _buildingComponentHelper = new BuildingComponentsHelper();
 		private LinkedList<ConveyorBelt> _chainedBelts = new LinkedList<ConveyorBelt>();
 		private ConveyorBelt _conveyorBelt = new ConveyorBelt();
 
 		private List<(int, int)> _usedCells = new List<(int, int)>();
 		private List<GridDisabledCellElement> _disabledCells = new List<GridDisabledCellElement>();
 		private List<(int, int)> _blinkingRectanglesCells = new List<(int, int)>();
-		private List<GridCell> _gridBuildingComponents = new List<GridCell>();
+		private List<BlinkingCell> _gridBuildingComponents = new List<BlinkingCell>();
 
 		private BitmapImage _currentBuildingComponentImage;
 		private BitmapImage _previousBuildingComponentImage;
@@ -53,9 +54,9 @@
             //        true);
 
             //_currentBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn);
-			_mpaBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.MPA);
+			_mpaBuildingComponentImage = BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.MPA);
+            cellsPainter = new BlinkigCellsPainter(SimulationGrid);
             InitializeClickableGridCells();
-            
 		}
 
 		public SimulationGridOptions SimulationGridOptions { get; set; } = new SimulationGridOptions();
@@ -67,7 +68,7 @@
                 for (var j = 0; j < SimulationGrid.ColumnDefinitions.Count; j++)
                 {
 
-                    var enabledRectangle = RectangleFactory.CreateEnabledRectangle();
+                    var enabledRectangle = new MutantRectangle((i, j));
 
                     enabledRectangle.MouseDown += EnabledRectangle_MouseDown;
                     Grid.SetColumn(enabledRectangle, j);
@@ -80,39 +81,39 @@
 
         private void EnabledRectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            UIElement clickedRectangle = sender as UIElement;
+            MutantRectangle clickedRectangle = sender as MutantRectangle;
 
-            int row = Grid.GetRow(clickedRectangle);
-            int column = Grid.GetColumn(clickedRectangle);
-            var currentBuildingComponent = new SingleCellComponentFactory().CreateSingleCellComponent(_currentBuildingComponentType, "asd", (row, column));
+            //(int row, int column) currentCell = (Grid.GetRow(clickedRectangle), Grid.GetColumn(clickedRectangle));
+            //var currentBuildingComponent = new SingleCellComponentFactory().CreateComponent(_currentBuildingComponentType, currentCell);
 
-            Grid.SetRow(currentBuildingComponent.UIElement, currentBuildingComponent.Cell.Row);
-            Grid.SetColumn(currentBuildingComponent.UIElement, currentBuildingComponent.Cell.Column);
-            
+            clickedRectangle.On_Click(_currentBuildingComponentType);
 
-            SimulationGrid.Children.Add(currentBuildingComponent.UIElement);
+            //var currentIndex = CalculateIndexGivenCoordinates(currentCell);
 
-            foreach (var blinkingCell in currentBuildingComponent.PossibleNeighbours)
-            {
-                var noElementOnThisPosition = SimulationGrid.Children
-                    .Cast<UIElement>()
-                    .FirstOrDefault(x =>
-                        Grid.GetRow(x) == blinkingCell.Cell.Row &&
-                        Grid.GetColumn(x) == blinkingCell.Cell.Column && x.Uid != Constants.ENABLED_RECTANGLE_UID) == null;
+            ////AssignElement(currentIndex, currentBuildingComponent.UIElement);
 
-                if (noElementOnThisPosition)
-                {
-                    Grid.SetRow(blinkingCell.UIElement, blinkingCell.Cell.Row);
-                    Grid.SetColumn(blinkingCell.UIElement, blinkingCell.Cell.Column);
+            //Grid.SetRow(currentBuildingComponent.UIElement, currentBuildingComponent.Cell.Row);
+            //Grid.SetColumn(currentBuildingComponent.UIElement, currentBuildingComponent.Cell.Column);
 
-                    buildingComponentClicked += ((BlinkingCell)blinkingCell).HideBlinkingCellBasedOnComponentType;
 
-                    SimulationGrid.Children.Add(blinkingCell.UIElement);
-                }
-            }
+            //SimulationGrid.Children.Add();
+
+            //foreach (var blinkingCell in currentBuildingComponent.PossibleNeighbours)
+            //{
+            //    int index = CalculateIndexGivenCoordinates(blinkingCell.Cell);
+
+            //    if (SimulationGrid.Children[index].Uid == Constants.ENABLED_RECTANGLE_UID)
+            //    {
+            //        Grid.SetRow(blinkingCell.UIElement, blinkingCell.Cell.Row);
+            //        Grid.SetColumn(blinkingCell.UIElement, blinkingCell.Cell.Column);
+
+            //        buildingComponentClicked += blinkingCell.HideBlinkingCellBasedOnComponentType;
+                    
+
+            //        SimulationGrid.Children.Add(blinkingCell.UIElement);
+            //    }
+            //}
         }
-
-
 
         private void SimulationGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -247,7 +248,7 @@
             //ShowAvailableBuildingComponentPlaces();
         }
 
-        private void DetachLinkedCells(GridCell cell)
+        private void DetachLinkedCells(BlinkingCell cell)
 		{
 			//var previousCell =
 			//	_gridBuildingComponents.FirstOrDefault(
@@ -276,7 +277,7 @@
 				return;
 
 			_currentBuildingComponentType = (BuildingComponentType) Enum.Parse(typeof(BuildingComponentType), componentName, true);
-			_currentBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(_currentBuildingComponentType);
+			_currentBuildingComponentImage = BuildingComponentsHelper.GetBuildingComponentImage(_currentBuildingComponentType);
 
             buildingComponentClicked(_currentBuildingComponentType);
 		}
@@ -518,7 +519,7 @@
 
 		private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
-			(_currentBuildingComponentType, _currentBuildingComponentImage) = _buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
+			(_currentBuildingComponentType, _currentBuildingComponentImage) = BuildingComponentsHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
 			ResetBuildingPossibilitesAfterClearOrCreate();
 			UpdateCanCreateAndCanClearValues();
 
@@ -549,7 +550,7 @@
 			_disabledCells.Clear();
 			//RectangleFactory.RemoveBlinkingRectangles(SimulationGrid, _blinkingRectanglesCells);
 			UpdateCanCreateAndCanClearValues();
-			(_currentBuildingComponentType, _currentBuildingComponentImage) =_buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
+			(_currentBuildingComponentType, _currentBuildingComponentImage) = BuildingComponentsHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, 1);
 		}
 	}
 }

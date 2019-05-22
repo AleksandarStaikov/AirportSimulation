@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.App.Helpers
 {
+    using AirportSimulation.Common.Models;
     using AirportSimulation.Utility;
     using System;
     using System.Collections.Generic;
@@ -14,6 +15,11 @@
         {
             public GridLength GridLength;
             public string SharedSizeGroup;
+        }
+
+        public static int CalculateIndexFromCoordinates((int row, int col) cell)
+        {
+            return cell.row * (SimulationGridOptions.GRID_MAX_COLUMNS) + cell.col;
         }
 
         public static bool IsGridCellUsedOrDisabled(this Grid grid, (int x, int y) cell)
@@ -63,7 +69,7 @@
                 .GetUIElementInCell(cell);
         }
 
-        private static UIElement GetUIElementInCell(this IEnumerable<UIElement> uIElements, (int x, int y) cell) 
+        public static UIElement GetUIElementInCell(this IEnumerable<UIElement> uIElements, (int x, int y) cell) 
             => uIElements
                 .FirstOrDefault(x =>
                         Grid.GetRow(x) == cell.x &&

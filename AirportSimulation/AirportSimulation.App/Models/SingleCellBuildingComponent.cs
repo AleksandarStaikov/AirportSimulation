@@ -13,7 +13,7 @@ using AirportSimulation.Common.Models;
 
 namespace AirportSimulation.App.Models
 {
-    internal class SingleCellBuildingComponent : GenericBuildingComponent
+    internal abstract class SingleCellBuildingComponent : GenericBuildingComponent
     {
         public GenericBuildingComponent Predecessor { get; set; }
 

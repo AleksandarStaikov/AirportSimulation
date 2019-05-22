@@ -9,20 +9,60 @@
     using AirportSimulation.App.Infrastructure;
     using AirportSimulation.Common.Models;
     using AirportSimulation.App.Helpers;
+    using System.Windows.Media;
 
-    internal class CheckIn : SingleCellBuildingComponent
+    internal class CheckIn : SingleCellBuildingComponent, ISucceedable
     {
-        private List<BuildingComponentType> _allowedComponents
-            = new List<BuildingComponentType>()
+        public CheckIn(string nodeId, (int, int) cell) : base(BuildingComponentType.CheckIn, nodeId, cell)
+        {
+            AllowedSuccessors = new List<BuildingComponentType>()
             {
                 BuildingComponentType.PSC,
             };
 
-        public CheckIn(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
-        {
-            successorEnabler = new Succeedable(this);
+            PopulateBlinkingCells();
         }
 
-        
+        public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        {
+            
+        }
+
+        private BlinkingCell GetBlinkingCell((int, int) cell)
+        {
+            return new BlinkingCell(this, cell);
+        }
+
+        public void PopulateBlinkingCells()
+        {
+            var (x, y) = Cell;
+            BlinkingCell gridCell = null;
+
+            if (x > 0)
+            {
+                gridCell = GetBlinkingCell((x - 1, y));
+                PossibleNeighbours.Add(gridCell); //Top rectangle
+            }
+
+            if (SimulationGridOptions.GRID_MAX_COLUMNS > y + 1)
+            {
+                gridCell = GetBlinkingCell((x, y + 1));
+                PossibleNeighbours.Add(gridCell); //Right rectangle
+            }
+
+            if (SimulationGridOptions.GRID_MAX_ROWS > x + 1)
+            {
+                gridCell = GetBlinkingCell((x + 1, y));
+                PossibleNeighbours.Add(gridCell); //Bottom rectangle
+            }
+
+            if (y > 0)
+            {
+                gridCell = GetBlinkingCell((x, y - 1));
+                PossibleNeighbours.Add(gridCell); //Left rectangle
+            }
+
+            BlinkigCellsPainter.PopulateBlinkingCells(PossibleNeighbours);
+        }
     }
 }
