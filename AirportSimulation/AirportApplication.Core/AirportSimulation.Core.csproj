@@ -87,6 +87,7 @@
     <Compile Include="Services\ChainLinkFactory.cs" />
     <Compile Include="Contracts\Services\IChainLinkFactory.cs" />
     <Compile Include="Contracts\Services\IStatisticsCalculator.cs" />
+    <Compile Include="Services\NodeConnectorService.cs" />
     <Compile Include="Services\StatisticsCalculator.cs" />
     <Compile Include="Services\TimerService.cs" />
     <Compile Include="ViewModels\SimulationSettingsContainerViewModel.cs" />

@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Timers;
+    using Common;
 
     public class CheckInDispatcher : ChainLink
     {
@@ -38,7 +39,7 @@
         {
             Condition
                 .Requires(checkIns.Count)
-                .IsEqualTo(_simulationSettings.CheckInStationsCount);
+                .IsEqualTo(_simulationSettings.Nodes.Count(n => n.Type == BuildingComponentType.CheckIn));
 
             _checkIns = checkIns;
         }
@@ -47,7 +48,7 @@
         {
             Condition
                 .Requires(_checkIns.Count)
-                .IsEqualTo(_simulationSettings.CheckInStationsCount);
+                .IsEqualTo(_simulationSettings.Nodes.Count(n => n.Type == BuildingComponentType.CheckIn));
 
             foreach (var timer in _flightDropOffTimers)
             {
@@ -158,7 +159,7 @@
         {
             _checkInQueues = new List<Queue<Baggage>>();
 
-            foreach (var checkIn in _simulationSettings.CheckIns)
+            foreach (var checkIn in Enumerable.Range(0, _simulationSettings.Nodes.Count(n => n.Type == BuildingComponentType.CheckIn)))
             {
                 _checkInQueues.Add(new Queue<Baggage>());
             }

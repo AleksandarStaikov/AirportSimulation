@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.Core
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Abstractions.Contracts;
     using Common.Models;
     using Contracts;
@@ -129,6 +130,22 @@
 
             _timerService.RunNewTimer();
             checkInDisp.Start();
+        }
+
+        public void ActualRun(SimulationSettings settings)
+        {
+            //TODO : Validate if needed
+            //_chainLinkFactory.SetSettings(settings);
+            //_timerService.SetSettings(settings);
+
+            //TODO : CheckInDispatcher, AaDispatcher, BagCollector 
+            var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings));
+
+            //TODO : Use the connector service to chain the nodes
+
+            //TODO : Extract the runnable nodes
+
+            //TODO : Run the runnable nodes
         }
     }
 }
