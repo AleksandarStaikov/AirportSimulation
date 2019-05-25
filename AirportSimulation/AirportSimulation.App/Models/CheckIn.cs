@@ -13,7 +13,7 @@
 
     internal class CheckIn : SingleCellBuildingComponent, IParent
     {
-        private Succeedable _succeedable;
+        private ISucceedable _succeedable;
         public CheckIn(string nodeId, (int, int) cell) : base(BuildingComponentType.CheckIn, nodeId, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
@@ -22,15 +22,18 @@
             };
 
             _succeedable = new Succeedable(this);
+        }
 
-            _succeedable.PopulateBlinkingCells();
+        public void PopulatePossibleNeighbours(MutantRectangle container)
+        {
+            _succeedable.PopulateAdjacentRectangles(container);
         }
 
         public void ShowBlinkingChildren(BuildingComponentType type)
         {
-            if(type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
+            if (type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
             {
-                _succeedable.PopulateBlinkingCells();
+                _succeedable.ShowBlinkingCells();
             }
             else
             {

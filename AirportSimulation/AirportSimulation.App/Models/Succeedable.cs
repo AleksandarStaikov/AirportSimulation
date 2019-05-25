@@ -8,62 +8,75 @@
     using AirportSimulation.Common.Models;
     using AirportSimulation.App.Infrastructure;
     using AirportSimulation.App.Helpers;
+    using System.Windows.Controls;
 
     class Succeedable : ISucceedable //TODO: Delete Succeedable
     {
         private GenericBuildingComponent _succeedableComponent;
 
-        public Succeedable(GenericBuildingComponent component)
+        public Succeedable(IParent component)
         {
-            _succeedableComponent = component;
+            _succeedableComponent = component as GenericBuildingComponent;
         }
 
-        private BlinkingCell GetBlinkingCell((int, int) cell)
+
+
+        private void MutateAdjacentRectangle(Grid grid, (int row, int col) cell)
         {
-            return new BlinkingCell(_succeedableComponent as IParent, cell);
+            var index = GridHelper.CalculateIndexFromCoordinates(cell);
+            var currentRectangle = grid.Children[index] as MutantRectangle;
+            if(currentRectangle.Content.GetType() == typeof(EnabledCell))
+            {
+                _succeedableComponent.PossibleNeighbours.Add(currentRectangle);
+            }
+
+            
         }
 
         public void HideBlinkingCells()
         {
-            foreach(int index in Enumerable.Range(0, _succeedableComponent.PossibleNeighbours.Count))
+            foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                var cell = _succeedableComponent.PossibleNeighbours[index].Cell;
-                _succeedableComponent.PossibleNeighbours[index] = new DisabledCell(_succeedableComponent, cell);
+                var cell = adjancentRectangle.Cell;
+                adjancentRectangle.ChangeContent(new DisabledCell(_succeedableComponent as IParent, cell));
             }
-
-            BlinkingCellsPainter.PaintChildrenCells(_succeedableComponent.PossibleNeighbours);
         }
 
-        public void PopulateBlinkingCells()
+        public void ShowBlinkingCells()
         {
-            var (x, y) = _succeedableComponent.Cell;
-            GridCell gridCell = null;
-
-            if (x > 0)
+            foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                gridCell = GetBlinkingCell((x - 1, y));
-                _succeedableComponent.PossibleNeighbours.Add(gridCell); //Top rectangle
+                var cell = adjancentRectangle.Cell;
+                adjancentRectangle.ChangeContent(new BlinkingCell(_succeedableComponent as IParent, cell));
+            }
+        }
+
+        public void PopulateAdjacentRectangles(MutantRectangle parentContainer)
+        {
+            var (row, column) = parentContainer.Cell;
+            var grid = parentContainer.GetGrid();
+
+            if (row > 0)
+            {
+                MutateAdjacentRectangle(grid, (row - 1, column)); //Top rectangle
             }
 
-            if (SimulationGridOptions.GRID_MAX_COLUMNS > y + 1)
+            if (grid.ColumnDefinitions.Count - 1 > column)
             {
-                gridCell = GetBlinkingCell((x, y + 1));
-                _succeedableComponent.PossibleNeighbours.Add(gridCell); //Right rectangle
+                MutateAdjacentRectangle(grid, (row, column + 1)); //Left rectangle
             }
 
-            if (SimulationGridOptions.GRID_MAX_ROWS > x + 1)
+            if (grid.RowDefinitions.Count - 1 > row)
             {
-                gridCell = GetBlinkingCell((x + 1, y));
-                _succeedableComponent.PossibleNeighbours.Add(gridCell); //Bottom rectangle
+                MutateAdjacentRectangle(grid, (row + 1, column)); //Bottom rectangle
             }
 
-            if (y > 0)
+            if (column > 0)
             {
-                gridCell = GetBlinkingCell((x, y - 1));
-                _succeedableComponent.PossibleNeighbours.Add(gridCell); //Left rectangle
+                MutateAdjacentRectangle(grid, (row, column - 1)); //Right rectangle
             }
 
-            BlinkingCellsPainter.PaintChildrenCells(_succeedableComponent.PossibleNeighbours);
+            ShowBlinkingCells();
         }
     }
 }

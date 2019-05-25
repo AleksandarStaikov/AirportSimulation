@@ -16,10 +16,10 @@ namespace AirportSimulation.App.Models
             UIElement = RectangleFactory.CreateDisabledRectangle();
         }
 
-        public DisabledCell(GenericBuildingComponent parentComponent, (int, int) cell) : base(cell)
+        public DisabledCell(IParent parentComponent, (int, int) cell) : base(cell)
         {
-            _parentComponent = parentComponent;
-            UIElement = RectangleFactory.CreateDisabledRectangle();
+            _parentComponent = parentComponent as GenericBuildingComponent;
+            Fill = RectangleFactory.CreateDisabledRectangle().Fill;
         }
 
         public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
@@ -34,7 +34,7 @@ namespace AirportSimulation.App.Models
                 ((IParent)_parentComponent).ShowBlinkingChildren(type);
             }
 
-            if (type == BuildingComponentType.CheckIn)
+            if (type == BuildingComponentType.CheckIn && _parentComponent == null)
             {
                 var content = new EnabledCell(Cell);
                 content.Fill = RectangleFactory.CreateEnabledRectangle().Fill;

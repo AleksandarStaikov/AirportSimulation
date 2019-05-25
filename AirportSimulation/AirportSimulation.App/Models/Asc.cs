@@ -7,7 +7,7 @@ using AirportSimulation.Common;
 
 namespace AirportSimulation.App.Models
 {
-    internal class Asc : SingleCellBuildingComponent
+    internal class Asc : SingleCellBuildingComponent, IParent
     {
         private List<BuildingComponentType> _allowedComponents
             = new List<BuildingComponentType>()
@@ -18,6 +18,11 @@ namespace AirportSimulation.App.Models
         public Asc(string nodeId, (int, int) cell) : base(BuildingComponentType.ASC, nodeId, cell)
         {
             successorEnabler = new Succeedable(this);
+        }
+
+        public void ShowBlinkingChildren(BuildingComponentType type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

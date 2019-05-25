@@ -21,7 +21,7 @@ namespace AirportSimulation.App.Models
         {
             if(type == BuildingComponentType.CheckIn)
             {
-                var content = new SingleCellComponentFactory().CreateComponent(type, Cell);
+                var content = new SingleCellComponentFactory().CreateComponent(type, sender);
                 sender.ChangeContent(content);
             }
         }

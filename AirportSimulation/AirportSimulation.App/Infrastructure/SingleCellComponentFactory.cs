@@ -17,26 +17,30 @@
             
         }
 
-        public GenericBuildingComponent CreateComponent(BuildingComponentType type, (int, int) cell)
+        public GenericBuildingComponent CreateComponent(BuildingComponentType type, MutantRectangle container)
         {
             if(type == BuildingComponentType.CheckIn)
             {
-                return CreateCheckIn(cell);
+                return CreateCheckIn(container);
             }
             else if(type == BuildingComponentType.PSC)
             {
-                return CreatePsc(cell);
+                return CreatePsc(container.Cell);
             }
 
             return null;
         }
 
-        private CheckIn CreateCheckIn((int, int) cell)
+        private CheckIn CreateCheckIn(MutantRectangle container)
         {
-            return new CheckIn("asdas", cell)
+            var temp = new CheckIn("asdas", container.Cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn))
             };
+
+            temp.PopulatePossibleNeighbours(container);
+
+            return temp;
         } 
 
         private Psc CreatePsc((int, int) cell)

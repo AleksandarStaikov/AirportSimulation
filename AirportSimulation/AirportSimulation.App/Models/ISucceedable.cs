@@ -8,6 +8,10 @@ namespace AirportSimulation.App.Models
 {
     interface ISucceedable
     {
-        void PopulateBlinkingCells();
+        void PopulateAdjacentRectangles(MutantRectangle parentContainer);
+
+        void ShowBlinkingCells();
+
+        void HideBlinkingCells();
     }
 }

@@ -19,14 +19,14 @@
         public BlinkingCell(IParent parent, (int, int) cell) : base(cell)
         {
             ParentComponent = parent;
-            UIElement = RectangleFactory.CreateBlinkingRectangle();
+            Fill = RectangleFactory.CreateBlinkingRectangle().Fill;
         }
 
         public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
         {
             if (IsConveyor(type))
             {
-                var content = new SingleCellComponentFactory().CreateComponent(type, Cell);
+                var content = new SingleCellComponentFactory().CreateComponent(type, sender);
                 sender.ChangeContent(content);
             }
         }
