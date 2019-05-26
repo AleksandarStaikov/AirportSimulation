@@ -38,7 +38,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:StatisticsView x:Name="StatisticsView"/>
+                    <views:Window1 x:Name="StatisticsView"/>
                 </Grid>
             </TabItem>
         </TabControl>

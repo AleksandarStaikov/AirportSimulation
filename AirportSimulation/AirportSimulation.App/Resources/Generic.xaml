@@ -10,6 +10,7 @@
     <Color x:Key="PrimaryForeground">#FF666666</Color>
 
     <Style x:Key="BasicTextStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FF666666"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="TextTrimming" Value="WordEllipsis"/>
@@ -26,7 +27,6 @@
     <Style x:Key="HeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaselineTextStyle}">
         <Setter Property="FontSize" Value="42"/>
         <Setter Property="FontWeight" Value="Light"/>
-        <Setter Property="FontFamily" Value="Segoe UI Light"/>
         <Setter Property="TextTrimming" Value="WordEllipsis"/>
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
@@ -43,24 +43,15 @@
         <Setter Property="LineHeight" Value="40" />
     </Style>
     <Style x:Key="SectionHeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
-        <Setter Property="Margin" Value="0,0,15,0"/>
-        <Setter Property="FontSize" Value="22" />
+        <Setter Property="Margin" Value="0,0,10,10"/>
+        <Setter Property="FontSize" Value="26" />
     </Style>
-    <Style x:Key="SectionHeaderSmallTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
-        <Setter Property="Margin" Value="0,10,5,5"/>
+    <Style x:Key="SeriesHeader" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
+        <Setter Property="Margin" Value="0,0,10,10"/>
+        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="18" />
-    </Style>
-    <Style x:Key="ContentTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
-        <Setter Property="Margin" Value="0,0,5,5"/>
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Foreground" Value="Black" />
     </Style>
 
-    <Style x:Key="SeriesHeader" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
-        <Setter Property="Margin" Value="0,10,5,5"/>
-        <Setter Property="FontSize" Value="18" />
-    </Style>
 
     <Style x:Key="BackButtonStyle" TargetType="Button">
         <Setter Property="MinWidth" Value="0"/>
@@ -69,7 +60,7 @@
         <Setter Property="Margin" Value="0"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="FontFamily" Value="../shared/fonts/seguisym.ttf#Segoe UI Symbol"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="FontSize" Value="56"/>
         <Setter Property="AutomationProperties.AutomationId" Value="BackButton"/>
@@ -81,8 +72,8 @@
                     <Grid x:Name="RootGrid">
                         <Grid Margin="-1,-16,0,0">
                             <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" Foreground="Transparent"/>
-                            <TextBlock x:Name="NormalGlyph" Text="&#xE071;" />
-                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0A6;" Opacity="0"/>
+                            <TextBlock x:Name="NormalGlyph" Text="&#xE071;" Foreground="#FF666666"/>
+                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0A6;" Foreground="Black" Opacity="0"/>
                         </Grid>
                         <Rectangle
                             x:Name="FocusVisualWhite"
@@ -197,316 +188,31 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BaseChartStyle" TargetType="chart:ChartBase">
+    <Style x:Key="ChartStyle" TargetType="chart:ChartBase">
         <Setter Property="Margin" Value="0 0 10 10"/>
-        <Setter Property="FontSize" Value="{Binding Path=SelectedFontSize}" />
-    </Style>
-
-
-    <Style x:Key="ChartStyleVariableSize" TargetType="chart:ChartBase" BasedOn="{StaticResource BaseChartStyle}">
-        <Setter Property="MinWidth" Value="450"/>
-        <Setter Property="MinHeight" Value="400"/>
-    </Style>
-    <Style x:Key="ChartStyleFixedSize" TargetType="chart:ChartBase" BasedOn="{StaticResource BaseChartStyle}">
-        <Setter Property="Width" Value="500"/>
-        <Setter Property="Height" Value="500"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-    </Style>
-    <Style x:Key="ChartStyleMinimalSize" TargetType="chart:ChartBase" BasedOn="{StaticResource BaseChartStyle}">
-        <Setter Property="Width" Value="425"/>
+        <Setter Property="Background" Value="#99FFFFFF"/>
+        <Setter Property="Foreground" Value="#FF666666"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Width" Value="400"/>
         <Setter Property="Height" Value="400"/>
     </Style>
 
-    <Style x:Key="BorderButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="DarkGray"/>
-        <Setter Property="BorderBrush" Value="DarkGray"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Padding" Value="12,4,12,4"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="MinWidth" Value="60"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="BackgroundVisualWhite" Storyboard.TargetProperty="Opacity" Duration="0" To="0.75"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="BackgroundVisualWhite" Storyboard.TargetProperty="Opacity" Duration="0" To="0.75"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="BackgroundVisualWhite" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="White"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To="0.5"/>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="FocusStates">
-                                <VisualState x:Name="Focused">
-                                    <Storyboard>
-                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhite"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unfocused"/>
-                                <VisualState x:Name="PointerFocused"/>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Rectangle x:Name="BackgroundVisualWhite" Fill="{TemplateBinding Background}" IsHitTestVisible="False" Opacity="0.5" Margin="3"/>
-                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" Margin="3">
-                            <ContentControl x:Name="ContentPresenter" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="ToggleButtonWithText" TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="4,4,4,4"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Grid>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="Black"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To="0.5"/>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="FocusStates">
-                                <VisualState x:Name="Focused" />
-                                <VisualState x:Name="Unfocused"/>
-                                <VisualState x:Name="PointerFocused"/>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Rectangle x:Name="BackgroundVisualWhite" Fill="#FF1B7F97" IsHitTestVisible="False" Opacity="0" Margin="3"/>
-                        <Border x:Name="Border" Opacity="0.5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3">
-                            <ContentControl x:Name="ContentPresenter" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <chart:ResourceDictionaryCollection x:Key="CustomColors">
+    <chart:ResourceDictionaryCollection x:Key="CustomPalette">
         <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush1" Color="#FF5B9BD5" />
+            <SolidColorBrush x:Key="Brush1" Color="#FF6685A2" />
         </ResourceDictionary>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush2" Color="#FFED7D31" />
+            <SolidColorBrush x:Key="Brush2" Color="#FF1D97E3" />
         </ResourceDictionary>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush3" Color="#FFA5A5A5" />
+            <SolidColorBrush x:Key="Brush3" Color="#FFFF2900" />
         </ResourceDictionary>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush4" Color="#FFFFC000" />
+            <SolidColorBrush x:Key="Brush4" Color="#FFFF8000" />
         </ResourceDictionary>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush5" Color="#FF4472C4" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush6" Color="#FF70AD47" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush7" Color="#FF255E91" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush8" Color="#FF9E480E" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush9" Color="#FF636363" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush10" Color="#FF997300" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush11" Color="#FF264478" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush12" Color="#FF43682B" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush13" Color="#FF7CAFDD" />
-        </ResourceDictionary>
-    </chart:ResourceDictionaryCollection>
-
-    <chart:ResourceDictionaryCollection x:Key="MonoChrome">
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush1" Color="#FFA9A9A9" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush1" Color="#FFA1A1A1" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush2" Color="#FF999999" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush3" Color="#FF919191" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush4" Color="#FF898989" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush5" Color="#FF818181" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush6" Color="#FF797979" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush7" Color="#FF717171" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush8" Color="#FF696969" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush9" Color="#FF616161" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush10" Color="#FF595959" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="Brush11" Color="#FF515151" />
-        </ResourceDictionary>
-
-    </chart:ResourceDictionaryCollection>
-
-    <chart:ResourceDictionaryCollection x:Key="Gradients">
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush1" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF00A7D0" Offset="0.0" />
-                <GradientStop Color="#FF007C9C" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush2" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF14CAFE" Offset="0.0" />
-                <GradientStop Color="#FF019FCC" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush3" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF8FCD3E" Offset="0.0" />
-                <GradientStop Color="#FF6B9D28" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush4" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF82B93A" Offset="0.0" />
-                <GradientStop Color="#FF5A8028" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush5" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF638A2D" Offset="0.0" />
-                <GradientStop Color="#FF425C1F" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush6" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FFE3AAD6" Offset="0.0" />
-                <GradientStop Color="#FFD580C1" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush7" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FFB5D8EB" Offset="0.0" />
-                <GradientStop Color="#FF6BB1D8" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush8" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FFFF8CBA" Offset="0.0" />
-                <GradientStop Color="#FFFF448E" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush9" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FFFF7D7D" Offset="0.0" />
-                <GradientStop Color="#FFFF3E3E" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush10" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF6685A2" Offset="0.0" />
-                <GradientStop Color="#FF455C72" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush11" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF70BEED" Offset="0.0" />
-                <GradientStop Color="#FF1D97E3" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush12" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF61B7EB" Offset="0.0" />
-                <GradientStop Color="#FF1C92D9" Offset="1.0" />
-            </LinearGradientBrush>
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="Brush13" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FFD88BC7" Offset="0.0" />
-                <GradientStop Color="#FFC44FA9" Offset="1.0" />
-            </LinearGradientBrush>
+            <SolidColorBrush x:Key="Brush4" Color="Gray" />
         </ResourceDictionary>
     </chart:ResourceDictionaryCollection>
 
@@ -514,76 +220,270 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     </Style>
 
-    <Style x:Key="SelectableListBoxItem" TargetType="ListBoxItem">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentPresenter" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentPresenter" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled">
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentPresenter" />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="InnerGrid" Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleX)" 
-                                            Duration="0:0:0.1"
-                                            From="1" To="0.975"/>
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="InnerGrid" Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(ScaleTransform.ScaleY)" 
-                                            Duration="0:0:0.1"
-                                            From="1" To="0.975" />
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Unselected" />
-                                <VisualState x:Name="Selected">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ContentPresenter" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="SelectedUnfocused" />
-                                <VisualState x:Name="SelectedDisabled" />
-                                <VisualState x:Name="SelectedPointerOver" />
-                                <VisualState x:Name="SelectedPressed" />
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="FocusStates">
-                                <VisualState x:Name="Focused" />
-                                <VisualState x:Name="Unfocused"/>
-                                <VisualState x:Name="PointerFocused"/>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Grid x:Name="InnerGrid" RenderTransformOrigin="0.5, 0.5">
-                            <ContentControl Opacity="0.5" x:Name="ContentPresenter" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Grid.RenderTransform>
-                                <ScaleTransform ScaleX="1.0" ScaleY="1.0"/>
-                            </Grid.RenderTransform>
+    <DataTemplate x:Key="PageContent">
+        <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0">
+                    <Button    
+                            Command="{Binding Path=GoBackCommand}"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource BackButtonStyle}"                                
+                            Content="&#xE112;" 
+                            ToolTipService.ToolTip="Back" >
+                    </Button>
+                </Border>
+                <Border Grid.Column="1">
+                    <TextBlock VerticalAlignment="Bottom" x:Name="pageTitle" Text="Metro Charts" Style="{StaticResource PageHeaderTextStyle}" Grid.Column="1"/>
+                </Border>
+            </Grid>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" Padding="120 20 20 20">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Width="350" Margin="0 0 10 0">
+                        <TextBlock Text="Test Data" Style="{StaticResource SectionHeaderTextStyle}" />
+                        <StackPanel  Background="White">
+                            <TextBlock Style="{StaticResource SeriesHeader}" TextWrapping="Wrap" Text="Edit the values of the following series to change the charts. Currently only positive values are supported." Margin="10" />
+                            <ItemsControl Margin="10"
+                            x:Name="parentList"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            ItemsSource="{Binding Path=Series}"
+                            Tag="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Width="330">
+                                            <TextBlock Text="{Binding Path=DisplayName}" Style="{StaticResource SeriesHeader}" />
+                                            <ListBox 
+                                            VerticalAlignment="Stretch"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                                            ItemsSource="{Binding Path=Items}" 
+                                            SelectedItem="{Binding Path=Tag, Mode=TwoWay, ElementName=parentList}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Path=Category}" />
+                                                            <TextBox Width="50" Background="White" Margin="0 0 0 0" BorderBrush="DarkGray" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding Path=Number, Mode=TwoWay}" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!--<StackPanel MinWidth="350">
+                        <TextBlock Text="Column Chart" Style="{StaticResource SectionHeaderTextStyle}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <chart:ClusteredColumnChart                                
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Column Chart"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                Palette="{StaticResource CustomPalette}"
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                SeriesSource="{Binding Series}">
+                                <chart:ClusteredColumnChart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:ClusteredColumnChart.SeriesTemplate>
+                            </chart:ClusteredColumnChart>
+                            <chart:StackedColumnChart
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Stacked Column Chart"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                SeriesSource="{Binding Series}">
+                                <chart:StackedColumnChart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:StackedColumnChart.SeriesTemplate>
+                            </chart:StackedColumnChart>
+                            <chart:StackedColumn100Chart
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="100% Stacked Column"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                SeriesSource="{Binding Series}">
+                                <chart:StackedColumn100Chart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:StackedColumn100Chart.SeriesTemplate>
+                            </chart:StackedColumn100Chart>
+                     
+
+                    </StackPanel>-->
+
+
+                    <StackPanel MinWidth="350">
+                        <chart:ClusteredColumnChart                                
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Column Chart with fixed series"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        Caption="Errors"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Errors}" />
+                                <chart:ChartSeries
+                                        Caption="Warnings"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Warnings}" />
+                                <chart:ChartSeries
+                                        Caption="Errors"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Errors}" />
+                                <chart:ChartSeries
+                                        Caption="Warnings"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=Warnings}" />
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
+                        
+                    </StackPanel>
+                    <StackPanel MinWidth="350">
+                        <TextBlock Text="Pie Chart" Style="{StaticResource SectionHeaderTextStyle}" />
+                        <chart:PieChart                     
+                            Style="{StaticResource ChartStyle}"
+                            ChartTitle="Pie Chart"
+                            ChartSubTitle="Which types of warnings appears most"
+                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                            <chart:PieChart.Series>
+                                <chart:ChartSeries
+                                    Caption="Errors"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=Errors}">
+                                </chart:ChartSeries>
+                            </chart:PieChart.Series>
+                        </chart:PieChart>
+                    </StackPanel>
+
+                    <!--<StackPanel MinWidth="350">
+                        <TextBlock Text="Bar Chart" Style="{StaticResource SectionHeaderTextStyle}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <chart:ClusteredBarChart                                
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Bar Chart"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"                                
+                                SeriesSource="{Binding Series}">
+                                <chart:ClusteredBarChart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:ClusteredBarChart.SeriesTemplate>
+                            </chart:ClusteredBarChart>
+                            <chart:StackedBarChart
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Stacked Bar Chart"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                SeriesSource="{Binding Series}">
+                                <chart:StackedBarChart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:StackedBarChart.SeriesTemplate>
+                            </chart:StackedBarChart>
+                            <chart:StackedBar100Chart
+                                Grid.Column="0"
+                                Grid.Row="1"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="100% Stacked Bar"
+                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+                                SeriesSource="{Binding Series}">
+                                <chart:StackedBar100Chart.SeriesTemplate>
+                                    <DataTemplate>
+                                        <chart:ChartSeries
+			                                Caption="{Binding Path=DisplayName}"
+                                            DisplayMember="Category"
+                                            ValueMember="Number"
+                                            ItemsSource="{Binding Path=Items}" />
+                                    </DataTemplate>
+                                </chart:StackedBar100Chart.SeriesTemplate>
+                            </chart:StackedBar100Chart>
                         </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
-
-
-
+                    </StackPanel>-->
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

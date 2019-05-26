@@ -48,9 +48,9 @@
     <Reference Include="Caliburn.Micro.Platform.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
     </Reference>
-    <Reference Include="De.TorstenMandelkow.MetroChart, Version=0.9.5818.20693, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="De.TorstenMandelkow.MetroChart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\modernuichartsMandelkow\sourceCode\ModernUIChart\TestApplicationWPF\bin\Debug\De.TorstenMandelkow.MetroChart.dll</HintPath>
+      <HintPath>..\..\..\..\Modern UI Charts\sourceCode\ModernUIChart\TestApplicationWPF\bin\Debug\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -95,6 +95,8 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Helpers\RectangleFactory.cs" />
+    <Compile Include="Helpers\StatisticsModel.cs" />
+    <Compile Include="Helpers\StatisticsViewModel.cs" />
     <Compile Include="Resources\GridCellElement.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
     <Compile Include="Resources\GridDisabledCellElement.cs" />
@@ -106,6 +108,9 @@
     </Compile>
     <Compile Include="Views\StatisticsView.xaml.cs">
       <DependentUpon>StatisticsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
     <Page Include="Helpers\StatisticsDictionary.xaml">
       <SubType>Designer</SubType>
@@ -137,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StatisticsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
