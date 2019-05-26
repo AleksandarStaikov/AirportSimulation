@@ -21,6 +21,7 @@
             Style="{StaticResource MinimalChartStyle}"
             Grid.Column="0"
             Grid.Row="0"
+            Margin="5"
             Name="pieChart" ChartTitle="Test"
             ChartSubTitle="(800)"
             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
@@ -33,8 +34,9 @@
             Style="{StaticResource MinimalChartStyle}"
             Grid.Column="1"
             Grid.Row="0"
-            Name="columnChart"  ChartTitle="asd"
-                              ChartSubTitle="(1000)"
+            Margin="5"
+            Name="columnChart"  ChartTitle="Statistics"
+                              ChartSubTitle="Bar Chart"
                         SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
             <chart:ClusteredColumnChart.Series>
             <chart:ChartSeries/>

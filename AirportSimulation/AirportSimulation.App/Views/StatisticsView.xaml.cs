@@ -22,7 +22,7 @@
             series.ValueMember = "Number";
             series.ItemsSource = null;
             pieChart.Series.Add(series);
-            columnChart.Series.Add(series);
+           
             ObservableCollection<ChartData> myData = new ObservableCollection<ChartData>();
             series.ItemsSource = myData;
 
@@ -34,12 +34,12 @@
             series1.ValueMember = "Number";
             series1.ItemsSource = null;
             columnChart.Series.Add(series1);
-            ObservableCollection<ChartData> myData1 = new ObservableCollection<ChartData>();
+            ObservableCollection<BarChartData> myData1 = new ObservableCollection<BarChartData>();
             series1.ItemsSource = myData1;
 
-            myData1.Add(new ChartData() { Category = "test1", Number = 15 });
-            myData1.Add(new ChartData() { Category = "test2", Number = 25 });
-            myData1.Add(new ChartData() { Category = "test3", Number = 3 });
+            myData1.Add(new BarChartData() { Category = "test1", Number = 50 });
+            myData1.Add(new BarChartData() { Category = "test2", Number = 20 });
+            myData1.Add(new BarChartData() { Category = "test3", Number = 30 });
 
         }
 
@@ -72,6 +72,19 @@
         public string Category { get; set; }
 
         public int Number { get; set; }
+
+        public double Percentage { get; set; }
+    }
+
+    public class BarChartData
+    {
+
+        public string Category { get; set; }
+
+        public int Number { get; set; }
+
+        public double Percentage { get; set; }
+
     }
 }
 
