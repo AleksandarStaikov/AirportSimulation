@@ -8,25 +8,30 @@
 	using System.Threading.Tasks;
     using System;
 
-    public class Mpa : ChainLink, IChainLink
+    public class Mpa : ChainLink, IMultiSuccessor
     {
         public delegate Mpa Factory(string nodeId);
 
-        private Dictionary<string, ChainLink> _allSuccessors;
+        private Dictionary<string, IChainLink> _allSuccessors;
         private Dictionary<string, Queue<Baggage>> _baggageDistributors;
 
         public Mpa(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
-            _allSuccessors = new Dictionary<string, ChainLink>();
+            _allSuccessors = new Dictionary<string, IChainLink>();
             _baggageDistributors = new Dictionary<string, Queue<Baggage>>();
         }
 
         public override string Destination => this.GetType().Name;
 
-        public void AddSuccessor(ChainLink successor)
+        public void AddSuccessor(IChainLink successor)
         {
             _allSuccessors[successor.Destination] = successor;
             _baggageDistributors[successor.Destination] = new Queue<Baggage>();
+
+            Task.Run(() =>
+            {
+                DistributeBaggage(successor.Destination);
+            });
         }
 
         public override void PassBaggage(Baggage baggage)
@@ -40,17 +45,6 @@
                 "MPA processing. Sorted to Gate " + baggage.Destination + ". Enqueuing for distribution.");
 
             _baggageDistributors[baggage.Destination].Enqueue(baggage);
-        }
-
-        public void Start()
-        {
-            foreach (var destination in _baggageDistributors.Keys)
-            {
-                Task.Run(() =>
-                {
-                    DistributeBaggage(destination);
-                });
-            }
         }
 
         private void DistributeBaggage(string destination)

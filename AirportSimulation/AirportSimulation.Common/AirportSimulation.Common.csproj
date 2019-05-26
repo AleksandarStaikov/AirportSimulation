@@ -68,6 +68,7 @@
     <Compile Include="Models\ConveyorSlot.cs" />
     <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\GridNode.cs" />
+    <Compile Include="Models\NodeCreationData.cs" />
     <Compile Include="Models\NodeState.cs" />
     <Compile Include="Models\SimulationGridOptions.cs" />
     <Compile Include="Models\SimulationSettings.cs" />

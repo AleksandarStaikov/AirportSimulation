@@ -17,7 +17,7 @@
         private readonly IFlightManagement _flightManagement;
 
         private Dictionary<IChainLink, Queue<Baggage>> _gateQueues;
-        private List<IChainLink> _gates;
+        private List<Aa> _gates;
 
         public AADispatcher(IFlightManagement flightManagement, string nodeId, ITimerService timerService)
             : base(nodeId, timerService)
@@ -28,7 +28,7 @@
 
         public override string Destination { get; }
 
-        public void SetUpGates(List<IChainLink> gates)
+        public void SetUpGates(List<Aa> gates)
         {
             _gates = gates;
             _gateQueues = new Dictionary<IChainLink, Queue<Baggage>>();
@@ -67,14 +67,14 @@
                     var transFlights = _flightManagement
                         .OutgoingFlights
                         .Where(f => f.TimeToFlightSinceSimulationStart > TimerService.GetTimeSinceSimulationStart()
-                                    && f.BaggageCount > f.DispatchedBaggagesCount)
+                                    && f.BaggageCount > f.DispatchedBaggageCount)
                         .ToList();
 
                     var index = randomGen.Next(0, transFlights.Count());
                     var transFlight = transFlights[index];
 
                     bag.Flight = transFlight;
-                    transFlight.DispatchedBaggagesCount++;
+                    transFlight.DispatchedBaggageCount++;
                 }
 
                 PassOrEnqueueBaggage(gate, bag);

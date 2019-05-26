@@ -1,14 +1,14 @@
 ﻿namespace AirportSimulation.Core
 {
+    using Contracts;
     using Autofac;
-    using System.Reflection;
-    using System;
     using Autofac.Core;
     using ImportExport;
-    using NLog;
-    using AirportSimulation.Core.Contracts;
     using LinkNodes;
+    using NLog;
     using Services;
+    using System;
+    using System.Reflection;
 
     public static class ContainerConfig
     {
@@ -32,22 +32,30 @@
                 .SingleInstance()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<Engine>()
+            builder
+                .RegisterType<Engine>()
                 .InstancePerDependency()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<ChainLinkFactory>()
-                .SingleInstance()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<TimerService>()
+            builder
+                .RegisterType<ChainLinkFactory>()
                 .SingleInstance()
                 .AsImplementedInterfaces();
 
             builder
-                .RegisterType<StatisticsCalculator>()
+                .RegisterType<TimerService>()
                 .SingleInstance()
                 .AsImplementedInterfaces();
+
+            builder
+                .RegisterType<NodeConnectorService>()
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            //builder
+            //    .RegisterType<StatisticsCalculator>()
+            //    .SingleInstance()
+            //    .AsImplementedInterfaces();
 
             builder.RegisterType<CheckInDesk>();
             builder.RegisterType<Psc>();

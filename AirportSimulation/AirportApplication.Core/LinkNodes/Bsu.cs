@@ -1,15 +1,14 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Cryptography;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    public class BSU : ChainLink, IChainLink
+    public class BSU : ChainLink, ISingleSuccessor
     {
         public delegate BSU Factory(string nodeId);
 
@@ -71,7 +70,7 @@
             baggage.Destination = baggage.Flight.FlightNumber;
         }
 
-        private void AddBaggageBucket(Flight flight) //TODO: Do this on flightScheduled
+        private void AddBaggageBucket(Flight flight)
         {
             var bucket = new BaggageBucket(flight.FlightNumber, Guid.NewGuid().ToString(), TimerService);
             bucket.SetSuccessor(_outboundRobot);
