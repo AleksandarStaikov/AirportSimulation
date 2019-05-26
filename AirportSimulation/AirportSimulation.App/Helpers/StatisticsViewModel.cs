@@ -1,8 +1,10 @@
 ﻿namespace AirportSimulation.App.Helpers
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Linq;
     using AirportSimulation.Core.Services;
 
 
@@ -15,22 +17,31 @@
 
             Series = new List<SeriesData>();
 
-            Warnings = new ObservableCollection<StatisticsModel>();
-            Errors = new ObservableCollection<StatisticsModel>();
 
-            Errors.Add(new StatisticsModel { Category = "Testing", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
-            Errors.Add(new StatisticsModel { Category = "Testing", Number = statisticsData?.PscFailedBags?.Count ?? 0});
-            Errors.Add(new StatisticsModel { Category = "Testing", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
-            Errors.Add(new StatisticsModel { Category = "Testing", Number = 44 });
+            // gr = Graph --- Col = 1 --- 
+            _gr1Col1 = new ObservableCollection<StatisticsModel>();
+            _gr1Col2 = new ObservableCollection<StatisticsModel>();
 
-            Warnings.Add(new StatisticsModel { Category = "Testing", Number = 44 });
-            Warnings.Add(new StatisticsModel { Category = "Testing", Number = 44 });
-            Warnings.Add(new StatisticsModel { Category = "Testing", Number = 44 });
-            Warnings.Add(new StatisticsModel { Category = "Testing", Number = 44 });
+            _gr2Par1 = new ObservableCollection<StatisticsModel>();
 
+            _gr3Par1 = new ObservableCollection<StatisticsModel>();
 
-            Series.Add(new SeriesData() { DisplayName = "Test1", Items = Errors });
-            Series.Add(new SeriesData { DisplayName = "Test1333", Items = Warnings });
+            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
+            _gr1Col1.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.LastCollectedBag?.Log?.FirstOrDefault()) });
+
+            _gr1Col2.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault()) });
+            _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.LastDispatchedBag?.Log?.FirstOrDefault()) });
+
+            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Failed Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
+            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Succeeded Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
+
+            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
+            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
+
+            Series.Add(new SeriesData() { DisplayName = "First", Items = _gr1Col1 });
+            Series.Add(new SeriesData() { DisplayName = "Last", Items = _gr1Col2 });
+            Series.Add(new SeriesData() { DisplayName = "Pie Chart", Items = _gr2Par1 });
+            Series.Add(new SeriesData() { DisplayName = "Pie Second", Items = _gr3Par1 });
 
 
         }
@@ -55,19 +66,20 @@
             set;
         }
 
-        public ObservableCollection<StatisticsModel> Warnings
+        public ObservableCollection<StatisticsModel> _gr1Col2
+        {
+            get;
+            set;
+        }
+        public ObservableCollection<StatisticsModel> _gr1Col1
         {
             get;
             set;
         }
 
-        public ObservableCollection<StatisticsModel> Errors
-        {
-            get;
-            set;
-        }
 
-
+        public ObservableCollection<StatisticsModel> _gr2Par1 { get; set; }
+        public ObservableCollection<StatisticsModel> _gr3Par1 { get; set; }
 
         private void NotifyPropertyChanged(string property)
         {

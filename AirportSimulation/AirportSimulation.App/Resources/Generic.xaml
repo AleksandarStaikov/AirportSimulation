@@ -231,15 +231,7 @@
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="0">
-                    <Button    
-                            Command="{Binding Path=GoBackCommand}"
-                            VerticalAlignment="Bottom"
-                            Style="{StaticResource BackButtonStyle}"                                
-                            Content="&#xE112;" 
-                            ToolTipService.ToolTip="Back" >
-                    </Button>
-                </Border>
+               
                 <Border Grid.Column="1">
                     <TextBlock VerticalAlignment="Bottom" x:Name="pageTitle" Text="Metro Charts" Style="{StaticResource PageHeaderTextStyle}" Grid.Column="1"/>
                 </Border>
@@ -367,47 +359,54 @@
                                 Grid.Column="1"
                                 Grid.Row="1"
                                 Style="{StaticResource ChartStyle}"
-                                ChartTitle="Column Chart with fixed series"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
+                                ChartTitle="Dispatch &amp; Collect"
+                                ChartSubTitle="The time in which the first &amp; last bags were dispatched/collected"                  
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
-                                        Caption="Errors"
+                                        Caption="First"
                                         DisplayMember="Category"
                                         ValueMember="Number"
-                                        ItemsSource="{Binding Path=Errors}" />
+                                        ItemsSource="{Binding Path=_gr1Col1}" />
                                 <chart:ChartSeries
-                                        Caption="Warnings"
+                                        Caption="Last"
                                         DisplayMember="Category"
                                         ValueMember="Number"
-                                        ItemsSource="{Binding Path=Warnings}" />
-                                <chart:ChartSeries
-                                        Caption="Errors"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=Errors}" />
-                                <chart:ChartSeries
-                                        Caption="Warnings"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=Warnings}" />
+                                        ItemsSource="{Binding Path=_gr1Col2}" />
+                            
                             </chart:ClusteredColumnChart.Series>
                         </chart:ClusteredColumnChart>
                         
                     </StackPanel>
                     <StackPanel MinWidth="350">
-                        <TextBlock Text="Pie Chart" Style="{StaticResource SectionHeaderTextStyle}" />
                         <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
-                            ChartTitle="Pie Chart"
-                            ChartSubTitle="Which types of warnings appears most"
+                            ChartTitle="Primary Failed &amp; Passed Bags"
+                            ChartSubTitle="Primary Security Check Percentage of Passed &amp; Failed Bags"
+                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                            <chart:PieChart.Series>
+                                <chart:ChartSeries
+                                    Caption="FailedPassed"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr2Par1}">
+                                </chart:ChartSeries>
+                            </chart:PieChart.Series>
+                        </chart:PieChart>
+                    </StackPanel>
+
+                    <StackPanel MinWidth="350">
+                        <chart:PieChart                     
+                            Style="{StaticResource ChartStyle}"
+                            ChartTitle="Secondary Failed &amp; Passed Bags"
+                            ChartSubTitle="Secondary Security Check Percentage of Passed &amp; Failed Bags"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                             <chart:PieChart.Series>
                                 <chart:ChartSeries
                                     Caption="Errors"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=Errors}">
+                                    ItemsSource="{Binding Path=_gr3Par1}">
                                 </chart:ChartSeries>
                             </chart:PieChart.Series>
                         </chart:PieChart>

@@ -147,7 +147,7 @@
 
     public class StatisticsData
     {
-        //Colum Chart
+        //Colum Chart -- DONE
         public Baggage FirstDispatchedBag { get; set; }
         public Baggage LastDispatchedBag { get; set; }
         public Baggage FirstCollectedBag { get; set; }
