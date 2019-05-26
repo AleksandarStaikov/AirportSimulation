@@ -18,11 +18,13 @@ namespace AirportSimulation.App.Models
 
         public string NodeId { get; }
 
-        public List<MutantRectangle> PossibleNeighbours { get; set; }
+        public readonly List<MutantRectangle> PossibleNeighbours;
 
         public List<BuildingComponentType> AllowedNonConveyorSuccessors { get; protected set; }
 
         protected ISucceedable successorEnabler;
+
+        public List<GenericBuildingComponent> NextNodes { get; protected set; }
 
         public GenericBuildingComponent(BuildingComponentType type, string nodeId, (int, int) cell) : base(cell)
         {
@@ -30,6 +32,7 @@ namespace AirportSimulation.App.Models
             NodeId = nodeId;
 
             PossibleNeighbours = new List<MutantRectangle>();
+            NextNodes = new List<GenericBuildingComponent>();
         }
     }
 }

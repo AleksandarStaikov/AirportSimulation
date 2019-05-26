@@ -12,7 +12,7 @@
     using System.Windows.Media;
     using System.Windows.Input;
 
-    internal class BlinkingCell : GridCell, IClickable
+    internal class BlinkingCell : GridCell, IClickable 
     {
         public readonly IParent ParentComponent;
 
@@ -22,13 +22,25 @@
             Fill = RectangleFactory.CreateBlinkingRectangle().Fill;
         }
 
-        public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
+        public void ClickHandler(MutantRectangle sender, BuildingComponentType type) //TODO: Add factory as a property?
         {
+            GenericBuildingComponent content;
+
             if (IsConveyor(type))
             {
-                var content = new SingleCellComponentFactory().CreateComponent(type, sender);
-                sender.ChangeContent(content);
+                content = new MultipleCellComponentFactory().CreateComponent(type, sender);
+                
             }
+            else
+            {
+                content = new SingleCellComponentFactory().CreateComponent(type, sender);
+            }
+
+            ParentComponent.ChildClicked(content);
+
+            ((IParent)content).PopulatePossibleNeighbours(sender);
+
+            sender.ChangeContent(content);
         }
 
         public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)

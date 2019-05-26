@@ -20,6 +20,16 @@ namespace AirportSimulation.App.Models
             successorEnabler = new Succeedable(this);
         }
 
+        public void ChildClicked(GenericBuildingComponent successor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PopulatePossibleNeighbours(MutantRectangle container)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ShowBlinkingChildren(BuildingComponentType type)
         {
             throw new NotImplementedException();

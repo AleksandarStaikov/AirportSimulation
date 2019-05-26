@@ -22,43 +22,5 @@ namespace AirportSimulation.App.Models
         {
             
         }
-
-        //protected override void PopulatePossibleNeighbours()
-        //{
-        //    var (x, y) = Cell;
-        //    GridCell gridCell = null;
-
-        //    if (x > 0)
-        //    {
-        //        gridCell = GetBlinkingCell((x - 1, y));
-        //        PossibleNeighbours.Add(gridCell); //Top rectangle
-        //    }
-
-        //    if (SimulationGridOptions.GRID_MAX_COLUMNS > y + 1)
-        //    {
-        //        gridCell = GetBlinkingCell((x, y + 1));
-        //        PossibleNeighbours.Add(gridCell); //Right rectangle
-        //    }
-
-        //    if (SimulationGridOptions.GRID_MAX_ROWS > x + 1)
-        //    {
-        //        gridCell = GetBlinkingCell((x + 1, y));
-        //        PossibleNeighbours.Add(gridCell); //Bottom rectangle
-        //    }
-
-        //    if (y > 0)
-        //    {
-        //        gridCell = GetBlinkingCell((x, y - 1));
-        //        PossibleNeighbours.Add(gridCell); //Left rectangle
-        //    }
-        //}
-
-        //private GridCell GetBlinkingCell((int, int) cell)
-        //{
-        //    return new BlinkingCell(this, cell)
-        //    {
-        //        UIElement = RectangleFactory.CreateBlinkingRectangle()
-        //    };
-        //}
     }
 }

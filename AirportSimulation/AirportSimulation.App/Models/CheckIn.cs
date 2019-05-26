@@ -22,6 +22,23 @@
             };
 
             _succeedable = new Succeedable(this);
+            NextNodes = new List<GenericBuildingComponent>(1);
+        }
+
+        public void ChildClicked(GenericBuildingComponent successor)
+        {
+            if(successor.GetType().BaseType == typeof(MultipleCellComponent))
+            {
+                var temp = successor as MultipleCellComponent;
+                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+                if(temp is ManyToOneCell)
+                {
+                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                }
+            }
+            NextNodes.Add(successor);
+
+            ShowBlinkingChildren(successor.Type);
         }
 
         public void PopulatePossibleNeighbours(MutantRectangle container)
@@ -31,7 +48,8 @@
 
         public void ShowBlinkingChildren(BuildingComponentType type)
         {
-            if (type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
+            if ((type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor) 
+                && NextNodes.Capacity != NextNodes.Count)
             {
                 _succeedable.ShowBlinkingCells();
             }

@@ -7,7 +7,7 @@
 
     public abstract class GridCell
     {
-        public Rectangle UIElement { get; set; }
+        //public Rectangle UIElement { get; set; }
 
         public Brush Fill { get; set; }
 

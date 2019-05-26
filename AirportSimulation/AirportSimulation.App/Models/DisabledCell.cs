@@ -10,15 +10,14 @@ namespace AirportSimulation.App.Models
 {
     class DisabledCell : GridCell, IClickable
     {
-        private GenericBuildingComponent _parentComponent;
+        public readonly GenericBuildingComponent ParentComponent;
         public DisabledCell((int, int) cell) : base(cell)
         {
-            UIElement = RectangleFactory.CreateDisabledRectangle();
         }
 
         public DisabledCell(IParent parentComponent, (int, int) cell) : base(cell)
         {
-            _parentComponent = parentComponent as GenericBuildingComponent;
+            ParentComponent = parentComponent as GenericBuildingComponent;
             Fill = RectangleFactory.CreateDisabledRectangle().Fill;
         }
 
@@ -29,12 +28,12 @@ namespace AirportSimulation.App.Models
 
         public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            if (_parentComponent != null && _parentComponent is IParent)
+            if (ParentComponent != null && ParentComponent is IParent)
             {
-                ((IParent)_parentComponent).ShowBlinkingChildren(type);
+                ((IParent)ParentComponent).ShowBlinkingChildren(type);
             }
 
-            if (type == BuildingComponentType.CheckIn && _parentComponent == null)
+            if (type == BuildingComponentType.CheckIn && ParentComponent == null)
             {
                 var content = new EnabledCell(Cell);
                 content.Fill = RectangleFactory.CreateEnabledRectangle().Fill;

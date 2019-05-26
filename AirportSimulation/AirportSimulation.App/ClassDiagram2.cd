@@ -29,11 +29,11 @@
       <FileName>Helpers\GridHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AirportSimulation.App.Helpers.MyGrid" Collapsed="true">
+  <Class Name="AirportSimulation.App.Helpers.Grid" Collapsed="true">
     <Position X="21.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Helpers\MyGrid.cs</FileName>
+      <FileName>Helpers\Grid.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AirportSimulation.App.Infrastructure.RectangleFactory" Collapsed="true">

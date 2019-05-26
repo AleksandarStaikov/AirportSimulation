@@ -27,7 +27,7 @@ namespace AirportSimulation.App.Helpers
                 if (rectangleAtIndex.Content.GetType() != typeof(GenericBuildingComponent))
                 {
                     rectangleAtIndex.Content = blinkingCell;
-                    rectangleAtIndex.Fill = blinkingCell.UIElement.Fill;
+                    rectangleAtIndex.Fill = blinkingCell.Fill;
                 }
             }
         }

@@ -19,26 +19,45 @@
             _succeedableComponent = component as GenericBuildingComponent;
         }
 
-
-
         private void MutateAdjacentRectangle(Grid grid, (int row, int col) cell)
         {
             var index = GridHelper.CalculateIndexFromCoordinates(cell);
             var currentRectangle = grid.Children[index] as MutantRectangle;
-            if(currentRectangle.Content.GetType() == typeof(EnabledCell))
+
+            _succeedableComponent.PossibleNeighbours.Add(currentRectangle);
+        }
+
+        private bool IsMutable(MutantRectangle rectangle)
+        {
+            if (rectangle.Content is EnabledCell)
             {
-                _succeedableComponent.PossibleNeighbours.Add(currentRectangle);
+                return true;
+            }
+            else if (rectangle.Content is DisabledCell)
+            {
+                if(((DisabledCell)rectangle.Content).ParentComponent == null || ((DisabledCell)rectangle.Content).ParentComponent == _succeedableComponent)
+                {
+                    return true;
+                }
+            }
+            else if(!(rectangle.Content is GenericBuildingComponent))
+            {
+                return true;
             }
 
-            
+            return false;
         }
 
         public void HideBlinkingCells()
         {
             foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                var cell = adjancentRectangle.Cell;
-                adjancentRectangle.ChangeContent(new DisabledCell(_succeedableComponent as IParent, cell));
+                if (IsMutable(adjancentRectangle))
+                {
+                    var cell = adjancentRectangle.Cell;
+                    adjancentRectangle.ChangeContent(new DisabledCell(_succeedableComponent as IParent, cell));
+                }
+                
             }
         }
 
@@ -46,8 +65,11 @@
         {
             foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                var cell = adjancentRectangle.Cell;
-                adjancentRectangle.ChangeContent(new BlinkingCell(_succeedableComponent as IParent, cell));
+                if (IsMutable(adjancentRectangle))
+                {
+                    var cell = adjancentRectangle.Cell;
+                    adjancentRectangle.ChangeContent(new BlinkingCell(_succeedableComponent as IParent, cell));
+                }
             }
         }
 
@@ -76,7 +98,7 @@
                 MutateAdjacentRectangle(grid, (row, column - 1)); //Right rectangle
             }
 
-            ShowBlinkingCells();
+            ((IParent)_succeedableComponent).ShowBlinkingChildren(_succeedableComponent.Type);
         }
     }
 }
