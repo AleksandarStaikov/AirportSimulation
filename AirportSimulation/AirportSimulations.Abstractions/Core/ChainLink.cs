@@ -24,7 +24,7 @@
 
         public abstract string Destination { get; }
 
-        public NodeState Status
+        public virtual NodeState Status
         {
             get => _status;
             set
@@ -34,7 +34,7 @@
             }
         }
 
-        public Action OnStatusChangedToFree { get; set; }
+        public virtual Action OnStatusChangedToFree { get; set; }
 
         public abstract void PassBaggage(Baggage baggage);
     }

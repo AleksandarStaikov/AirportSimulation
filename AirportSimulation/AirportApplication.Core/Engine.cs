@@ -3,27 +3,35 @@
     using System.Collections.Generic;
     using System.Linq;
     using Abstractions.Contracts;
+    using Abstractions.Core;
     using Common.Models;
     using Contracts;
     using Contracts.Services;
     using LinkNodes;
+    using Services;
 
     public class Engine : IEngine
     {
         private readonly IChainLinkFactory _chainLinkFactory;
         private readonly ITimerService _timerService;
+        private readonly INodeConnectorService _nodeConnectorService;
 
-        public Engine(IChainLinkFactory chainLinkFactory, ITimerService timerService)
+        private List<IPauseResume> _pauseResumeNodes;
+
+        public Engine(IChainLinkFactory chainLinkFactory,
+            ITimerService timerService,
+            INodeConnectorService nodeConnectorService)
         {
             _chainLinkFactory = chainLinkFactory;
             _timerService = timerService;
+            _nodeConnectorService = nodeConnectorService;
         }
 
         public void Run(SimulationSettings settings)
         {
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
-
+            
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
             var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
             var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
@@ -86,7 +94,6 @@
             checkInToPsc.Start();
 
             PscToMpa.Start();
-            mpa.Start();
             MpaToAA.Start();
             mpaToBsu.Start();
             bsuToMpa.Start();
@@ -126,7 +133,6 @@
             checkInToPsc.Start();
             mpaToAA.Start();
             pscToMpa.Start();
-			mpa.Start();
 
             _timerService.RunNewTimer();
             checkInDisp.Start();
@@ -134,18 +140,32 @@
 
         public void ActualRun(SimulationSettings settings)
         {
-            //TODO : Validate if needed
-            //_chainLinkFactory.SetSettings(settings);
-            //_timerService.SetSettings(settings);
+            _chainLinkFactory.SetSettings(settings);
+            _timerService.SetSettings(settings);
 
-            //TODO : CheckInDispatcher, AaDispatcher, BagCollector 
-            var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings));
+            var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings)).ToList();
+            nodes.Add(_chainLinkFactory.CreateCheckInDispatcher());
+            nodes.Add(_chainLinkFactory.CreateAaDispatcher());
+            nodes.Add(_chainLinkFactory.CreateBagCollector());
 
-            //TODO : Use the connector service to chain the nodes
+            _nodeConnectorService.ConnectNodes(nodes, settings.Nodes);
 
-            //TODO : Extract the runnable nodes
+            _pauseResumeNodes = nodes.OfType<IPauseResume>().ToList();
 
-            //TODO : Run the runnable nodes
+            _timerService.RunNewTimer();
+            _pauseResumeNodes.ForEach(n => n.Start());
+        }
+
+        public void Pause()
+        {
+            _timerService.Stop();
+            _pauseResumeNodes.ForEach(n => n.Stop());
+        }
+
+        public void Resume()
+        {
+            _timerService.Start();
+            _pauseResumeNodes.ForEach(n => n.Start());
         }
     }
 }

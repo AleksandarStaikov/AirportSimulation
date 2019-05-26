@@ -18,6 +18,7 @@
         ManyToOneConveyor CreateManyToOneConveyor(int length);
         ConveyorConnector CreateConveyorConnector();
         CheckInDispatcher CreateCheckInDispatcher();
+        AADispatcher CreateAaDispatcher();
         BagCollector CreateBagCollector();
 
         void SetSettings(SimulationSettings settings);

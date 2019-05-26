@@ -11,7 +11,7 @@
     using System.Timers;
     using Common;
 
-    public class CheckInDispatcher : ChainLink
+    public class CheckInDispatcher : ChainLink, IPauseResume
     {
         public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings, string nodeId);
 
@@ -77,7 +77,7 @@
 
         public void DispatchBaggage(Flight flight)
         {
-            flight.DispatchedBaggagesCount++;
+            flight.DispatchedBaggageCount++;
             var baggage = new Baggage()
             {
                 Flight = flight,
@@ -173,7 +173,7 @@
                 var timer = new Timer { Interval = CalculateDispatchRate(flight) };
                 timer.Elapsed += (sender, e) =>
                 {
-                    if (flight.BaggageCount > flight.DispatchedBaggagesCount)
+                    if (flight.BaggageCount > flight.DispatchedBaggageCount)
                     {
                         DispatchBaggage(flight);
                     }

@@ -3,15 +3,13 @@
     using Common.Models;
     using System;
 
-    public interface ITimerService
+    public interface ITimerService : IPauseResume
     {
         Action<Flight> FlightLandedEvent { get; set; }
         Action<Flight> PrepareFlightEvent { get; set; }
 
         float SimulationMultiplier { get; }
         void RunNewTimer();
-        void StopTimer();
-        void ResumeTimer();
         TimeSpan GetTimeSinceSimulationStart();
         long GetTicksSinceSimulationStart();
         TimeSpan ConvertMillisecondsToTimeSpan(int milliseconds);
