@@ -223,8 +223,9 @@
     <DataTemplate x:Key="PageContent">
         <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="-90"/>     <!-- no idea how this row works -->
                 <RowDefinition Height="*"/>
+                
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -412,6 +413,76 @@
                         </chart:PieChart>
                     </StackPanel>
 
+                    <StackPanel MinWidth="350">
+                        <chart:ClusteredColumnChart                                
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Second Column Chart"
+                                ChartSubTitle="The borko baby"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        Caption="Total bags"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=_gr2Col1}" />
+                                <chart:ChartSeries
+                                        Caption="BSU bags"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=_gr2Col2}" />
+
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
+
+                    </StackPanel>
+
+                    <StackPanel MinWidth="350">
+                        <chart:ClusteredColumnChart                                
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Third Column Chart"
+                                ChartSubTitle="The borko baby"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        Caption="BSU stay times"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=_gr3Col1}" />
+                               
+
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
+
+                    </StackPanel>
+
+                    <StackPanel MinWidth="350">
+                        <chart:ClusteredColumnChart                                
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Longest and Shortest times"
+                                ChartSubTitle="Borko baby"                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                            <chart:ClusteredColumnChart.Series>
+                                <chart:ChartSeries
+                                        Caption="Longest"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=_gr4Col1}" />
+                                <chart:ChartSeries
+                                        Caption="Shortest"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=_gr4Col2}" />
+
+                            </chart:ClusteredColumnChart.Series>
+                        </chart:ClusteredColumnChart>
+
+                    </StackPanel>
                     <!--<StackPanel MinWidth="350">
                         <TextBlock Text="Bar Chart" Style="{StaticResource SectionHeaderTextStyle}" />
                         <Grid>
