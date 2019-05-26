@@ -2,10 +2,8 @@
 {
     using Common.Models;
 
-    public interface IProcessingNode
+    public interface IProcessingNode : IMultiSuccessor
     {
         void Process(Baggage baggage);
-
-        void AddSuccessor(IChainLink successor);
     }
 }

@@ -3,7 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Remoting.Channels;
     using Abstractions.Core.Contracts;
+    using Common;
     using Common.Models;
     using Contracts.Services;
     using LinkNodes;
@@ -62,6 +65,33 @@
             _gatesCount = 1;
         }
 
+        public IChainLink CreateChainLink(NodeCreationData nodeData, SimulationSettings settings)
+        {
+            switch (nodeData.Type)
+            {
+                case BuildingComponentType.CheckIn:
+                    return _checkInDeskFactory.Invoke(nodeData.Id);
+                case BuildingComponentType.PSC:
+                    return _pscFactory.Invoke(settings.Pscs, nodeData.Id);
+                case BuildingComponentType.ASC:
+                    return _ascFactory.Invoke(settings.Ascs, nodeData.Id);
+                case BuildingComponentType.MPA:
+                    return _mpaFactory.Invoke(nodeData.Id);
+                case BuildingComponentType.BSU:
+                    return _bsuFactory.Invoke(nodeData.Id);
+                case BuildingComponentType.AA:
+                    return _aaFactory.Invoke(_gatesCount++, nodeData.Id);
+                case BuildingComponentType.PA:
+                    return _puaFactory.Invoke(_puasCount++, nodeData.Id);
+                case BuildingComponentType.Conveyor:
+                    return _oneToOneConveyorFactory.Invoke(nodeData.Length ?? 0, nodeData.Id);
+                case BuildingComponentType.ManyToOneConveyor:
+                    return _manyToOneConveyorFactory.Invoke(nodeData.Length ?? 0, nodeData.Id);
+                default:
+                    throw new ArgumentException("Unsupported node type");
+            }
+        }
+
         public CheckInDesk CreateCheckInDesk()
         {
             ValidateSettings();
@@ -73,8 +103,7 @@
         public Psc CreatePsc()
         {
             ValidateSettings();
-            //TODO: Deal with indexes
-            var psc = _pscFactory(_simulationSettings.Pscs[0], Guid.NewGuid().ToString());
+            var psc = _pscFactory(_simulationSettings.Pscs, Guid.NewGuid().ToString());
             Nodes.Add(psc);
             return psc;
         }
@@ -82,8 +111,7 @@
         public Asc CreateAsc()
         {
             ValidateSettings();
-            //TODO: Deal with indexes
-            var asc = _ascFactory(_simulationSettings.Ascs[0], Guid.NewGuid().ToString());
+            var asc = _ascFactory(_simulationSettings.Ascs, Guid.NewGuid().ToString());
             Nodes.Add(asc);
             return asc;
         }

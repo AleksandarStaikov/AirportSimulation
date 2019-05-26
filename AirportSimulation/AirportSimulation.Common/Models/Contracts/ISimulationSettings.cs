@@ -4,15 +4,11 @@
 
     public interface ISimulationSettings : IFlightManagement
     {
-        List<CheckInSettings> CheckIns { get; set; }
-        int CheckInStationsCount { get; }
-        List<PscSettings> Pscs { get; set; }
-        int PscCount { get; }
-        List<AscSettings> Ascs { get; set; }
-        int AscCount { get; }
-        BsuSettings Bsu { get; set; }
-        List<AaSettings> Aas { get; set; }
-        int AaCount { get; }
+        IEnumerable<NodeCreationData> Nodes { get; set; }
+
+        PscSettings Pscs { get; set; }
+        AscSettings Ascs { get; set; }
+
         List<ConveyorSettings> ConveyorSettingsMpaToAa { get; set; }
         List<ConveyorSettings> ConveyorSettingsMpaToPickUp { get; set; }
         List<ConveyorSettings> ConveyorSettingsCheckInToPsc { get; set; }
@@ -43,7 +39,6 @@
     public interface IAscSettings
     {
         int ProcessingRateInMilliseconds { get; set; }
-        int AscStaffCount { get; set; }
         int AscInvalidationPercentage { get; set; }
     }
 }
