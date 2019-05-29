@@ -6,8 +6,9 @@
 	using System.Linq;
 	using System.Windows.Media.Imaging;
 	using Common.Models;
+    using AirportSimulation.App.Models;
 
-	internal static class BuildingComponentsHelper
+    internal static class BuildingComponentsHelper
 	{
         private static readonly Dictionary<BuildingComponentType, List<BuildingComponentType>> _allowedSingleCellComponentsPerComponent
             = new Dictionary<BuildingComponentType, List<BuildingComponentType>>()
@@ -112,7 +113,9 @@
 		private static (BuildingComponentType, BitmapImage) GetNextBuildingComponentTypeAndImage(int step)
 			=> (_buildingComponentsSteps[step], GetBuildingComponentImage(_buildingComponentsSteps[step]));
 
-		public static BitmapImage GetComponentImage(string fileLocation)
+		private static BitmapImage GetComponentImage(string fileLocation)
 			=> new BitmapImage(new Uri($"../../{fileLocation}", UriKind.Relative));
+
+        public static readonly List<GenericBuildingComponent> BuiltList = new List<GenericBuildingComponent>();
 	}
 }

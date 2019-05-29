@@ -9,6 +9,7 @@
     using AirportSimulation.App.Infrastructure;
     using AirportSimulation.App.Helpers;
     using System.Windows.Controls;
+    using AirportSimulation.Common;
 
     class Succeedable : ISucceedable //TODO: Delete Succeedable
     {

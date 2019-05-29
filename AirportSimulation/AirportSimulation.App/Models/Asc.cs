@@ -9,30 +9,49 @@ namespace AirportSimulation.App.Models
 {
     internal class Asc : SingleCellBuildingComponent, IParent
     {
-        private List<BuildingComponentType> _allowedComponents
-            = new List<BuildingComponentType>()
-            {
-                BuildingComponentType.ASC, BuildingComponentType.MPA
-            };
-
         public Asc(string nodeId, (int, int) cell) : base(BuildingComponentType.ASC, nodeId, cell)
         {
+            AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
+            {
+                BuildingComponentType.MPA
+            };
+
             successorEnabler = new Succeedable(this);
+            NextNodes = new List<GenericBuildingComponent>(1);
         }
 
         public void ChildClicked(GenericBuildingComponent successor)
         {
-            throw new NotImplementedException();
+            if (successor.GetType().BaseType == typeof(MultipleCellComponent))
+            {
+                var temp = successor as MultipleCellComponent;
+                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+                if (temp is ManyToOneCell)
+                {
+                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                }
+            }
+            NextNodes.Add(successor);
+
+            ShowBlinkingChildren(successor.Type);
         }
 
         public void PopulatePossibleNeighbours(MutantRectangle container)
         {
-            throw new NotImplementedException();
+            successorEnabler.PopulateAdjacentRectangles(container);
         }
 
         public void ShowBlinkingChildren(BuildingComponentType type)
         {
-            throw new NotImplementedException();
+            if ((type == BuildingComponentType.Conveyor || type == BuildingComponentType.ManyToOneConveyor)
+                && NextNodes.Capacity != NextNodes.Count)
+            {
+                successorEnabler.ShowBlinkingCells();
+            }
+            else
+            {
+                successorEnabler.HideBlinkingCells();
+            }
         }
     }
 }

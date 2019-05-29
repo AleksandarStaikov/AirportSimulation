@@ -112,6 +112,7 @@
     <Compile Include="Models\IClickable.cs" />
     <Compile Include="Models\ISucceedable.cs" />
     <Compile Include="Models\ManyToOneCell.cs" />
+    <Compile Include="Models\Mpa.cs" />
     <Compile Include="Models\MultipleCellComponent.cs" />
     <Compile Include="Models\MutantRectangle.cs" />
     <Compile Include="Models\OneToOneCell.cs" />

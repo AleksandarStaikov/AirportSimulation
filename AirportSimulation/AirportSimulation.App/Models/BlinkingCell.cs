@@ -38,7 +38,10 @@
 
             ParentComponent.ChildClicked(content);
 
-            ((IParent)content).PopulatePossibleNeighbours(sender);
+            if(content is IParent)
+            {
+                ((IParent)content).PopulatePossibleNeighbours(sender);
+            }
 
             sender.ChangeContent(content);
         }

@@ -9,12 +9,11 @@ namespace AirportSimulation.App.Models
 {
     internal abstract class MultipleCellComponent : GenericBuildingComponent, IParent
     {
-        protected ISucceedable _succeedable;
         public int Length { get; protected set; }
 
         public MultipleCellComponent(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
         {
-            _succeedable = new Succeedable(this);
+            successorEnabler = new Succeedable(this);
         }
 
         public abstract void ShowBlinkingChildren(BuildingComponentType type); //TODO: Refactor succeedable components. Issues - code repetition
@@ -24,10 +23,11 @@ namespace AirportSimulation.App.Models
             if(successor is MultipleCellComponent)
             {
                 ((MultipleCellComponent)successor).ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                NextNodes.Add(successor);
+                
                 Length++;
             }
 
+            NextNodes.Add(successor);
             ShowBlinkingChildren(successor.Type);
         }
 
@@ -38,7 +38,7 @@ namespace AirportSimulation.App.Models
 
         public void PopulatePossibleNeighbours(MutantRectangle container)
         {
-            _succeedable.PopulateAdjacentRectangles(container);
+            successorEnabler.PopulateAdjacentRectangles(container);
         }
     }
 }

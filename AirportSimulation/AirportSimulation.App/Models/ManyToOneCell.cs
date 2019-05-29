@@ -19,17 +19,17 @@ namespace AirportSimulation.App.Models
             if (((AllowedNonConveyorSuccessors.Contains(type) && NextNodes.Count != 0) != 
                 (NextNodes.Count == 0 && (AllowedNonConveyorSuccessors.Contains(type) || type == this.Type)))) //TODO: Simplify expression //TODO: Many SingleCell to one MultiCell
             {
-                _succeedable.ShowBlinkingCells();
+                successorEnabler.ShowBlinkingCells();
             }
             else
             {
-                _succeedable.HideBlinkingCells();
+                successorEnabler.HideBlinkingCells();
             }
         }
 
         public override void ChildClicked(GenericBuildingComponent successor)
         {
-            if (successor is SingleCellBuildingComponent)
+            if (successor is SingleCellBuildingComponent && NextNodes.Count != 0)
             {
                 ((IParent)successor).ChildClicked(this);
             }

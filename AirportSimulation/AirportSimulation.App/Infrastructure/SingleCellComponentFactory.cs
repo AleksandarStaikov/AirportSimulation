@@ -27,6 +27,22 @@
             {
                 return CreatePsc(container.Cell);
             }
+            else if(type == BuildingComponentType.ASC)
+            {
+                return CreateAsc(container.Cell);
+            }
+            else if(type == BuildingComponentType.MPA)
+            {
+                return Mpa.GetInstance("ads", container.Cell);
+            }
+            else if(type == BuildingComponentType.AA)
+            {
+                return CreateAa(container.Cell);
+            }
+            else if(type == BuildingComponentType.PA)
+            {
+                return CreatePa(container.Cell);
+            }
 
             return null;
         }
@@ -37,9 +53,7 @@
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn))
             };
-
-            temp.PopulatePossibleNeighbours(container);
-
+            temp.PopulatePossibleNeighbours(container); //TODO: Move to EnabledCell
             return temp;
         } 
 
@@ -48,6 +62,30 @@
             return new Psc("asda", cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.PSC))
+            };
+        }
+
+        private Asc CreateAsc((int, int) cell)
+        {
+            return new Asc("asda", cell)
+            {
+                Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.ASC))
+            };
+        }
+
+        private Aa CreateAa((int, int) cell)
+        {
+            return new Aa("asda", cell)
+            {
+                Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.AA))
+            };
+        }
+
+        private Pa CreatePa((int, int) cell)
+        {
+            return new Pa("asd", cell)
+            {
+                Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.PA))
             };
         }
     }

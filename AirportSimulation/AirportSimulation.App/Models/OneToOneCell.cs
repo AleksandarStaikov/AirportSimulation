@@ -17,11 +17,11 @@ namespace AirportSimulation.App.Models
         {
             if ((AllowedNonConveyorSuccessors.Contains(type) || type == this.Type) && NextNodes.Count == 0) 
             {
-                _succeedable.ShowBlinkingCells();
+                successorEnabler.ShowBlinkingCells();
             }
             else
             {
-                _succeedable.HideBlinkingCells();
+                successorEnabler.HideBlinkingCells();
             }
         }
     }
