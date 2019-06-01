@@ -221,25 +221,25 @@
     </Style>
 
     <DataTemplate x:Key="PageContent">
+        <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="20 20 20 20">
         <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="-90"/>     <!-- no idea how this row works -->
+                <RowDefinition Height="*"/>   
                 <RowDefinition Height="*"/>
-                
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-               
-                <Border Grid.Column="1">
-                    <TextBlock VerticalAlignment="Bottom" x:Name="pageTitle" Text="Metro Charts" Style="{StaticResource PageHeaderTextStyle}" Grid.Column="1"/>
-                </Border>
-            </Grid>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" Padding="120 20 20 20">
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+
+            </Grid.ColumnDefinitions>
+           
+
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel Width="350" Margin="0 0 10 0">
+                    <StackPanel  Grid.Column="0" Grid.Row="1" Width="350" Margin="0 0 10 0">
                         <TextBlock Text="Test Data" Style="{StaticResource SectionHeaderTextStyle}" />
                         <StackPanel  Background="White">
                             <TextBlock Style="{StaticResource SeriesHeader}" TextWrapping="Wrap" Text="Edit the values of the following series to change the charts. Currently only positive values are supported." Margin="10" />
@@ -355,7 +355,7 @@
                     </StackPanel>-->
 
 
-                    <StackPanel MinWidth="350">
+                    <StackPanel  Grid.Column="1" Grid.Row="1" MinWidth="350">
                         <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="1"
@@ -374,12 +374,12 @@
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr1Col2}" />
-                            
+
                             </chart:ClusteredColumnChart.Series>
                         </chart:ClusteredColumnChart>
-                        
+
                     </StackPanel>
-                    <StackPanel MinWidth="350">
+                    <StackPanel  Grid.Column="2" Grid.Row="1" MinWidth="350">
                         <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Primary Failed &amp; Passed Bags"
@@ -396,7 +396,7 @@
                         </chart:PieChart>
                     </StackPanel>
 
-                    <StackPanel MinWidth="350">
+                    <StackPanel Grid.Column="3" Grid.Row="1" MinWidth="350">
                         <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Secondary Failed &amp; Passed Bags"
@@ -413,7 +413,7 @@
                         </chart:PieChart>
                     </StackPanel>
 
-                    <StackPanel MinWidth="350">
+                    <StackPanel Grid.Column="1" Grid.Row="2" MinWidth="350">
                         <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
@@ -438,7 +438,7 @@
 
                     </StackPanel>
 
-                    <StackPanel MinWidth="350">
+                    <StackPanel Grid.Column="2" Grid.Row="2" MinWidth="350">
                         <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
@@ -452,14 +452,14 @@
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr3Col1}" />
-                               
+
 
                             </chart:ClusteredColumnChart.Series>
                         </chart:ClusteredColumnChart>
 
                     </StackPanel>
 
-                    <StackPanel MinWidth="350">
+                    <StackPanel  Grid.Column="3" Grid.Row="2" MinWidth="350">
                         <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="1"
@@ -552,8 +552,10 @@
                         </Grid>
 
                     </StackPanel>-->
+
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
+            </Grid>
+        </ScrollViewer>
+       
     </DataTemplate>
 </ResourceDictionary>
