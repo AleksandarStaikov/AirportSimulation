@@ -221,41 +221,46 @@
     </Style>
 
     <DataTemplate x:Key="PageContent">
-        <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="20 20 20 20">
-        <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>   
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            </Grid.ColumnDefinitions>
-           
-
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel  Grid.Column="0" Grid.Row="1" Width="350" Margin="0 0 10 0">
-                        <TextBlock Text="Test Data" Style="{StaticResource SectionHeaderTextStyle}" />
-                        <StackPanel  Background="White">
-                            <TextBlock Style="{StaticResource SeriesHeader}" TextWrapping="Wrap" Text="Edit the values of the following series to change the charts. Currently only positive values are supported." Margin="10" />
-                            <ItemsControl Margin="10"
-                            x:Name="parentList"
-                            VerticalAlignment="Stretch"
-                            HorizontalAlignment="Stretch"
-                            VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"
-                            ItemsSource="{Binding Path=Series}"
-                            Tag="{Binding Path=SelectedItem, Mode=TwoWay}" >
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Width="330">
-                                            <TextBlock Text="{Binding Path=DisplayName}" Style="{StaticResource SeriesHeader}" />
-                                            <ListBox 
+                <StackPanel 
+                    Width="350" 
+                    Margin="0 0 10 0" 
+                    Background="White" 
+                    Grid.RowSpan="2" 
+                    Grid.Column="0">
+                    <TextBlock 
+                        Style="{StaticResource SeriesHeader}" 
+                        TextWrapping="Wrap" 
+                        Text="Edit the values of the following series to change the charts. Currently only positive values are supported." 
+                        Margin="10" 
+                    />
+                    <ItemsControl 
+                        Margin="10"
+                        x:Name="parentList"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        ItemsSource="{Binding Path=Series}"
+                        Tag="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="330">
+                                    <TextBlock Text="{Binding Path=DisplayName}" Style="{StaticResource SeriesHeader}" />
+                                    <ListBox 
                                             VerticalAlignment="Stretch"
                                             HorizontalAlignment="Stretch"
                                             VerticalContentAlignment="Stretch"
@@ -263,299 +268,144 @@
                                             ItemContainerStyle="{StaticResource ListBoxItemStyle}"
                                             ItemsSource="{Binding Path=Items}" 
                                             SelectedItem="{Binding Path=Tag, Mode=TwoWay, ElementName=parentList}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="auto" />
-                                                                <ColumnDefinition Width="*" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0" Text="{Binding Path=Category}" />
-                                                            <TextBox Width="50" Background="White" Margin="0 0 0 0" BorderBrush="DarkGray" Grid.Column="1" HorizontalAlignment="Right" Text="{Binding Path=Number, Mode=TwoWay}" />
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!--<StackPanel MinWidth="350">
-                        <TextBlock Text="Column Chart" Style="{StaticResource SectionHeaderTextStyle}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-
-                            <chart:ClusteredColumnChart                                
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Column Chart"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                Palette="{StaticResource CustomPalette}"
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                SeriesSource="{Binding Series}">
-                                <chart:ClusteredColumnChart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:ClusteredColumnChart.SeriesTemplate>
-                            </chart:ClusteredColumnChart>
-                            <chart:StackedColumnChart
-                                Grid.Column="1"
-                                Grid.Row="0"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Stacked Column Chart"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                SeriesSource="{Binding Series}">
-                                <chart:StackedColumnChart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:StackedColumnChart.SeriesTemplate>
-                            </chart:StackedColumnChart>
-                            <chart:StackedColumn100Chart
-                                Grid.Column="0"
-                                Grid.Row="1"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="100% Stacked Column"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                SeriesSource="{Binding Series}">
-                                <chart:StackedColumn100Chart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:StackedColumn100Chart.SeriesTemplate>
-                            </chart:StackedColumn100Chart>
-                     
-
-                    </StackPanel>-->
-
-
-                    <StackPanel  Grid.Column="1" Grid.Row="1" MinWidth="350">
-                        <chart:ClusteredColumnChart                                
-                                Grid.Column="1"
-                                Grid.Row="1"
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Path=Category}" />
+                                                    <TextBox 
+                                                            Width="50" 
+                                                            Background="White" 
+                                                            Margin="0 0 0 0" 
+                                                            BorderBrush="DarkGray" 
+                                                            Grid.Column="1" 
+                                                            HorizontalAlignment="Right" 
+                                                            Text="{Binding Path=Number, Mode=TwoWay}"
+                                                        />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="0">
+                    <chart:ClusteredColumnChart                                
                                 Style="{StaticResource ChartStyle}"
                                 ChartTitle="Dispatch &amp; Collect"
                                 ChartSubTitle="The time in which the first &amp; last bags were dispatched/collected"                  
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
                                         SeriesTitle="First"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr1Col1}" />
-                                <chart:ChartSeries
+                            <chart:ChartSeries
                                         SeriesTitle="Last"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr1Col2}" />
-
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
-
-                    </StackPanel>
-                    <StackPanel  Grid.Column="2" Grid.Row="1" MinWidth="350">
-                        <chart:PieChart                     
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
+                </StackPanel>
+                <StackPanel  Grid.Column="2" Grid.Row="0">
+                    <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Primary Failed &amp; Passed Bags"
                             ChartSubTitle="Primary Security Check Percentage of Passed &amp; Failed Bags"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
-                            <chart:PieChart.Series>
-                                <chart:ChartSeries
+                        <chart:PieChart.Series>
+                            <chart:ChartSeries
                                     SeriesTitle="FailedPassed"
                                     DisplayMember="Category"
                                     ValueMember="Number"
                                     ItemsSource="{Binding Path=_gr2Par1}">
-                                </chart:ChartSeries>
-                            </chart:PieChart.Series>
-                        </chart:PieChart>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="3" Grid.Row="1" MinWidth="350">
-                        <chart:PieChart                     
+                            </chart:ChartSeries>
+                        </chart:PieChart.Series>
+                    </chart:PieChart>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="0">
+                    <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Secondary Failed &amp; Passed Bags"
                             ChartSubTitle="Secondary Security Check Percentage of Passed &amp; Failed Bags"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
-                            <chart:PieChart.Series>
-                                <chart:ChartSeries
+                        <chart:PieChart.Series>
+                            <chart:ChartSeries
                                     SeriesTitle="Errors"
                                     DisplayMember="Category"
                                     ValueMember="Number"
                                     ItemsSource="{Binding Path=_gr3Par1}">
-                                </chart:ChartSeries>
-                            </chart:PieChart.Series>
-                        </chart:PieChart>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Grid.Row="2" MinWidth="350">
-                        <chart:ClusteredColumnChart                                
+                            </chart:ChartSeries>
+                        </chart:PieChart.Series>
+                    </chart:PieChart>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Style="{StaticResource ChartStyle}"
                                 ChartTitle="Second Column Chart"
                                 ChartSubTitle="The borko baby"                  
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
                                         SeriesTitle="Total bags"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr2Col1}" />
-                                <chart:ChartSeries
+                            <chart:ChartSeries
                                         SeriesTitle="BSU bags"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr2Col2}" />
-
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
-
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2" Grid.Row="2" MinWidth="350">
-                        <chart:ClusteredColumnChart                                
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="1">
+                    <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Style="{StaticResource ChartStyle}"
                                 ChartTitle="Third Column Chart"
                                 ChartSubTitle="The borko baby"                  
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
-                                        SeriesTitle="BSU stay times"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr3Col1}" />
-
-
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
-
-                    </StackPanel>
-
-                    <StackPanel  Grid.Column="3" Grid.Row="2" MinWidth="350">
-                        <chart:ClusteredColumnChart                                
-                                Grid.Column="1"
-                                Grid.Row="1"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Longest and Shortest times"
-                                ChartSubTitle="Borko baby"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                            <chart:ClusteredColumnChart.Series>
-                                <chart:ChartSeries
-                                        SeriesTitle="Longest"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr4Col1}" />
-                                <chart:ChartSeries
-                                        SeriesTitle="Shortest"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr4Col2}" />
-
-                            </chart:ClusteredColumnChart.Series>
-                        </chart:ClusteredColumnChart>
-
-                    </StackPanel>
-                    <!--<StackPanel MinWidth="350">
-                        <TextBlock Text="Bar Chart" Style="{StaticResource SectionHeaderTextStyle}" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-
-                            <chart:ClusteredBarChart                                
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Bar Chart"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"                                
-                                SeriesSource="{Binding Series}">
-                                <chart:ClusteredBarChart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:ClusteredBarChart.SeriesTemplate>
-                            </chart:ClusteredBarChart>
-                            <chart:StackedBarChart
-                                Grid.Column="1"
-                                Grid.Row="0"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Stacked Bar Chart"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                SeriesSource="{Binding Series}">
-                                <chart:StackedBarChart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:StackedBarChart.SeriesTemplate>
-                            </chart:StackedBarChart>
-                            <chart:StackedBar100Chart
-                                Grid.Column="0"
-                                Grid.Row="1"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="100% Stacked Bar"
-                                ChartSubTitle="Which types of errors and warnings appears most"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
-                                SeriesSource="{Binding Series}">
-                                <chart:StackedBar100Chart.SeriesTemplate>
-                                    <DataTemplate>
-                                        <chart:ChartSeries
-			                                SeriesTitle="{Binding Path=DisplayName}"
-                                            DisplayMember="Category"
-                                            ValueMember="Number"
-                                            ItemsSource="{Binding Path=Items}" />
-                                    </DataTemplate>
-                                </chart:StackedBar100Chart.SeriesTemplate>
-                            </chart:StackedBar100Chart>
-                        </Grid>
-
-                    </StackPanel>-->
-
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
+                                    SeriesTitle="BSU stay times"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr3Col1}" />
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
+                </StackPanel>
+                <StackPanel  Grid.Column="3" Grid.Row="1">
+                    <chart:ClusteredColumnChart
+                            Style="{StaticResource ChartStyle}"
+                            ChartTitle="Longest and Shortest times"
+                            ChartSubTitle="Borko baby"                  
+                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
+                                    SeriesTitle="Longest"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr4Col1}" />
+                            <chart:ChartSeries
+                                    SeriesTitle="Shortest"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr4Col2}" />
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
-       
     </DataTemplate>
 </ResourceDictionary>

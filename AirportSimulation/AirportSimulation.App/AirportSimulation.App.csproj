@@ -95,6 +95,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BlinkingCellsPainter.cs" />
+    <Compile Include="Helpers\StatisticsModel.cs" />
+    <Compile Include="Helpers\StatisticsViewModel.cs" />
     <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
@@ -124,6 +126,9 @@
     <Compile Include="Models\Succeedable.cs" />
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FlightsView.xaml.cs">
+      <DependentUpon>FlightsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SimulationView.xaml.cs">
       <DependentUpon>SimulationView.xaml</DependentUpon>
@@ -157,6 +162,10 @@
     <Page Include="Views\AdminView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FlightsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SimulationView.xaml">
       <SubType>Designer</SubType>
