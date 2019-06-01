@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.App.Resources
+﻿namespace AirportSimulation.App.Models
 {
     using System.Windows;
 

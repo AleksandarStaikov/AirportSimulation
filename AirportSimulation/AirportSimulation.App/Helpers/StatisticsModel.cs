@@ -22,6 +22,7 @@ namespace AirportSimulation.App.Helpers
     public class StatisticsModel : INotifyPropertyChanged
     {
           public string Category { get; set; }
+        public string DisplayName { get; set; }
 
         public float _number = 0;
         public float Number

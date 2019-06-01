@@ -3,16 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
              xmlns:avml ="clr-namespace:AirportSimulation.Core.ViewModels;assembly=AirportSimulation.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <avml:SimulationSettingsContainerViewModel />
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <localRes:EnumToBoolConverter x:Key="EBConverter" />
-    </UserControl.Resources>
     <Grid x:Name="GridAdministration" Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
