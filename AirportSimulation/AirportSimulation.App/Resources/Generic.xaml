@@ -221,7 +221,7 @@
     </Style>
 
     <DataTemplate x:Key="PageContent">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -229,6 +229,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -404,6 +405,23 @@
                                     ItemsSource="{Binding Path=_gr4Col2}" />
                         </chart:ClusteredColumnChart.Series>
                     </chart:ClusteredColumnChart>
+                </StackPanel>
+                
+                <StackPanel  Grid.Column="4" Grid.Row="0">
+                    <chart:PieChart                     
+                            Style="{StaticResource ChartStyle}"
+                            ChartTitle="ASC PCS Invalidation Percentage"
+                            ChartSubTitle="Invalidaitons"
+                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:PieChart.Series>
+                            <chart:ChartSeries
+                                    SeriesTitle="Invalidation %"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr4Par1}">
+                            </chart:ChartSeries>
+                        </chart:PieChart.Series>
+                    </chart:PieChart>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

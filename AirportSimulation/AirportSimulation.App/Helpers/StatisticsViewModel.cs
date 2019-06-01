@@ -54,8 +54,9 @@
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
 
-            //third pie chart - TO DO 
-            // _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number =}) -> can't convert
+            //third pie chart - TO DO throws null
+           // _gr4Par1.Add(new StatisticsModel() { Category = "ACS Invalidation Percentage", Number = (float)statisticsData.AscInvalidationPercentage });
+           // _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number = (float)statisticsData.PscInvalidationPercentage });
 
             //second column chart -> missing the flight per fligh variable commented out below
             _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags Late at AA", Number = statisticsData?.TotalBagsArrivedLateAtAa?.Count ?? 0 });
@@ -63,7 +64,12 @@
 
             _gr2Col2.Add(new StatisticsModel() { Category = "Total Bags At BSU", Number = statisticsData?.TotalBagsThatWentToBsu?.Count ?? 0 });
             _gr2Col2.Add(new StatisticsModel() { Category = "Delays per Flight", Number = statisticsData?.DelaysPerFlight?.Count ?? 0 });
-            //_gr2Col2.Add(new StatisticsModel() { Category = "Late for flight per flight", Number = statisticsData?.BagsLateForFlightPerFlight?.Count ?? 0 }); - dont know how to convert
+
+           // foreach (var flight in statisticsData.DelaysPerFlight)
+           // {
+          //      _gr2Col2.Add(new StatisticsModel() { Category = flight.Key.FlightNumber, Number = (float)flight.Value });
+          //  }
+
 
 
             // third column chart
