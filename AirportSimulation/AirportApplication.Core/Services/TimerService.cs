@@ -34,16 +34,19 @@
             _preparationFlightsWatcher = new Timer(CheckForFlightPreparations, _simulationSettings.OutgoingFlights, m, m);
         }
 
-        public void StopTimer()
+        public void Stop()
         {
             _watch.Stop();
             _landingFlightsWatcher.Dispose();
             _preparationFlightsWatcher.Dispose();
         }
 
-        public void ResumeTimer()
+        public void Start()
         {
             _watch.Start();
+            int m = (int)(1000 / SimulationMultiplier);
+            _landingFlightsWatcher = new Timer(CheckForIncomingFlights, _simulationSettings.IncomingFlights, m, m);
+            _preparationFlightsWatcher = new Timer(CheckForFlightPreparations, _simulationSettings.OutgoingFlights, m, m);
         }
 
         public TimeSpan GetTimeSinceSimulationStart()

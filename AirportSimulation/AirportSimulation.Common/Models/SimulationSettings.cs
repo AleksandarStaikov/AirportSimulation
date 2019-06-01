@@ -7,11 +7,9 @@
     {
         public SimulationSettings()
         {
-            CheckIns = new List<CheckInSettings>() { new CheckInSettings() };
-            Pscs = new List<PscSettings>() { new PscSettings() };
-            Ascs = new List<AscSettings>() { new AscSettings() };
-            Bsu = new BsuSettings();
-            Aas = new List<AaSettings>() { new AaSettings() };
+            Pscs =  new PscSettings();
+            Ascs = new AscSettings();
+
 
             ConveyorSettingsMpaToAa = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsMpaToPickUp = new List<ConveyorSettings>() { new ConveyorSettings() };
@@ -28,23 +26,14 @@
             } };
         }
 
+        public IEnumerable<NodeCreationData> Nodes { get; set; }
+
         #region NodesInfos
 
-        public List<CheckInSettings> CheckIns { get; set; }
-        public int CheckInStationsCount => CheckIns.Count;
+        public PscSettings Pscs { get; set; }
 
-        public List<PscSettings> Pscs { get; set; }
-        public int PscCount => Pscs.Count;
-
-        public List<AscSettings> Ascs { get; set; }
-        public int AscCount => Ascs.Count;
-
-        public BsuSettings Bsu { get; set; }
-
-        public List<AaSettings> Aas { get; set; }
-        public int AaCount => Aas.Count;
-
-
+        public AscSettings Ascs { get; set; }
+        
         public List<ConveyorSettings> ConveyorSettingsMpaToAa { get; set; }
 
         public List<ConveyorSettings> ConveyorSettingsMpaToPickUp { get; set; }
@@ -68,11 +57,6 @@
         public int Multiplier { get; set; } = 1;
     }
 
-    public class CheckInSettings
-    {
-        public int ProcessingRateInMilliseconds { get; set; } = 1000;
-    }
-
     public class PscSettings : IPscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
@@ -83,34 +67,12 @@
     public class AscSettings : IAscSettings
     {
         public int ProcessingRateInMilliseconds { get; set; } = 1000;
-
-        public int AscStaffCount { get; set; }
-
+        
         public int AscInvalidationPercentage { get; set; }
-    }
-
-    public class AaSettings
-    {
-        public int PickUpRate { get; set; }
-    }
-
-    public class BsuSettings
-    {
-        public int BsuCapacity { get; set; } = 100;
-
-        public int BsuRobotsCount { get; set; } = 2;
-
-        public int MinutesToFlightDispatchTime { get; set; } = 20;
     }
 
     public class ConveyorSettings
     {
         public int Length { get; set; } = 10;
-        
-        public int SpeedInMilliseconds { get; set; } = 1000;
-    }
-
-    public class PickupAreaSettings
-    {
     }
 }

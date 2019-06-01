@@ -51,12 +51,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IPauseResume.cs" />
     <Compile Include="Contracts\ITimerService.cs" />
     <Compile Include="Core\ChainLink.cs" />
     <Compile Include="Core\Contracts\IChainLink.cs" />
     <Compile Include="Core\Contracts\IConveyorConnector.cs" />
     <Compile Include="Core\Contracts\IManyToOneConveyor.cs" />
+    <Compile Include="Core\Contracts\IMultiSuccessor.cs" />
     <Compile Include="Core\Contracts\IProcessingNode.cs" />
+    <Compile Include="Core\Contracts\ISingleSuccessor.cs" />
     <Compile Include="Core\Contracts\ITransportingNode.cs" />
     <Compile Include="Core\ProcessingNode.cs" />
     <Compile Include="Core\TransportingNode.cs" />

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:local="clr-namespace:AirportSimulation.App"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
         mc:Ignorable="d">
@@ -36,7 +37,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <views:StatisticsView x:Name="StatisticsView"/>
+                    <views:Window1 x:Name="StatisticsView"/>
                 </Grid>
             </TabItem>
         </TabControl>

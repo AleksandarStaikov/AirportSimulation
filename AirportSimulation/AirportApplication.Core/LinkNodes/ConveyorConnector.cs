@@ -17,12 +17,11 @@
         {
         }
 
-        //TODO : Pardon the fuck, looks weird
-        public NodeState Status => _nextNode.Status(this);
+        public override NodeState Status => _nextNode.Status(this);
 
         public override string Destination => _nextNode.Destination;
 
-        public Action OnStatusChangedToFree { get; set; }
+        public override Action OnStatusChangedToFree { get; set; }
 
         public override void PassBaggage(Baggage baggage)
         {
