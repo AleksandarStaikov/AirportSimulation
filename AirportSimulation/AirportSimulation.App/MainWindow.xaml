@@ -6,7 +6,6 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:local="clr-namespace:AirportSimulation.App"
-        xmlns:localRes="clr-namespace:AirportSimulation.App.Resources"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
         mc:Ignorable="d">
     <Grid>

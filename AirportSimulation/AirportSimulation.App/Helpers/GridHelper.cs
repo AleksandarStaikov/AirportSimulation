@@ -1,5 +1,7 @@
 ﻿namespace AirportSimulation.App.Helpers
 {
+    using AirportSimulation.Common.Models;
+    using AirportSimulation.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -7,7 +9,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
 
-	public class GridHelper
+    public static class GridHelper
     {
         internal struct GridDefinitionInformation
         {
@@ -15,16 +17,65 @@
             public string SharedSizeGroup;
         }
 
-		public static bool IsCellDisabled(List<(int, int)> gridDisabledCells, (int, int) cell) =>
-			CellCondition(gridDisabledCells, cell);
+        public static int CalculateIndexFromCoordinates((int row, int col) cell)
+        {
+            return cell.row * (SimulationGridOptions.GRID_MAX_COLUMNS) + cell.col;
+        }
 
-		public static bool IsCellAlreadyUsed(List<(int, int)> usedCells, (int, int) cell) =>
-			CellCondition(usedCells, cell);
+        public static bool IsGridCellUsedOrDisabled(this Grid grid, (int x, int y) cell)
+            => grid.IsGridCellUsed(cell) || grid.IsGridCellDisabled(cell);
 
-		private static bool CellCondition<T>(ICollection<T> list, T obj)
-		{
-			return list.Any() && list.Contains(obj);
-		}
+        public static bool IsGridCellUsed(this Grid grid, (int x, int y) cell)
+            => grid.GetGridCellOnCondition(cell, x => x.Uid != Constants.BLINKING_RECTANGLE_UID) != null;
+
+        public static bool CanPlaceBlinkingRectangle(this Grid grid, (int x, int y) cell)
+            => grid.GetGridCellOnCondition(cell, x => x.Uid == Constants.COMPONENT_RECTANGLE_UID) == null;
+
+        public static bool IsGridCellDisabled(this Grid grid, (int x, int y) cell)
+            => grid.GetGridCellOnCondition(cell, x => x.Uid == Constants.DISABLED_RECTANGLE_UID) != null;
+
+        public static bool CanDisable(this Grid grid, (int x, int y) cell)
+            => grid.GetGridCellOnCondition(cell, 
+                    x => x.Uid == Constants.COMPONENT_RECTANGLE_UID || 
+                        x.Uid == Constants.BLINKING_RECTANGLE_UID) == null;   
+
+        public static void RemoveDisabledGridCellsIfPossible(this Grid grid)
+        {
+            var uIElements = grid.GetGridUIElements()
+                .Where(x => x.Uid != Constants.DISABLED_RECTANGLE_UID)
+                .ToList();
+
+            foreach (var element in uIElements)
+            {
+                var x = Grid.GetRow(element);
+                var y = Grid.GetColumn(element);
+
+                if (IsGridCellDisabled(grid, (x, y)))
+                {
+                    grid.Children.Remove(uIElements.GetUIElementInCell((x, y)));
+                }
+            }
+        }
+
+        private static UIElement GetGridCellOnCondition(this Grid grid, (int x, int y) cell, Func<UIElement, bool> condition = null)
+        {
+            if (condition == null)
+            {
+                return grid.GetGridUIElements().GetUIElementInCell(cell);
+            }
+
+            return grid.GetGridUIElements()
+                .Where(condition)
+                .GetUIElementInCell(cell);
+        }
+
+        public static UIElement GetUIElementInCell(this IEnumerable<UIElement> uIElements, (int x, int y) cell) 
+            => uIElements
+                .FirstOrDefault(x =>
+                        Grid.GetRow(x) == cell.x &&
+                        Grid.GetColumn(x) == cell.y);
+
+        private static IEnumerable<UIElement> GetGridUIElements(this Grid grid) => grid.Children.Cast<UIElement>();
 
         public static (int, int) GetCurrentlySelectedGridCell(Grid grid, MouseButtonEventArgs e)
         {
@@ -87,7 +138,9 @@
             text = text.Trim();
 
             if (text.ToLower() == "auto")
+            {
                 return GridLength.Auto;
+            }
 
             if (text.Contains("*"))
             {
@@ -148,7 +201,9 @@
             var oldValue = e.OldValue as string;
             var newValue = e.NewValue as string;
             if (grid == null || oldValue == null || newValue == null)
+            {
                 return;
+            }
 
             var prefix = GetSharedSizeGroupPrefix(grid);
 
@@ -191,7 +246,9 @@
             var oldValue = e.OldValue as string;
             var newValue = e.NewValue as string;
             if (grid == null || oldValue == null || newValue == null)
+            {
                 return;
+            }
 
             var prefix = GetSharedSizeGroupPrefix(grid);
 
@@ -228,7 +285,9 @@
             var oldValue = e.OldValue as string;
             var newValue = e.NewValue as string;
             if (element == null || oldValue == null || newValue == null)
+            {
                 return;
+            }
 
             if (oldValue != newValue)
             {

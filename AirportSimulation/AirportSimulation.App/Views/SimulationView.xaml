@@ -18,6 +18,7 @@
             <ImageBrush x:Key="ASCImageBrush" ImageSource="/Resources/AdvancedCheckBaggage.png" Stretch="Fill"/>
             <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png" Stretch="Fill"/>
             <ImageBrush x:Key="ManyToOneConveyorImageBrush" ImageSource="/Resources/manytomanyConv.png" Stretch="Fill"/>
+            <ImageBrush x:Key="MPAImageBrush" ImageSource="/Resources/MPApng.png" Stretch="Fill"/>
         </Grid.Resources>
         
         <Grid.ColumnDefinitions>
@@ -152,7 +153,7 @@
             </Button.ToolTip>
         </Button>
 
-        <Button
+        <!--<Button
             x:Name="PA"
             Grid.Column="0" 
             Grid.Row="6"
@@ -169,9 +170,27 @@
                     </StackPanel>
                 </ToolTip>
             </Button.ToolTip>
+        </Button>-->
+
+        <Button
+            x:Name="MPA"
+            Grid.Column="0" 
+            Grid.Row="6"
+            Height="50"
+            Width="60"
+            BorderThickness="0"
+            Click="BuildingComponent_Click"
+            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+            Background="{StaticResource MPAImageBrush}">
+            <Button.ToolTip>
+                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Pick Up</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
 
-      
         <ScrollViewer 
             Margin="10 10 10 10"
             Grid.Column="1" 

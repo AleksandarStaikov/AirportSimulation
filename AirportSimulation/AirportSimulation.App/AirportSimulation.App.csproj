@@ -94,13 +94,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BlinkingCellsPainter.cs" />
+    <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
-    <Compile Include="Helpers\RectangleFactory.cs" />
-    <Compile Include="Helpers\StatisticsModel.cs" />
-    <Compile Include="Helpers\StatisticsViewModel.cs" />
-    <Compile Include="Resources\GridCellElement.cs" />
+    <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
+    <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\IParent.cs" />
+    <Compile Include="Models\Aa.cs" />
+    <Compile Include="Models\Asc.cs" />
+    <Compile Include="Models\BlinkingCell.cs" />
+    <Compile Include="Models\CheckIn.cs" />
+    <Compile Include="Models\DisabledCell.cs" />
+    <Compile Include="Models\EnabledCell.cs" />
+    <Compile Include="Models\GenericBuildingComponent.cs" />
+    <Compile Include="Infrastructure\RectangleFactory.cs" />
+    <Compile Include="Models\GridCell.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
-    <Compile Include="Resources\GridDisabledCellElement.cs" />
+    <Compile Include="Models\GridDisabledCellElement.cs" />
+    <Compile Include="Models\IClickable.cs" />
+    <Compile Include="Models\ISucceedable.cs" />
+    <Compile Include="Models\ManyToOneCell.cs" />
+    <Compile Include="Models\Mpa.cs" />
+    <Compile Include="Models\MultipleCellComponent.cs" />
+    <Compile Include="Models\MutantRectangle.cs" />
+    <Compile Include="Models\OneToOneCell.cs" />
+    <Compile Include="Models\Pa.cs" />
+    <Compile Include="Models\Psc.cs" />
+    <Compile Include="Models\SingleCellBuildingComponent.cs" />
+    <Compile Include="Models\Succeedable.cs" />
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
@@ -129,7 +150,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Resources\EnumToBoolConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -180,6 +200,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram2.cd" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
