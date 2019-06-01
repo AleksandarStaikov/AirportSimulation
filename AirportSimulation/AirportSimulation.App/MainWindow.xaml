@@ -4,283 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:local="clr-namespace:AirportSimulation.App"
-        mc:Ignorable="d"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}" Height="600" Width="1080" ResizeMode="NoResize" AllowsTransparency="True" WindowStyle="None">
-
-    <StackPanel Background="#7395AE">
-
-        <!--
-        ##########     NAVIGATION (LOGO / FAQ / CONTACT / SHUT DOWN BUTTON     ##########
-        -->
-
-        <!--#region NAVIGATION-->
-        <Grid Height="40">
-            <StackPanel HorizontalAlignment="Left" Margin="20 0">
-                <Label FontSize="15" Width="80" Foreground="WhiteSmoke" VerticalAlignment="Center">
-                    AirportSim
-                </Label>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="20 0">
-                <Button Content="FAQ" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="WhiteSmoke" FontFamily="15" FontWeight="Bold" VerticalAlignment="Center" Click="ButtonFaq_Click"/>
-                <Button Content="CONTACT" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="WhiteSmoke" FontFamily="15" FontWeight="Bold" VerticalAlignment="Center"/>
-                <Button Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center"  Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Click="ButtonExit_Click" >
-                    <materialDesign:PackIcon Kind="Power" Foreground="WhiteSmoke" Width="25" Height="25"/>
-                </Button>
-            </StackPanel>
-
-        </Grid>
-        <!--#endregion-->
-
-        <!--
-        ##########     MENU (SIMULATION / ADMINISTRATION / STATISTICS     ##########
-        -->
-
-        <!--#region MENU -->
-        <Grid Height="43">
-            <Grid VerticalAlignment="Top" Margin="10 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="0" Uid="0" Width="150" Content="Simulation" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#123C69" Click="ButtonHover_Click"/>
-                <Button Grid.Column="1" Uid="2.35" Width="150" Content="Administration" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#123C69" Click="ButtonHover_Click"/>
-                <Button Grid.Column="2" Uid="4.70" Width="150" Content="Statistics" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#123C69" Click="ButtonHover_Click"/>
-
-
-            </Grid>
-
-            <Grid x:Name="GridCursor" Width="150" Height="5" Background="#123C69" HorizontalAlignment="Left" Margin="114,38,0,0" />
-        </Grid>
-      <!--#endregion-->
-
-        <!--
-        ##########     MAIN ADMIN GRID     ##########
-        -->
-        <!--#region ADMINISTRATION -->
-        
-        <Border Background="#7395AE" BorderBrush="#7395AE" BorderThickness="3 0 3 2">
-            <Grid x:Name="GridAdministration" Background="WhiteSmoke" Height="513" Visibility="Hidden">
-
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                
-        
-       <!-- ##########     COLUMN 0     ########## -->
-        
-        
-
-                <StackPanel Grid.Column="0" Grid.Row="0" Background="WhiteSmoke">
-                    <StackPanel Margin="20 15">
-                        <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15" FontWeight="Bold" FontSize="14"><Run Text="Variable set-up"/></TextBlock>
+        xmlns:views="clr-namespace:AirportSimulation.App.Views"
+        mc:Ignorable="d">
+    <Grid>
+        <TabControl x:Name="MainTabMenu">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Administration" />
                     </StackPanel>
-                </StackPanel>
-
-                <StackPanel Grid.Column="0" Grid.Row="1" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of Check-In Desks"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="2" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of PSC Conveyors"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="3" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="PSC Fail Percentage"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="4" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="# of AA"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="5" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from Check-In to MPA"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-
-
-
-                <!-- ##########     COLUMN 1     ########## -->
-
-
-
-                <StackPanel Grid.Column="1" Grid.Row="1" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to AA"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="2" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to Pick-Up Area"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="3" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Drop-off Rate"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="4" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Pick-up Rate"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="5" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Load/Unload Rate AA"/></TextBlock>
-                    <TextBox VerticalAlignment="Center" Foreground="#5D5C61"/>
-                </StackPanel>
-
-
-
-                <!-- ##########     COLUMN 2     ########## -->
-
-
-
-                <StackPanel Grid.Column="2" Grid.Row="1" Margin="25 20">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Distance from MPA to AA"/></TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <RadioButton Grid.Column="0" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" IsChecked="True" Margin="0 10" Content="x kg"/>
-                        <RadioButton Grid.Column="1" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Background="#5D5C61" Foreground="#5D5C61" Content="y kg"/>
-                    </Grid>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2" Grid.Row="2" Margin="25 15">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="ASC"/></TextBlock>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <TextBox Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Number of Employees" FontSize="10" GotFocus="TextBox_GotFocus"/>
-
-                        <TextBox Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="10" GotFocus="TextBox_GotFocus" Margin="0 5"/>
-                    </Grid>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2" Grid.Row="3" Margin="25,20,25,4" Height="180" Grid.RowSpan="2">
-                    <TextBlock VerticalAlignment="Center" Foreground="#5D5C61" FontFamily="15"><Run Text="Bag Storage"/></TextBlock>
-                    <Grid Height="150">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <TextBox Grid.Row="0" VerticalAlignment="Center" Foreground="#5D5C61" Text="Number of Employees" FontSize="10" GotFocus="TextBox_GotFocus" Margin="0 2 0 0"/>
-
-                        <TextBox Grid.Row="1" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="10" GotFocus="TextBox_GotFocus" Margin="0 2 0 0"/>
-
-                        <TextBox Grid.Row="2" VerticalAlignment="Center" Foreground="#5D5C61" Text="Employee processing time x bag" FontSize="10" GotFocus="TextBox_GotFocus"/>
-
-                    </Grid>
-                </StackPanel>
-
-
-
-                <!-- ##########     COLUMN 3     ########## -->
-
-
-
-                <StackPanel Grid.Column="3" Grid.Row="1" Margin="25 20">
-                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12">
-                        _SAVE &amp; EXPORT
-                    </Button>
-                </StackPanel>
-
-                <StackPanel Grid.Column="3" Grid.Row="2" Margin="25 20">
-                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12">
-                        _LOAD &amp; IMPORT
-                    </Button>
-
-                </StackPanel>
-
-                <StackPanel Grid.Column="3" Grid.Row="3" Margin="25 20">
-                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12">
-                        _BUTTON
-                    </Button>
-
-                </StackPanel>
-
-                <StackPanel Grid.Column="3" Grid.Row="4" Margin="25 20">
-                    <Button Style="{StaticResource MaterialDesignRaisedLightButton}" Width="150"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12">
-                        _BUTTON
-                    </Button>
-
-                </StackPanel>
-
-
-
-            </Grid>
-        </Border>
-
-        <!--#endregion-->
-
-        <!--
-        ##########     MAIN SIMULATION GRID     ##########
-        -->
-        
-        <!--#region SIMULATION-->
-        
-        <!--<Border Background="#7395AE" BorderBrush="#7395AE" BorderThickness="3 0 3 2">
-            <Grid x:Name="GridSimulation" Background="WhiteSmoke" Height="513" Visibility="Hidden">
-
-                <Grid Background="White" Width="1000" Height="400" Margin="35,22,39,91">
-                    <Border BorderBrush="#FF000000" BorderThickness="1" CornerRadius="8">
-
-
-                    </Border>
-                </Grid>
-
+                </TabItem.Header>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0" Margin="25,459,31,20">
-                        <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12" Content="_START" Margin="79,0"/>
-                    </Grid>
-
-                    <Grid Grid.Column="1" Margin="25,459,31,20">
-                        <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12" Content="_PAUSE" Margin="79,0"/>
-                    </Grid>
-
-                    <Grid Grid.Column="2" Margin="25,459,31,20">
-                        <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                        ToolTip="Resource name: MaterialDesignRaisedLightButton" FontSize="12" Content="_STOP" Margin="79,0"/>
-                    </Grid>
-
+                    <views:AdminView x:Name="AdminView"/>
                 </Grid>
-
-            </Grid>
-        </Border>-->
-        <!--#endregion-->
-        
-        
-    </StackPanel>
-    
-    
+            </TabItem>
+            <TabItem Selector.IsSelected="True">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Simulation" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <views:SimulationView x:Name="SimulationView"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Statistics" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <views:Window1 x:Name="StatisticsView"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

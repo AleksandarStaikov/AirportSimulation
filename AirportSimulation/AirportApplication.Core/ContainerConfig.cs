@@ -1,11 +1,14 @@
-﻿namespace AirportApplication.Core
+﻿namespace AirportSimulation.Core
 {
-    using Autofac;       
-    using AirportApplication.Core.Services.Interfaces;
-    using System.Reflection;
-    using System;
+    using Contracts;
+    using Autofac;
     using Autofac.Core;
+    using ImportExport;
+    using LinkNodes;
     using NLog;
+    using Services;
+    using System;
+    using System.Reflection;
 
     public static class ContainerConfig
     {
@@ -21,10 +24,56 @@
             // TODO: Register types according to their life time scope. 
             // This is just an example:
             var assembly = Assembly.GetCallingAssembly();
+
+            #region LocalRegistrations
+
             builder.RegisterAssemblyTypes(assembly)
-                   .Where(t => typeof(IService).IsAssignableFrom(t))
-                   .SingleInstance()
-                   .AsImplementedInterfaces();
+                .Where(t => typeof(IService).IsAssignableFrom(t))
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterType<Engine>()
+                .InstancePerDependency()
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterType<ChainLinkFactory>()
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterType<TimerService>()
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterType<NodeConnectorService>()
+                .SingleInstance()
+                .AsImplementedInterfaces();
+
+            //builder
+            //    .RegisterType<StatisticsCalculator>()
+            //    .SingleInstance()
+            //    .AsImplementedInterfaces();
+
+            builder.RegisterType<CheckInDesk>();
+            builder.RegisterType<Psc>();
+            builder.RegisterType<Asc>();
+            builder.RegisterType<Mpa>();
+            builder.RegisterType<BSU>();
+            builder.RegisterType<Aa>();
+            builder.RegisterType<PickUpArea>();
+            builder.RegisterType<OneToOneConveyor>();
+            builder.RegisterType<ManyToOneConveyor>();
+            builder.RegisterType<ConveyorConnector>();
+            builder.RegisterType<CheckInDispatcher>();
+            builder.RegisterType<AADispatcher>();
+            builder.RegisterType<BagCollector>();
+
+            #endregion
+
+            builder.RegisterModule<ImportExportModule>();
 
             _container = builder.Build();
 

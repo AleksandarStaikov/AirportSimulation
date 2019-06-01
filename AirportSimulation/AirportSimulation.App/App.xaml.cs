@@ -1,9 +1,13 @@
 ﻿namespace AirportSimulation.App
 {
-    using AirportApplication.Core;
+    using AirportSimulation.App.Views;
+    using Core;
     using NLog;
     using System;
     using System.Windows;
+    using Autofac;
+    using Common.Models;
+    using Core.Contracts;
 
     public partial class App : Application
     {
@@ -17,12 +21,9 @@
 
                 base.OnStartup(e);
 
-                using (var container = ContainerConfig.Configure())
-                    container.BeginLifetimeScope();
-
-                Current.MainWindow = new MainWindow();
-                Current.MainWindow.Closed += HandleClosed;
-                Current.MainWindow.Show();
+                ContainerConfig.Configure();
+                    
+                InitializeMainWindow();
 
                 Logger.Info("Application stared.");
             }
@@ -38,6 +39,20 @@
         private void HandleClosed(object sender, EventArgs e)
         {
             ContainerConfig.Stop();
+        }
+
+        private void InitializeMainWindow()
+        {
+            Current.MainWindow = new MainWindow
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                WindowState = WindowState.Maximized,
+                ResizeMode = ResizeMode.CanMinimize,
+                WindowStyle = WindowStyle.ThreeDBorderWindow,
+            };
+
+            Current.MainWindow.Closed += HandleClosed;
+            Current.MainWindow.Show();
         }
     }
 }
