@@ -307,7 +307,7 @@
                                 <chart:ClusteredColumnChart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
@@ -325,7 +325,7 @@
                                 <chart:StackedColumnChart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
@@ -343,7 +343,7 @@
                                 <chart:StackedColumn100Chart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
@@ -365,12 +365,12 @@
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
-                                        Caption="First"
+                                        SeriesTitle="First"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr1Col1}" />
                                 <chart:ChartSeries
-                                        Caption="Last"
+                                        SeriesTitle="Last"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr1Col2}" />
@@ -387,7 +387,7 @@
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                             <chart:PieChart.Series>
                                 <chart:ChartSeries
-                                    Caption="FailedPassed"
+                                    SeriesTitle="FailedPassed"
                                     DisplayMember="Category"
                                     ValueMember="Number"
                                     ItemsSource="{Binding Path=_gr2Par1}">
@@ -404,7 +404,7 @@
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                             <chart:PieChart.Series>
                                 <chart:ChartSeries
-                                    Caption="Errors"
+                                    SeriesTitle="Errors"
                                     DisplayMember="Category"
                                     ValueMember="Number"
                                     ItemsSource="{Binding Path=_gr3Par1}">
@@ -423,12 +423,12 @@
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
-                                        Caption="Total bags"
+                                        SeriesTitle="Total bags"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr2Col1}" />
                                 <chart:ChartSeries
-                                        Caption="BSU bags"
+                                        SeriesTitle="BSU bags"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr2Col2}" />
@@ -448,7 +448,7 @@
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
-                                        Caption="BSU stay times"
+                                        SeriesTitle="BSU stay times"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr3Col1}" />
@@ -469,12 +469,12 @@
                                 SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
                             <chart:ClusteredColumnChart.Series>
                                 <chart:ChartSeries
-                                        Caption="Longest"
+                                        SeriesTitle="Longest"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr4Col1}" />
                                 <chart:ChartSeries
-                                        Caption="Shortest"
+                                        SeriesTitle="Shortest"
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr4Col2}" />
@@ -506,7 +506,7 @@
                                 <chart:ClusteredBarChart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
@@ -524,7 +524,7 @@
                                 <chart:StackedBarChart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
@@ -542,7 +542,7 @@
                                 <chart:StackedBar100Chart.SeriesTemplate>
                                     <DataTemplate>
                                         <chart:ChartSeries
-			                                Caption="{Binding Path=DisplayName}"
+			                                SeriesTitle="{Binding Path=DisplayName}"
                                             DisplayMember="Category"
                                             ValueMember="Number"
                                             ItemsSource="{Binding Path=Items}" />
