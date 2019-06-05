@@ -101,6 +101,7 @@
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
     <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\FlightsOrganizer.cs" />
     <Compile Include="Models\IParent.cs" />
     <Compile Include="Models\Aa.cs" />
     <Compile Include="Models\Asc.cs" />

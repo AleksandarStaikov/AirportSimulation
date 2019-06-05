@@ -67,7 +67,6 @@
             {
                 for (var j = 0; j < SimulationGrid.ColumnDefinitions.Count; j++)
                 {
-
                     var enabledRectangle = new MutantRectangle((i, j));
 
                     enabledRectangle.MouseDown += EnabledRectangle_MouseDown;
@@ -286,7 +285,8 @@
 		private void Run_Click(object sender, RoutedEventArgs e)
 		{
 			var engine = ContainerConfig.Resolve<IEngine>();
-			var simulationSettings = new SimulationSettings();
+            var flights = FlightsOrganizer.Flights.ToList();
+            var simulationSettings = new SimulationSettings() { IncomingFlights = flights };
 
 			foreach (var belt in _chainedBelts)
 			{
