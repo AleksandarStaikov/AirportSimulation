@@ -285,8 +285,10 @@
 		private void Run_Click(object sender, RoutedEventArgs e)
 		{
 			var engine = ContainerConfig.Resolve<IEngine>();
-            var flights = FlightsOrganizer.Flights.ToList();
-            var simulationSettings = new SimulationSettings() { IncomingFlights = flights };
+            var incomingFlights = FlightsOrganizer.Flights.Where(x => x.FlightState == FlightState.Incoming).ToList();
+            var outgoingFlights = FlightsOrganizer.Flights.Where(x => x.FlightState == FlightState.WaitingForPreparation).ToList();
+
+            var simulationSettings = new SimulationSettings() { IncomingFlights = incomingFlights, OutgoingFlights = outgoingFlights };
 
 			foreach (var belt in _chainedBelts)
 			{
