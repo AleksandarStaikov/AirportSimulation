@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AirportSimulation.App.Helpers;
 using AirportSimulation.Common;
+using AirportSimulation.Common.Models;
 
 namespace AirportSimulation.App.Models
 {
     internal abstract class MultipleCellComponent : GenericBuildingComponent, IParent
     {
-        public int Length { get; protected set; }
+        public int Index { get; protected set; } = 0;
 
-        public MultipleCellComponent(BuildingComponentType type, string nodeId, (int, int) cell) : base(type, nodeId, cell)
+        public MultipleCellComponent(BuildingComponentType type, (int, int) cell) : base(type, cell)
         {
             successorEnabler = new Succeedable(this);
         }
@@ -20,11 +22,10 @@ namespace AirportSimulation.App.Models
 
         public virtual void ChildClicked(GenericBuildingComponent successor)
         {
-            if(successor is MultipleCellComponent)
+            if(successor is MultipleCellComponent component)
             {
-                ((MultipleCellComponent)successor).ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                
-                Length++;
+                component.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+                component.Index++;
             }
 
             NextNodes.Add(successor);
@@ -39,6 +40,50 @@ namespace AirportSimulation.App.Models
         public void PopulatePossibleNeighbours(MutantRectangle container)
         {
             successorEnabler.PopulateAdjacentRectangles(container);
+        }
+
+        public override NodeCreationData GetCreationData()
+        {
+            NodeCreationData nodeData = null;
+            if (!ConvertToSettingsService.Listed.Contains(this.NodeId))
+            {
+                ConvertToSettingsService.Listed.Add(this.NodeId);
+
+                nodeData = new NodeCreationData();
+                Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
+
+                var lastSegment = GetLastSegment();
+
+                nodeData.Id = lastSegment.NodeId;
+
+                foreach (ICreatable nextNode in lastSegment.NextNodes)
+                {
+                    nextNodesData.Add(nextNode.GetCreationData(), null);
+                }
+                nodeData.NextNodes = nextNodesData;
+
+                nodeData.Type = lastSegment.Type;
+                nodeData.Length = lastSegment.Index + 1;
+            }
+            else
+            {
+                nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == this.NodeId);
+            }
+
+            ConvertToSettingsService.NodesCreationData.Add(nodeData);
+            return nodeData;
+        }
+
+        private MultipleCellComponent GetLastSegment()
+        {
+            var tempCell = this;
+
+            while(!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
+            {
+                tempCell = tempCell.NextNodes[0] as MultipleCellComponent;
+            }
+
+            return tempCell;
         }
     }
 }

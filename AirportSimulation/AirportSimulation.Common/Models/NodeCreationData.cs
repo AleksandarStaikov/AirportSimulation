@@ -6,7 +6,7 @@
     {
         public string Id { get; set; }
 
-        public IEnumerable<NodeCreationData> NextNodes { get; set; }
+        public Dictionary<NodeCreationData, int?> NextNodes { get; set; }
 
         public BuildingComponentType Type { get; set; }
 

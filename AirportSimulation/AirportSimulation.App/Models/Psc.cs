@@ -9,7 +9,7 @@ namespace AirportSimulation.App.Models
 {
     internal class Psc : SingleCellBuildingComponent, IParent
     {
-        public Psc(string nodeId, (int, int) cell) : base(BuildingComponentType.PSC, nodeId, cell)
+        public Psc((int, int) cell) : base(BuildingComponentType.PSC, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
