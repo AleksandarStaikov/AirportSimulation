@@ -6,8 +6,10 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class BaggageBucket : ChainLink, IChainLink
+    public class BaggageBucket : ChainLink, IChainLink, IBaggageBucket
     {
         public bool isDistributing { get; set; } = false;
 
@@ -15,15 +17,15 @@
             : base(nodeId, timerService)
         {
             FlightNumber = flightNumber;
-            Baggages = new Queue<Baggage>();
+            Baggages = new Queue<IBaggage>();
         }
 
         public string FlightNumber { get; }
-        public Queue<Baggage> Baggages { get; }
+        public Queue<IBaggage> Baggages { get; }
 
         public override string Destination => FlightNumber;
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             Baggages.Enqueue(baggage);
         }

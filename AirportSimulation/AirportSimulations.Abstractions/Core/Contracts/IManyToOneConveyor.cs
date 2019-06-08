@@ -2,6 +2,7 @@
 {
     using System;
     using Common.Models;
+    using Common.Models.Contracts;
 
     public interface IManyToOneConveyor : IChainLink
     {
@@ -11,6 +12,6 @@
 
         Action OnStatusChangedToFree(IConveyorConnector predecessor);
 
-        void PassBaggage(Baggage baggage, IConveyorConnector predecessor);
+        void PassBaggage(IBaggage baggage, IConveyorConnector predecessor);
     }
 }

@@ -1,14 +1,14 @@
-﻿namespace AirportSimulation.Abstractions.Core.Contracts
+﻿namespace AirportSimulation.Core.LinkNodes.Contracts
 {
+    using System;
     using Common.Models;
     using Common.Models.Contracts;
-    using System;
 
-    public interface IChainLink
+    public interface IBagCollector
     {
+        string Destination { get; }
         string NodeId { get; set; }
         NodeState Status { get; set; }
-        string Destination { get; }
         Action OnStatusChangedToFree { get; set; }
         void PassBaggage(IBaggage baggage);
     }

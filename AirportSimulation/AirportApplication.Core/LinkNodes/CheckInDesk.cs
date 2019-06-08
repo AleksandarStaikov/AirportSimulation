@@ -4,8 +4,10 @@
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class CheckInDesk : ProcessingNode, IProcessingNode
+    public class CheckInDesk : ProcessingNode, IProcessingNode, ICheckInDesk
     {
         public delegate CheckInDesk Factory(string nodeId);
 
@@ -14,7 +16,7 @@
         {
         }
 
-        public override void Process(Baggage baggage)
+        public override void Process(IBaggage baggage)
         {
             baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
                 TimerService.ConvertMillisecondsToTimeSpan(1000),

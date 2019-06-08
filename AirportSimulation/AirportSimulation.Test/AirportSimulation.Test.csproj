@@ -84,7 +84,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainLinkFactoryTests.cs" />
+    <Compile Include="ChainLinkNodeTests.cs" />
+    <Compile Include="LinkNodesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransportationNodesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

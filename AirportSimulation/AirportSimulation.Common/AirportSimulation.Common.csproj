@@ -55,10 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingComponentType.cs" />
-    <Compile Include="Exceptions\ConveyorFullException.cs" />
     <Compile Include="Models\Baggage.cs" />
     <Compile Include="Models\BaggageEventLog.cs" />
     <Compile Include="Models\BaggageType.cs" />
+    <Compile Include="Models\Contracts\IBaggage.cs" />
+    <Compile Include="Models\Contracts\IFlight.cs" />
     <Compile Include="Models\LoggingConstants.cs" />
     <Compile Include="Models\Contracts\ISimulationSettings.cs" />
     <Compile Include="Models\ConveyorBelt.cs" />

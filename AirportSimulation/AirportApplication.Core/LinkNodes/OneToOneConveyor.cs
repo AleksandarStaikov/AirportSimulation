@@ -3,8 +3,10 @@
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Common.Models;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class OneToOneConveyor : TransportingNode
+    public class OneToOneConveyor : TransportingNode, IOneToOneConveyor
     {
         public delegate OneToOneConveyor Factory(int length, string nodeId);
 
@@ -13,7 +15,7 @@
         {
         }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             Status = NodeState.Busy;
             baggage.TransporterId = NodeId;

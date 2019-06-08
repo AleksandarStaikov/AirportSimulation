@@ -3,8 +3,10 @@
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Common.Models;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class PickUpArea : ProcessingNode
+    public class PickUpArea : ProcessingNode, IPickUpArea
     {
         public delegate PickUpArea Factory(int pickUpAreaIndex, string nodeId, int pickUpRate = 0);
 
@@ -21,12 +23,12 @@
 
         public override string Destination => $"P{_pickUpAreaIndex}";
 
-        public override void Process(Baggage baggage)
+        public override void Process(IBaggage baggage)
         {
             baggage.AddEventLog(TimerService.GetTimeSinceSimulationStart(), 
                 TimerService.ConvertMillisecondsToTimeSpan(_pickUpRate),
                 "PickUpArea processings");
-            baggage.Destination = typeof(Mpa).Name;
+            baggage.Destination = typeof(BagCollector).Name;
         }
     }
 }

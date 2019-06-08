@@ -1,6 +1,11 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>False</AllowParallelTestExecution>
+    <MetricsExclusionList>
+      <Value>ImportExport\AirportSimulation.ImportExport.csproj</Value>
+      <Value>AirportSimulation.Utility\AirportSimulation.Utilities.csproj</Value>
+      <Value>AirportSimulation.App\AirportSimulation.App.csproj</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

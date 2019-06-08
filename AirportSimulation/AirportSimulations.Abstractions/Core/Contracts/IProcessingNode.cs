@@ -1,9 +1,9 @@
 ﻿namespace AirportSimulation.Abstractions.Core.Contracts
 {
-    using Common.Models;
+    using Common.Models.Contracts;
 
-    public interface IProcessingNode : IMultiSuccessor
+    public interface IProcessingNode : IChainLink, IMultiSuccessor
     {
-        void Process(Baggage baggage);
+        void Process(IBaggage baggage);
     }
 }
