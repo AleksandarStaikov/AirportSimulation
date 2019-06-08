@@ -95,12 +95,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BlinkingCellsPainter.cs" />
+    <Compile Include="Helpers\ConvertToSettingsService.cs" />
     <Compile Include="Helpers\StatisticsModel.cs" />
     <Compile Include="Helpers\StatisticsViewModel.cs" />
     <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
     <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\FlightsOrganizer.cs" />
+    <Compile Include="Models\ICreatable.cs" />
     <Compile Include="Models\IParent.cs" />
     <Compile Include="Models\Aa.cs" />
     <Compile Include="Models\Asc.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="Models\MultipleCellComponent.cs" />
     <Compile Include="Models\MutantRectangle.cs" />
     <Compile Include="Models\OneToOneCell.cs" />
+    <Compile Include="Models\OverlappingBlinkingCell.cs" />
     <Compile Include="Models\Pa.cs" />
     <Compile Include="Models\Psc.cs" />
     <Compile Include="Models\SingleCellBuildingComponent.cs" />

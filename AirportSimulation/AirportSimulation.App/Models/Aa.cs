@@ -9,13 +9,10 @@ namespace AirportSimulation.App.Models
 {
     internal class Aa : SingleCellBuildingComponent
     {
-        public Aa(string nodeId, (int, int) cell) : base(BuildingComponentType.AA, nodeId, cell)
+        public Aa((int, int) cell) : base(BuildingComponentType.AA, cell)
         {
         }
 
-        //public override void ClickHandler(MutantRectangle sender, BuildingComponentType type)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
     }
 }

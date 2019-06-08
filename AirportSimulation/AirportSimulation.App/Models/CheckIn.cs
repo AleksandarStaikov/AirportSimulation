@@ -13,7 +13,7 @@
 
     internal class CheckIn : SingleCellBuildingComponent, IParent
     {
-        public CheckIn(string nodeId, (int, int) cell) : base(BuildingComponentType.CheckIn, nodeId, cell)
+        public CheckIn((int, int) cell) : base(BuildingComponentType.CheckIn, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
@@ -22,6 +22,8 @@
 
             successorEnabler = new Succeedable(this);
             NextNodes = new List<GenericBuildingComponent>(1);
+
+            ConvertToSettingsService.StartNodes.Add(this);
         }
 
         public void ChildClicked(GenericBuildingComponent successor)

@@ -30,7 +30,7 @@
             foreach (var nodeCreationData in nodesData)
             {
                 var currentNode = nodes.FirstOrDefault(n => n.NodeId == nodeCreationData.Id);
-                var nextNodes = nodes.Where(n => nodeCreationData.NextNodes.Select(nn => nn.Id).Contains(n.NodeId));
+                var nextNodes = nodes.Where(n => nodeCreationData.NextNodes.Select(nn => nn.Key.Id).Contains(n.NodeId));
 
                 //If current node is end node => attach the bagCollector
                 if (currentNode is PickUpArea || currentNode is Asc || currentNode is Aa)
@@ -44,6 +44,7 @@
                     if (nextNode is ManyToOneConveyor manyToOneConveyor)
                     {
                         var connector = _chainLinkFactory.CreateConveyorConnector();
+                        var index = nodeCreationData.NextNodes[nodeCreationData.NextNodes.Keys.FirstOrDefault(k => k.Id == manyToOneConveyor.NodeId)];
 
                         if (currentNode is ISingleSuccessor single)
                         {
@@ -54,7 +55,7 @@
                             multi.AddSuccessor(connector);
                         }
 
-                        connector.SetNextNode(manyToOneConveyor, nodeCreationData.ConveyorIndex ?? 0);
+                        connector.SetNextNode(manyToOneConveyor, index ?? 0);
                     }
                     else
                     {

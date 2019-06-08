@@ -10,7 +10,7 @@ namespace AirportSimulation.App.Models
     class ManyToOneCell : MultipleCellComponent
     {
         public BuildingComponentType PredecessorType;
-        public ManyToOneCell(string nodeId, (int, int) cell) : base(BuildingComponentType.ManyToOneConveyor, nodeId, cell)
+        public ManyToOneCell((int, int) cell) : base(BuildingComponentType.ManyToOneConveyor,cell)
         {
         }
 

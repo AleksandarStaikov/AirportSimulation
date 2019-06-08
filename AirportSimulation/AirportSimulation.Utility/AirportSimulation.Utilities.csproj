@@ -58,5 +58,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AirportSimulation.Common\AirportSimulation.Common.csproj">
+      <Project>{C23326E3-3FF3-405F-B74F-45924D828FB8}</Project>
+      <Name>AirportSimulation.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
