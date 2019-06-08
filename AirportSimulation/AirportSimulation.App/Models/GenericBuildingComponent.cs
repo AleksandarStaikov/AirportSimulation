@@ -61,13 +61,13 @@ namespace AirportSimulation.App.Models
                 }
 
                 nodeData.NextNodes = nextNodesData;
+                ConvertToSettingsService.NodesCreationData.Add(nodeData);
             }
             else
             {
                 nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == this.NodeId);
             }
 
-            ConvertToSettingsService.NodesCreationData.Add(nodeData);
             return nodeData;
         }
     }

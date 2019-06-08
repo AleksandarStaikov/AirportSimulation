@@ -39,22 +39,29 @@ namespace AirportSimulation.App.Models
 
         public void ChildClicked(GenericBuildingComponent successor)
         {
-            if(successor != this)
+            if (successor.GetType().BaseType == typeof(MultipleCellComponent))
             {
-                if (successor.GetType().BaseType == typeof(MultipleCellComponent))
+                if (successor.AllowedNonConveyorSuccessors == null)
                 {
                     var temp = successor as MultipleCellComponent;
                     temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+
                     if (temp is ManyToOneCell)
                     {
                         ((ManyToOneCell)temp).PredecessorType = this.Type;
                     }
-                }
-                NextNodes.Add(successor);
 
-                ShowBlinkingChildren(successor.Type);
+                    NextNodes.Add(successor);
+                }
+                else
+                {
+                    if (successor is IParent parentComponent)
+                    {
+                        parentComponent.ChildClicked(this);
+                    }
+                }
             }
-            
+
         }
 
         public void PopulatePossibleNeighbours(MutantRectangle container)
