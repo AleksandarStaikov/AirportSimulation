@@ -71,7 +71,7 @@
 
                     enabledRectangle.MouseDown += EnabledRectangle_MouseDown;
                     buildingComponentClicked += enabledRectangle.On_BuildingComponentClicked;
-                    enabledRectangle.ReadyToRun += EnableRunButton;
+                    enabledRectangle.ReadyToGoNext += EnableNextButton;
                     Grid.SetColumn(enabledRectangle, j);
                     Grid.SetRow(enabledRectangle, i);
 
@@ -87,9 +87,9 @@
             clickedRectangle.On_Click(_currentBuildingComponentType);
         }
 
-        private void EnableRunButton()
+        private void EnableNextButton()
         {
-            SimulationGridOptions.CanRun = !SimulationGridOptions.CanRun;
+            SimulationGridOptions.CanNext = !SimulationGridOptions.CanNext;
         }
 
         private void SimulationGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

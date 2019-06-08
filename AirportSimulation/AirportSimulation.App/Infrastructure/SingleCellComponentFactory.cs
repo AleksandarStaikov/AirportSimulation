@@ -37,7 +37,7 @@
             }
             else if(type == BuildingComponentType.AA)
             {
-                container.ReadyToRun?.Invoke();
+                container.ReadyToGoNext?.Invoke();
 
                 return CreateAa(container.Cell);
             }

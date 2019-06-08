@@ -15,7 +15,7 @@
         private bool _isGridEnabled = true;
         private bool _canCreate;
         private bool _canClear;
-        private bool _canRun = true;
+        private bool _canNext = true;
 
         public static int GRID_MAX_ROWS = 14;
         public static int GRID_MAX_COLUMNS = 19;
@@ -24,13 +24,13 @@
 
         public string GridColumns => $"*#{++GRID_MAX_COLUMNS}";
 
-        public bool CanRun
+        public bool CanNext
         {
-            get => _canRun;
+            get => _canNext;
             set
             {
-                _canRun = value;
-                OnPropertyRaised(nameof(CanRun));
+                _canNext = value;
+                OnPropertyRaised(nameof(CanNext));
             }
         }
 
