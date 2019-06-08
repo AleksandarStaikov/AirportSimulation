@@ -1,13 +1,8 @@
-﻿using AirportSimulation.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
-    interface ICreatable
+    using AirportSimulation.Common.Models;
+
+    internal interface ICreatable
     {
         NodeCreationData GetCreationData();
     }

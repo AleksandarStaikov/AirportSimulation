@@ -70,6 +70,7 @@
     <Compile Include="Models\SimulationGridOptions.cs" />
     <Compile Include="Models\SimulationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

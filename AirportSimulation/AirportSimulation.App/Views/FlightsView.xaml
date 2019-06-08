@@ -50,11 +50,10 @@
                 Text="Gate">
             </TextBlock>
             <ComboBox 
-                x:Name="Gates"
+                x:Name="GatesComboBox"
                 Foreground="#5D5C61"
                 VerticalAlignment="Center" 
                 Width="auto"  
-                ItemsSource="{Binding Gates, Mode=TwoWay}" 
                 SelectedItem="{Binding Path=CurrentFlight.Gate, Mode=TwoWay}"
                 IsSynchronizedWithCurrentItem="True"
             />
@@ -68,11 +67,10 @@
                 Text="Pick Up Area">
             </TextBlock>
             <ComboBox 
-                x:Name="PickUpAreas"
+                x:Name="PickUpAreasComboBox"
                 Foreground="#5D5C61"
                 VerticalAlignment="Center" 
                 Width="auto"  
-                ItemsSource="{Binding PickUpAreas, Mode=TwoWay}" 
                 SelectedItem="{Binding Path=CurrentFlight.PickUpArea, Mode=TwoWay}"
                 IsSynchronizedWithCurrentItem="True"
             />
@@ -147,7 +145,28 @@
             </Button.ToolTip>
         </Button>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="2" Grid.RowSpan="6">
+        <Button
+            x:Name="Run"
+            Grid.Column="3" 
+            Grid.Row="6" 
+            Height="40"
+            FontFamily="15" 
+            Width="auto"
+            VerticalAlignment="Center" 
+            Content="Run"
+            Click="Run_Click">
+            <Button.ToolTip>
+                <ToolTip 
+                    ToolTipService.HasDropShadow="True" 
+                    ToolTipService.Placement="Right">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">Run</TextBlock>
+                    </StackPanel>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+        
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1" Grid.RowSpan="6">
             <StackPanel>
                 <TextBlock Foreground="Black" HorizontalAlignment="Center" FontSize="20">FLIGHTS</TextBlock>
                 <ListBox HorizontalAlignment="Center"
