@@ -13,7 +13,7 @@ namespace AirportSimulation.App.Models
     {
         private static Mpa _instance = null;
 
-        protected Mpa(string nodeId, (int, int) cell) : base(BuildingComponentType.MPA, nodeId, cell)
+        protected Mpa((int, int) cell) : base(BuildingComponentType.MPA, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
@@ -21,11 +21,11 @@ namespace AirportSimulation.App.Models
             };
         }
 
-        public static Mpa GetInstance(string nodeId, (int, int) cell)
+        public static Mpa GetInstance((int, int) cell)
         {
             if(_instance == null)
             {
-                _instance = new Mpa(nodeId, cell)
+                _instance = new Mpa(cell)
                 {
                     Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.MPA)),
                 };
@@ -41,16 +41,27 @@ namespace AirportSimulation.App.Models
         {
             if (successor.GetType().BaseType == typeof(MultipleCellComponent))
             {
-                var temp = successor as MultipleCellComponent;
-                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                if (temp is ManyToOneCell)
+                if (successor.AllowedNonConveyorSuccessors == null)
                 {
-                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    var temp = successor as MultipleCellComponent;
+                    temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+
+                    if (temp is ManyToOneCell)
+                    {
+                        ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    }
+
+                    NextNodes.Add(successor);
+                }
+                else
+                {
+                    if (successor is IParent parentComponent)
+                    {
+                        parentComponent.ChildClicked(this);
+                    }
                 }
             }
-            NextNodes.Add(successor);
 
-            ShowBlinkingChildren(successor.Type);
         }
 
         public void PopulatePossibleNeighbours(MutantRectangle container)

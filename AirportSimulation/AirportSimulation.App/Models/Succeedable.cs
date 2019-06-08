@@ -30,11 +30,7 @@
 
         private bool IsMutable(MutantRectangle rectangle)
         {
-            if (rectangle.Content is EnabledCell)
-            {
-                return true;
-            }
-            else if (rectangle.Content is DisabledCell)
+            if (rectangle.Content is DisabledCell)
             {
                 if(((DisabledCell)rectangle.Content).ParentComponent == null || ((DisabledCell)rectangle.Content).ParentComponent == _succeedableComponent)
                 {
@@ -48,6 +44,7 @@
 
             return false;
         }
+
 
         public void HideBlinkingCells()
         {
@@ -64,12 +61,24 @@
 
         public void ShowBlinkingCells()
         {
-            foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
+            foreach (MutantRectangle adjacentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                if (IsMutable(adjancentRectangle))
+                if (IsMutable(adjacentRectangle))
                 {
-                    var cell = adjancentRectangle.Cell;
-                    adjancentRectangle.ChangeContent(new BlinkingCell(_succeedableComponent as IParent, cell));
+                    var cell = adjacentRectangle.Cell;
+                    var newBlinkingCell = new BlinkingCell(_succeedableComponent as IParent, cell);
+
+                    if (adjacentRectangle.Content is BlinkingCell adjacentBlinkingCell && adjacentBlinkingCell.ParentComponent != _succeedableComponent)
+                    {
+                        var overlappingCell = new OverlappingBlinkingCell(cell);
+                        overlappingCell.AddLayer(adjacentBlinkingCell);
+                        overlappingCell.AddLayer(newBlinkingCell);
+                        adjacentRectangle.ChangeContent(overlappingCell);
+                    }
+                    else
+                    {
+                        adjacentRectangle.ChangeContent(newBlinkingCell);
+                    }
                 }
             }
         }

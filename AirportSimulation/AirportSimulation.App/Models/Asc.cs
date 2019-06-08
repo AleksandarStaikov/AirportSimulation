@@ -9,7 +9,7 @@ namespace AirportSimulation.App.Models
 {
     internal class Asc : SingleCellBuildingComponent, IParent
     {
-        public Asc(string nodeId, (int, int) cell) : base(BuildingComponentType.ASC, nodeId, cell)
+        public Asc((int, int) cell) : base(BuildingComponentType.ASC, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
@@ -24,14 +24,27 @@ namespace AirportSimulation.App.Models
         {
             if (successor.GetType().BaseType == typeof(MultipleCellComponent))
             {
-                var temp = successor as MultipleCellComponent;
-                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                if (temp is ManyToOneCell)
+                if(successor.AllowedNonConveyorSuccessors == null)
                 {
-                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    var temp = successor as MultipleCellComponent;
+                    temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+
+                    if (temp is ManyToOneCell)
+                    {
+                        ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    }
+
+                    NextNodes.Add(successor);
+                }
+                else
+                {
+                    if(successor is IParent parentComponent)
+                    {
+                        parentComponent.ChildClicked(this);
+                    }
                 }
             }
-            NextNodes.Add(successor);
+            
 
             ShowBlinkingChildren(successor.Type);
         }

@@ -22,11 +22,11 @@
             Fill = RectangleFactory.CreateBlinkingRectangle().Fill;
         }
 
-        public void ClickHandler(MutantRectangle sender, BuildingComponentType type) //TODO: Add factory as a property?
+        public void ClickHandler(MutantRectangle sender, BuildingComponentType type) 
         {
             GenericBuildingComponent content;
 
-            if (IsConveyor(type))
+            if (IsConveyor(type))  //TODO: Add factory as a property?
             {
                 content = new MultipleCellComponentFactory().CreateComponent(type, sender);
                 
@@ -38,9 +38,9 @@
 
             ParentComponent.ChildClicked(content);
 
-            if(content is IParent)
+            if(content is IParent parent)
             {
-                ((IParent)content).PopulatePossibleNeighbours(sender);
+                parent.PopulatePossibleNeighbours(sender);
             }
 
             sender.ChangeContent(content);
