@@ -1,13 +1,13 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System.Reflection;
-    using System.Windows.Media;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class Aa : ProcessingNode, IProcessingNode
+    public class Aa : ProcessingNode, IProcessingNode, IAa
     {
         public delegate Aa Factory(int dropOffNumber, string nodeId);
 
@@ -20,7 +20,7 @@
 
         public override string Destination => $"A{DropOffNumber}";
 
-        public override void Process(Baggage baggage)
+        public override void Process(IBaggage baggage)
         {
             var logMessage = $"{Destination} processing - ";
 

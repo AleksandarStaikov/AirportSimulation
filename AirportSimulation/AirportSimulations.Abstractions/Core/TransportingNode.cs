@@ -3,6 +3,7 @@
     using System.Timers;
     using Abstractions.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
     using Contracts;
     using CuttingEdge.Conditions;
 
@@ -11,21 +12,21 @@
         private const int ConveyorDefaultMovingTime = 1000;
 
         protected readonly int _length;
-        protected Baggage[] _conveyorBelt;
+        protected IBaggage[] _conveyorBelt;
         protected Timer _timer;
 
         protected TransportingNode(int length, string nodeId, ITimerService timerService)
             : base(nodeId, timerService)
         {
             _length = length;
-            _conveyorBelt = new Baggage[_length];
+            _conveyorBelt = new IBaggage[_length];
 
             _timer = new Timer();
             _timer.Elapsed += (sender, args) => Move();
         }
 
         protected int LastIndex => _length - 1;
-        protected Baggage LastBaggage => _conveyorBelt[LastIndex];
+        protected IBaggage LastBaggage => _conveyorBelt[LastIndex];
 
         protected bool HasLastItem => LastBaggage != null;
 
@@ -81,7 +82,7 @@
             return _conveyorBelt[index] == null;
         }
 
-        protected void Add(Baggage baggage, int index = 0)
+        protected void Add(IBaggage baggage, int index = 0)
         {
             Condition.Requires(CanAdd(), "conveyor")
                 .IsEqualTo(true, "Trying to add to {0}, while full.");

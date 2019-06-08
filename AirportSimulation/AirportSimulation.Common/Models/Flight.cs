@@ -3,7 +3,7 @@
     using System;
     using System.Text;
 
-    public class Flight
+    public class Flight : IFlight
     {
         public int BaggageCount { get; set; } = 100;
 

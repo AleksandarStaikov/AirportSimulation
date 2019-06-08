@@ -1,15 +1,18 @@
-﻿namespace AirportSimulation.Abstractions.Core.Contracts
+﻿namespace AirportSimulation.Core.LinkNodes.Contracts
 {
+    using Abstractions.Core.Contracts;
     using Common.Models;
     using Common.Models.Contracts;
     using System;
 
-    public interface IChainLink
+    public interface ICheckInDesk
     {
+        void Process(IBaggage baggage);
+        string Destination { get; }
         string NodeId { get; set; }
         NodeState Status { get; set; }
-        string Destination { get; }
         Action OnStatusChangedToFree { get; set; }
+        void AddSuccessor(IChainLink chainLink);
         void PassBaggage(IBaggage baggage);
     }
 }

@@ -6,6 +6,7 @@
     using Common.Models;
     using System;
     using System.Collections.Generic;
+    using Common.Models.Contracts;
 
     public class ManyToOneConveyor : TransportingNode, IManyToOneConveyor
     {
@@ -39,7 +40,7 @@
             return _statusChangedToFreeEvents[index];
         }
 
-        public void PassBaggage(Baggage baggage, IConveyorConnector predecessor)
+        public void PassBaggage(IBaggage baggage, IConveyorConnector predecessor)
         {
             var index = _incomingConnections[predecessor];
             if (CanAdd(index))
@@ -49,7 +50,7 @@
             }
         }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             throw new NotImplementedException();
         }

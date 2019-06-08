@@ -1,13 +1,14 @@
 ﻿namespace AirportSimulation.Core.LinkNodes
 {
-    using System;
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
     using Common.Models;
     using Common.Models.Contracts;
+    using Contracts;
+    using System;
 
-    public class Psc : ProcessingNode, IProcessingNode
+    public class Psc : ProcessingNode, IProcessingNode, IPsc
     {
         public delegate Psc Factory(IPscSettings pscSettings, string nodeId);
 
@@ -21,7 +22,7 @@
             _randomGen = new Random();
         }
 
-        public override void Process(Baggage baggage)
+        public override void Process(IBaggage baggage)
         {
             var isFail = _randomGen.Next(0, 101) < _pscSettings.PscInvalidationPercentage;
 

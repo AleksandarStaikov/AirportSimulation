@@ -8,15 +8,16 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
     using Common.Models.Contracts;
+    using Contracts;
     using CuttingEdge.Conditions;
 
-    public class AADispatcher : ChainLink
+    public class AADispatcher : ChainLink, IAADispatcher
     {
         public delegate AADispatcher Factory(IFlightManagement flightManagement, string nodeId);
 
         private readonly IFlightManagement _flightManagement;
 
-        private Dictionary<IChainLink, Queue<Baggage>> _gateQueues;
+        private Dictionary<IChainLink, Queue<IBaggage>> _gateQueues;
         private List<Aa> _gates;
 
         public AADispatcher(IFlightManagement flightManagement, string nodeId, ITimerService timerService)
@@ -31,8 +32,8 @@
         public void SetUpGates(List<Aa> gates)
         {
             _gates = gates;
-            _gateQueues = new Dictionary<IChainLink, Queue<Baggage>>();
-            foreach (var gate in gates) _gateQueues.Add(gate, new Queue<Baggage>());
+            _gateQueues = new Dictionary<IChainLink, Queue<IBaggage>>();
+            foreach (var gate in gates) _gateQueues.Add(gate, new Queue<IBaggage>());
         }
 
         private IChainLink FindGate(string gateDestination)
@@ -81,7 +82,7 @@
             }
         }
 
-        private void PassOrEnqueueBaggage(IChainLink gate, Baggage bag)
+        private void PassOrEnqueueBaggage(IChainLink gate, IBaggage bag)
         {
             bag.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
             bag.TransporterId = "Queue AA";
@@ -106,7 +107,7 @@
             gate.PassBaggage(queue.Dequeue());
         }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             throw new NotImplementedException();
         }
