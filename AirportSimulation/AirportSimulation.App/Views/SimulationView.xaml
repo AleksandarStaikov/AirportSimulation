@@ -261,7 +261,7 @@
                 Name="CreateButton"
                 Width="150"
                 FontSize="12"
-                Click="CreateButton_Click"
+               
                 IsEnabled="{Binding Path=SimulationGridOptions.CanCreate, Mode=TwoWay}">
                 <StackPanel>
                     <TextBlock>CREATE</TextBlock>

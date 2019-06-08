@@ -27,7 +27,7 @@ namespace AirportSimulation.App.Infrastructure
 
         private OneToOneCell CreateOneToOneConveyor(MutantRectangle container)
         {
-            var temp = new OneToOneCell("asd", container.Cell)
+            var temp = new OneToOneCell(container.Cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.Conveyor))
             };
@@ -37,7 +37,7 @@ namespace AirportSimulation.App.Infrastructure
 
         private ManyToOneCell CreateManyToOneConveyor(MutantRectangle container)
         {
-            var temp = new ManyToOneCell("asd", container.Cell)
+            var temp = new ManyToOneCell(container.Cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.ManyToOneConveyor))
             };

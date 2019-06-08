@@ -17,6 +17,7 @@ namespace AirportSimulation.App.Models
     {
         public (int row, int column) Cell;
         public GridCell Content;
+        public Action ReadyToRun;
 
         public MutantRectangle((int, int) cell) : base()
         {

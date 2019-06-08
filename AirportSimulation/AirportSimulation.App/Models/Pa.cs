@@ -9,7 +9,7 @@ namespace AirportSimulation.App.Models
 {
     internal class Pa : SingleCellBuildingComponent
     {
-        public Pa(string nodeId, (int, int) cell) : base(BuildingComponentType.PA, nodeId, cell)
+        public Pa((int, int) cell) : base(BuildingComponentType.PA, cell)
         {
         }
 
