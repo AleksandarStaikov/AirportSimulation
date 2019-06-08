@@ -9,6 +9,9 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using Abstractions.Contracts;
+    using Autofac;
+    using Core;
     using Core.Contracts.Services;
     using NUnit.Framework;
 
@@ -670,6 +673,60 @@
                 sut.SetSettings(simulationSettings);
 
                 var resultNode = sut.CreateBagCollector();
+
+                Guid.TryParse(resultNode.NodeId, out Guid output).ShouldBe(true);
+            }
+        }
+
+        [Test]
+        public void ChainLinkFactory_CreateCheckInDispatcher_ShouldReturnNodeWithRandomGuid()
+        {
+            using (var mock = AutoMock.GetLoose((a) => { a.RegisterType<TimerService>().AsImplementedInterfaces(); }))
+            {
+
+                var timerService = mock.Create<ITimerService>();
+                var sut = mock.Create<ChainLinkFactory>();
+                var nodeData = new NodeCreationData()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    NextNodes = null,
+                    Type = BuildingComponentType.Conveyor
+                };
+                var simulationSettings = new SimulationSettings()
+                {
+                    Nodes = new List<NodeCreationData>() { nodeData }
+                };
+
+                sut.SetSettings(simulationSettings);
+
+                var resultNode = sut.CreateCheckInDispatcher();
+
+                Guid.TryParse(resultNode.NodeId, out Guid output).ShouldBe(true);
+            }
+        }
+
+        [Test]
+        public void ChainLinkFactory_CreateAaDispatcher_ShouldReturnNodeWithRandomGuid()
+        {
+            using (var mock = AutoMock.GetLoose((a) => { a.RegisterType<TimerService>().AsImplementedInterfaces(); }))
+            {
+
+                var timerService = mock.Create<ITimerService>();
+                var sut = mock.Create<ChainLinkFactory>();
+                var nodeData = new NodeCreationData()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    NextNodes = null,
+                    Type = BuildingComponentType.Conveyor
+                };
+                var simulationSettings = new SimulationSettings()
+                {
+                    Nodes = new List<NodeCreationData>() { nodeData }
+                };
+
+                sut.SetSettings(simulationSettings);
+
+                var resultNode = sut.CreateAaDispatcher();
 
                 Guid.TryParse(resultNode.NodeId, out Guid output).ShouldBe(true);
             }

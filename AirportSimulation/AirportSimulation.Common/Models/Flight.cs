@@ -9,7 +9,7 @@
 
         public TimeSpan TimeToFlightSinceSimulationStart { get; set; } = new TimeSpan(0, 2, 0);
 
-        public TimeSpan TimeToFlightPreparationSinceSimulationStart { get; } = new TimeSpan(0, 1, 0);
+        public TimeSpan TimeToFlightPreparationSinceSimulationStart { get; set; } = new TimeSpan(0, 1, 0);
 
         public string FlightNumber { get; set; } = "FR6969";
 

@@ -11,7 +11,7 @@
     using Shouldly;
 
     [TestFixture]
-    public class TransportationNodesTest
+    public class TransportationNodesTests
     {
         [Test]
         public void Conveyor_ShouldMoveTheBaggage_WhenStarted()
