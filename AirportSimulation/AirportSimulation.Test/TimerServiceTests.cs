@@ -101,8 +101,8 @@
             {
                 new Flight()
                 {
-                    TimeToFlightSinceSimulationStart = timerService.ConvertMillisecondsToTimeSpan(1000),
-                    TimeToFlightPreparationSinceSimulationStart =  timerService.ConvertMillisecondsToTimeSpan(500),
+                    TimeToFlightSinceSimulationStart = timerService.ConvertMillisecondsToTimeSpan(4000),
+                    TimeToFlightPreparationSinceSimulationStart =  timerService.ConvertMillisecondsToTimeSpan(1000),
                     FlightState =  FlightState.WaitingForPreparation,
                 }
             });
@@ -112,7 +112,7 @@
             timerService.SetSettings(settingsMock.Object);
 
             timerService.Start();
-            Thread.Sleep(750);
+            Thread.Sleep(2000);
 
             settingsMock.Object.OutgoingFlights.First().FlightState.ShouldBe(FlightState.InPreparation);
         }

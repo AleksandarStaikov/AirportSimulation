@@ -26,12 +26,14 @@
             checkInDispatcher.SetCheckIns(GetNodesOfType<ICheckInDesk>(nodes).ToList());
             aaDispatcher.SetUpGates(GetNodesOfType<Aa>(nodes).ToList());
 
-            nodesData = nodesData.OrderBy(x => x.NextNodes.Count);
+            nodesData = nodesData.OrderBy(x => x.NextNodes?.Count ?? 0);
 
             foreach (var nodeCreationData in nodesData)
             {
                 var currentNode = nodes.FirstOrDefault(n => n.NodeId == nodeCreationData.Id);
-                var nextNodes = nodes?.Where(n => nodeCreationData.NextNodes?.Select(nn => nn.Key.Id).Contains(n.NodeId) ?? false) ?? new List<IChainLink>();
+                var nextNodes = nodes?.Where(n => nodeCreationData.NextNodes?
+                                                      .Select(nn => nn.Key.Id)
+                                                      .Contains(n.NodeId) ?? false) ?? new List<IChainLink>();
 
                 //If current node is end node => attach the bagCollector
                 if (currentNode is IPickUpArea || currentNode is IAsc || currentNode is IAa)

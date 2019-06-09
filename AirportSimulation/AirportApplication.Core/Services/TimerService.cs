@@ -25,7 +25,7 @@
             _mainThread = Dispatcher.CurrentDispatcher;
         }
 
-        public float SimulationMultiplier => _simulationSettings.Multiplier = 8;
+        public float SimulationMultiplier => _simulationSettings.Multiplier;
 
         public void RunNewTimer()
         {
@@ -70,7 +70,7 @@
 
         public int ConvertTimeSpanToMilliseconds(TimeSpan span)
         {
-            return (int)span.Ticks / 10000;
+            return (int)((long)span.Ticks / 10000);
         }
 
         public void SetSettings(ISimulationSettings settings)
