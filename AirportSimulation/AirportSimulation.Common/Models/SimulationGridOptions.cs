@@ -16,7 +16,6 @@
         private bool _canBuildMpa = true;
         private bool _isGridEnabled = true;
         private bool _canCreate;
-        private bool _canClear;
         private bool _canNext;
 
         public static int GRID_MAX_ROWS = 14;
@@ -43,16 +42,6 @@
             {
                 _isGridEnabled = value;
                 OnPropertyRaised(nameof(IsGridEnabled));
-            }
-        }
-
-        public bool CanClear
-        {
-            get => _canClear;
-            set
-            {
-                _canClear = value;
-                OnPropertyRaised(nameof(CanClear));
             }
         }
 

@@ -45,11 +45,29 @@
             FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
             FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
 
+            DisableBuildingComponentsButtons();
+
             this.MainTabMenu.SelectedIndex = 1;
         }
 
-        public ICommand OnRunButton_Command { get; set; } 
+        public ICommand OnRunButton_Command { get; set; }
 
         public ICommand OnNextButton_Command { get; set; }
+
+        private void DisableBuildingComponentsButtons()
+        {
+            SimulationView.CheckIn.IsEnabled = false;
+            SimulationView.Conveyor.IsEnabled = false;
+            SimulationView.ManyToOneConveyor.IsEnabled = false;
+            SimulationView.PSC.IsEnabled = false;
+            SimulationView.ASC.IsEnabled = false;
+            SimulationView.AA.IsEnabled = false;
+            SimulationView.PA.IsEnabled = false;
+            SimulationView.MPA.IsEnabled = false;
+            SimulationView.Next.IsEnabled = false;
+            SimulationView.Export.IsEnabled = false;
+            SimulationView.Import.IsEnabled = false;
+            SimulationView.ClearGridButton.IsEnabled = false;
+        }
     }
 }

@@ -231,7 +231,7 @@
         </ScrollViewer>
 
         <StackPanel 
-            x:Name="Run"
+            x:Name="Next"
             Grid.Column="1" 
             Grid.Row="7"
             Margin="25 20">
@@ -274,20 +274,6 @@
         </StackPanel>
         <StackPanel 
             Grid.Column="4" 
-            Grid.Row="7" 
-            Margin="25 20">
-            <Button 
-                Name="CreateButton"
-                Width="150"
-                FontSize="12"
-                IsEnabled="{Binding Path=SimulationGridOptions.CanCreate, Mode=TwoWay}">
-                <StackPanel>
-                    <TextBlock>CREATE</TextBlock>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-        <StackPanel 
-            Grid.Column="5" 
             Grid.Row="7" 
             Margin="25 20">
             <Button 

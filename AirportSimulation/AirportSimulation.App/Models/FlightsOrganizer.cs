@@ -7,6 +7,7 @@
     using System.Windows;
     using AirportSimulation.Utility;
     using System.Windows.Input;
+    using System;
 
     internal class FlightsOrganizer
     {
@@ -24,13 +25,38 @@
 
         public static ObservableCollection<Flight> Flights { get; set; } = new ObservableCollection<Flight>();
 
-        public static int Multiplier { get; set; }
+        public static int Multiplier { get; set; } = 1;
 
         public static int TransBaggagePercentage { get; set; }
 
         public static ICommand GetOutgoingFlightInfo { get; set; } = new RelayCommand<Flight>(AddNewOutgoingFlightCommand);
 
         public static ICommand GetIncomingFlightInfo { get; set; } = new RelayCommand<Flight>(AddNewIncomingFlightCommand);
+
+        public static ICommand DeleteFlightCommand { get; set; } = new RelayCommand<string>(DeleteFlight);
+
+        private static void DeleteFlight(string flightNumber)
+        {
+            var flight = Flights.FirstOrDefault(x => x.FlightNumber == flightNumber);
+
+            if (flight == null)
+            {
+                MessageBox.Show("Flight could not be found!");
+                return;
+            }
+
+            Flights.Remove(flight);
+
+            switch (flight.FlightState)
+            {
+                case FlightState.Incoming:
+                    IncomingFlights.Remove(flight);
+                    break;
+                case FlightState.WaitingForPreparation:
+                    OutgoingFlights.Remove(flight);
+                    break;
+            }
+        }
 
         private static void AddNewIncomingFlightCommand(Flight obj)
         {
