@@ -29,7 +29,7 @@
                 <chart:ChartSeries/>
             </chart:PieChart.Series>
         </chart:PieChart>
-        
+
         <chart:ClusteredColumnChart 
             Style="{StaticResource MinimalChartStyle}"
             Grid.Column="1"
@@ -39,9 +39,10 @@
                               ChartSubTitle="Bar Chart"
                         SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
             <chart:ClusteredColumnChart.Series>
-            <chart:ChartSeries/>
-        </chart:ClusteredColumnChart.Series>
+                <chart:ChartSeries/>
+            </chart:ClusteredColumnChart.Series>
         </chart:ClusteredColumnChart>
+
     </Grid>
 
 </UserControl>

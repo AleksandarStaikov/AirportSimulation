@@ -1,5 +1,6 @@
 ﻿namespace AirportSimulation.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Abstractions.Contracts;
@@ -15,23 +16,28 @@
         private readonly IChainLinkFactory _chainLinkFactory;
         private readonly ITimerService _timerService;
         private readonly INodeConnectorService _nodeConnectorService;
+        private readonly IStatisticsCalculator _statisticsCalculator;
 
         private List<IPauseResume> _pauseResumeNodes;
+        private SimulationSettings _settings;
 
         public Engine(IChainLinkFactory chainLinkFactory,
             ITimerService timerService,
-            INodeConnectorService nodeConnectorService)
+            INodeConnectorService nodeConnectorService,
+            IStatisticsCalculator statisticsCalculator)
         {
             _chainLinkFactory = chainLinkFactory;
             _timerService = timerService;
             _nodeConnectorService = nodeConnectorService;
+            _statisticsCalculator = statisticsCalculator;
         }
 
         public void Run(SimulationSettings settings)
         {
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
-            
+
+
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
             var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
             var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
@@ -98,6 +104,11 @@
             mpaToBsu.Start();
             bsuToMpa.Start();
             checkInDispatcher.Start();
+
+            //Stats
+            _statisticsCalculator.CalculateStatistics(settings);
+
+
         }
 
         public void RunDemo(SimulationSettings settings)
@@ -140,6 +151,7 @@
 
         public void ActualRun(SimulationSettings settings)
         {
+            _settings = settings;
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
 
@@ -154,6 +166,11 @@
 
             _timerService.RunNewTimer();
             _pauseResumeNodes.ForEach(n => n.Start());
+        }
+
+        public Func<StatisticsData> GetStatisticsCalculator()
+        {
+            return () => { return StatisticsCalculator.CalculateStatistics(this._settings); };
         }
 
         public void Pause()

@@ -123,6 +123,7 @@
 		private void Run_Click(object sender, RoutedEventArgs e)
 		{
             var data = ConvertToSettingsService.Convert();
+            
         }
 
         private void ClearGridButton_Click(object sender, RoutedEventArgs e)
