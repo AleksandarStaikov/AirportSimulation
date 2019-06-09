@@ -25,7 +25,7 @@
             checkInDispatcher.SetCheckIns(GetNodesOfType<CheckInDesk>(nodes).ToList());
             aaDispatcher.SetUpGates(GetNodesOfType<Aa>(nodes).ToList());
 
-            nodesData = nodesData.OrderBy(x => x.NextNodes);
+            nodesData = nodesData.OrderBy(x => x.NextNodes.Count);
 
             foreach (var nodeCreationData in nodesData)
             {

@@ -12,12 +12,5 @@
         {
             InitializeComponent();
         }
-
-        private void Run_Click(object sender, RoutedEventArgs e)
-        {
-            var data = ConvertToSettingsService.Convert();
-            var incomingFlights = FlightsOrganizer.GetIncomingFlights();
-            var outgoingFlights = FlightsOrganizer.GetOutgoingFlights();
-        }
     }
 }

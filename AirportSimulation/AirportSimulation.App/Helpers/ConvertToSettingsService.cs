@@ -27,9 +27,9 @@
             return NodesCreationData.AsEnumerable();
         }
 
-        public static ObservableCollection<string> GetAvailablePickUpAreas() => GetByType(BuildingComponentType.PA, "Pick up");
+        public static ObservableCollection<string> GetAvailablePickUpAreas() => GetByType(BuildingComponentType.PA, "P");
 
-        public static ObservableCollection<string> GetAvailableGates() => GetByType(BuildingComponentType.AA, "Gate");
+        public static ObservableCollection<string> GetAvailableGates() => GetByType(BuildingComponentType.AA, "A");
 
         private static ObservableCollection<string> GetByType(BuildingComponentType type, string prefix)
         {
@@ -37,7 +37,7 @@
             var count = NodesCreationData.Count(n => n.Type == type);
 
             for (int i = 1; i <= count; i++)
-                oc.Add($"{prefix} {i}");
+                oc.Add($"{prefix}{i}");
 
             return oc;
         }

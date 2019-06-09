@@ -3,7 +3,11 @@
     using AirportSimulation.App.Helpers;
     using AirportSimulation.App.Models;
     using AirportSimulation.Common;
+    using AirportSimulation.Common.Models;
+    using AirportSimulation.Core;
+    using AirportSimulation.Core.Contracts;
     using System;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Input;
 
@@ -13,16 +17,38 @@
         {
             InitializeComponent();
             OnNextButton_Command = new RelayCommand<MainWindow>(SwitchTab);
+            OnRunButton_Command = new RelayCommand<MainWindow>(RunSimulation);
+        }
+
+        private void RunSimulation(MainWindow obj)
+        {
+            var engine = ContainerConfig.Resolve<IEngine>();
+
+            var settings = new SimulationSettings
+            {
+                IncomingFlights = FlightsOrganizer.IncomingFlights.ToList(),
+                OutgoingFlights = FlightsOrganizer.OutgoingFlights.ToList(),
+                Multiplier = FlightsOrganizer.Multiplier,
+                Ascs = FlightsOrganizer.CurrentAscSettings,
+                Pscs = FlightsOrganizer.CurrentPscSettings,
+                TransBaggagePercentage = FlightsOrganizer.TransBaggagePercentage,
+                Nodes = ConvertToSettingsService.Convert()
+            };
+
+            engine.ActualRun(settings);
         }
 
         private void SwitchTab(MainWindow obj)
         {
             var a = ConvertToSettingsService.Convert();
-            FlightsView.PickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
-            FlightsView.GatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
+            FlightsView.IncomingPickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
+            FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
+            FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
 
             this.MainTabMenu.SelectedIndex = 1;
         }
+
+        public ICommand OnRunButton_Command { get; set; } 
 
         public ICommand OnNextButton_Command { get; set; }
     }
