@@ -20,6 +20,7 @@
         private readonly INodeConnectorService _nodeConnectorService;
 
         private List<IPauseResume> _pauseResumeNodes;
+        private SimulationSettings _settings;
 
         public Engine(IChainLinkFactory chainLinkFactory,
             ITimerService timerService,
@@ -34,7 +35,8 @@
         {
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
-            
+
+
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
             var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
             var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
@@ -143,6 +145,7 @@
 
         public void ActualRun(SimulationSettings settings)
         {
+            _settings = settings;
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
 
@@ -159,6 +162,11 @@
 
             _timerService.RunNewTimer();
             _pauseResumeNodes.ForEach(n => n.Start());
+        }
+
+        public Func<StatisticsData> GetStatisticsCalculator()
+        {
+            return () => { return StatisticsCalculator.CalculateStatistics(this._settings); };
         }
 
         public void Pause()

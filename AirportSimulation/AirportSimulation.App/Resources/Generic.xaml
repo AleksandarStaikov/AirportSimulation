@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart" >
+    xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+    x:Class="AirportSimulation.App.Helpers.StatisticsViewModel">
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="#FFEFEFEF"/>
     <SolidColorBrush x:Key="ForegroundBrush" Color="#FF666666"/>
@@ -221,7 +222,7 @@
     </Style>
 
     <DataTemplate x:Key="PageContent">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid x:Name="maingrid" Background="{StaticResource BackgroundBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -235,7 +236,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel 
+                <!--<StackPanel 
                     Width="350" 
                     Margin="0 0 10 0" 
                     Background="White" 
@@ -293,8 +294,9 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0">
+                </StackPanel>-->
+                
+                <StackPanel Grid.Column="0" Grid.Row="0">
                     <chart:ClusteredColumnChart                                
                                 Style="{StaticResource ChartStyle}"
                                 ChartTitle="Dispatch &amp; Collect"
@@ -305,7 +307,8 @@
                                         SeriesTitle="First"
                                         DisplayMember="Category"
                                         ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr1Col1}" />
+                                        ItemsSource="{Binding Path=_gr1Col1}"
+                                />
                             <chart:ChartSeries
                                         SeriesTitle="Last"
                                         DisplayMember="Category"
@@ -314,7 +317,7 @@
                         </chart:ClusteredColumnChart.Series>
                     </chart:ClusteredColumnChart>
                 </StackPanel>
-                <StackPanel  Grid.Column="2" Grid.Row="0">
+                <StackPanel  Grid.Column="1" Grid.Row="0">
                     <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Primary Failed &amp; Passed Bags"
@@ -330,7 +333,7 @@
                         </chart:PieChart.Series>
                     </chart:PieChart>
                 </StackPanel>
-                <StackPanel Grid.Column="3" Grid.Row="0">
+                <StackPanel Grid.Column="2" Grid.Row="0">
                     <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Secondary Failed &amp; Passed Bags"
@@ -346,7 +349,7 @@
                         </chart:PieChart.Series>
                     </chart:PieChart>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1">
+                <StackPanel Grid.Column="0" Grid.Row="1">
                     <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
@@ -360,15 +363,15 @@
                                         DisplayMember="Category"
                                         ValueMember="Number"
                                         ItemsSource="{Binding Path=_gr2Col1}" />
-                            <chart:ChartSeries
+                            <!--<chart:ChartSeries
                                         SeriesTitle="BSU bags"
                                         DisplayMember="Category"
                                         ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr2Col2}" />
+                                        ItemsSource="{Binding Path=_gr2Col2}" />-->
                         </chart:ClusteredColumnChart.Series>
                     </chart:ClusteredColumnChart>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1">
+                <StackPanel Grid.Column="1" Grid.Row="1">
                     <chart:ClusteredColumnChart                                
                                 Grid.Column="1"
                                 Grid.Row="2"
@@ -385,7 +388,7 @@
                         </chart:ClusteredColumnChart.Series>
                     </chart:ClusteredColumnChart>
                 </StackPanel>
-                <StackPanel  Grid.Column="3" Grid.Row="1">
+                <StackPanel  Grid.Column="2" Grid.Row="1">
                     <chart:ClusteredColumnChart
                             Style="{StaticResource ChartStyle}"
                             ChartTitle="Longest and Shortest times"
@@ -396,14 +399,32 @@
                                     SeriesTitle="Longest"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr4Col1}" />
-                            <chart:ChartSeries
+                                    ItemsSource="{Binding Path=_gr4Col1}"
+                                />
+                            <!--<chart:ChartSeries
                                     SeriesTitle="Shortest"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr4Col2}" />
+                                    ItemsSource="{Binding Path=_gr4Col2}" />-->
                         </chart:ClusteredColumnChart.Series>
                     </chart:ClusteredColumnChart>
+                </StackPanel>
+                
+                <StackPanel  Grid.Column="3" Grid.Row="0">
+                    <chart:PieChart                     
+                            Style="{StaticResource ChartStyle}"
+                            ChartTitle="ASC PCS Invalidation Percentage"
+                            ChartSubTitle="Invalidaitons"
+                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:PieChart.Series>
+                            <chart:ChartSeries
+                                    SeriesTitle="Invalidation %"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=_gr4Par1}">
+                            </chart:ChartSeries>
+                        </chart:PieChart.Series>
+                    </chart:PieChart>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

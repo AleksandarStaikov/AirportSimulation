@@ -5,21 +5,31 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Windows;
+    using System.Windows.Threading;
+    using AirportSimulation.Core;
+    using AirportSimulation.Core.Contracts;
     using AirportSimulation.Core.Services;
 
-
-    class StatisticsViewModel : INotifyPropertyChanged
+    partial class StatisticsViewModel : INotifyPropertyChanged
     {
+        private static Func<StatisticsData> _calculateStatistics;
+
         public StatisticsData statisticsData = new StatisticsData();
+        static DispatcherTimer timer = new DispatcherTimer();
+        public int myVar;
 
         public StatisticsViewModel()
         {
+            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Tick += Timer_Tick;
 
             Series = new List<SeriesData>();
 
 
             // gr = Graph --- Col = 1 --- 
             _gr1Col1 = new ObservableCollection<StatisticsModel>();
+
             _gr1Col2 = new ObservableCollection<StatisticsModel>();
 
             _gr2Par1 = new ObservableCollection<StatisticsModel>();
@@ -37,11 +47,34 @@
             _gr4Col1 = new ObservableCollection<StatisticsModel>();
             _gr4Col2 = new ObservableCollection<StatisticsModel>();
 
+            
+
+            //Series is the left column of the window ONLY  used for testing the numbers of different charts
+            //Series.Add(new SeriesData() { DisplayName = "First", Items = _gr1Col1 });
+            //Series.Add(new SeriesData() { DisplayName = "Last", Items = _gr1Col2 });
+
+            //Series.Add(new SeriesData() { DisplayName = "Pie Chart", Items = _gr2Par1 });
+            //Series.Add(new SeriesData() { DisplayName = "Pie Second", Items = _gr3Par1 });
+
+            //Series.Add(new SeriesData() { DisplayName = "Longest", Items = _gr4Col1 });
+            //Series.Add(new SeriesData() { DisplayName = "Shortest", Items = _gr4Col2 });
+            //Series.Add(new SeriesData() { DisplayName = "BSU bags", Items = _gr2Col2 });
+
+        }
+
+        public static void StartStatisticsTimer()
+        {
+            _calculateStatistics = ContainerConfig.Resolve<IEngine>().GetStatisticsCalculator();
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            statisticsData = _calculateStatistics();
 
             //fir column chart
-
-            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
-            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.LastCollectedBag?.Log?.FirstOrDefault()) });
+            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
+            _gr1Col2.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
 
             _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault()) });
             _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.LastDispatchedBag?.Log?.FirstOrDefault()) });
@@ -49,21 +82,31 @@
             // first pie chart
             _gr2Par1.Add(new StatisticsModel() { Category = "PSC Failed Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
             _gr2Par1.Add(new StatisticsModel() { Category = "PSC Succeeded Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
-           
+
             //second pie chart
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
 
-            //third pie chart - TO DO 
-            // _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number =}) -> can't convert
+            //third pie chart - TO DO throws null
+            if (statisticsData.AscInvalidationPercentage != null && statisticsData.PscInvalidationPercentage !=  null)
+            {
+                _gr4Par1.Add(new StatisticsModel() { Category = "ACS Invalidation Percentage", Number = (float)statisticsData.AscInvalidationPercentage });
+                _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number = (float)statisticsData.PscInvalidationPercentage });
+            }
 
             //second column chart -> missing the flight per fligh variable commented out below
             _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags Late at AA", Number = statisticsData?.TotalBagsArrivedLateAtAa?.Count ?? 0 });
             _gr2Col1.Add(new StatisticsModel() { Category = "Total Transferred Bags", Number = statisticsData?.TotalTransferredBags?.Count ?? 0 });
 
-            _gr2Col2.Add(new StatisticsModel() { Category = "Total Bags At BSU", Number = statisticsData?.TotalBagsThatWentToBsu?.Count ?? 0 });
-            _gr2Col2.Add(new StatisticsModel() { Category = "Delays per Flight", Number = statisticsData?.DelaysPerFlight?.Count ?? 0 });
-            //_gr2Col2.Add(new StatisticsModel() { Category = "Late for flight per flight", Number = statisticsData?.BagsLateForFlightPerFlight?.Count ?? 0 }); - dont know how to convert
+            _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags At BSU", Number = statisticsData?.TotalBagsThatWentToBsu?.Count ?? 0 });
+            _gr2Col1.Add(new StatisticsModel() { Category = "Delays per Flight", Number = statisticsData?.DelaysPerFlight?.Count ?? 0 });
+
+
+            //foreach (var flight in Series)
+            //{
+            //    _gr2Col1.Add(new StatisticsModel() { Category = flight.Key.FlightNumber, Number = (float)flight.Value });
+            //}
+
 
 
             // third column chart
@@ -72,22 +115,15 @@
             _gr3Col1.Add(new StatisticsModel() { Category = "Min BSU stay time ", Number = (float)statisticsData?.MinBsuStayTimeInMinutes });
 
             // fourth column chart
-            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Stay NO BSU ", Number = (float)statisticsData?.LongestSystemStayWithoutBsu});
+            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Stay NO BSU ", Number = (float)statisticsData?.LongestSystemStayWithoutBsu });
             _gr4Col2.Add(new StatisticsModel() { Category = "Shortest Stay NO BSU ", Number = (float)statisticsData?.ShortestSystemStayWithoutBsu });
-            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Transporting Time", Number = (float)statisticsData?.LongestTransportingTime});
+            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Transporting Time", Number = (float)statisticsData?.LongestTransportingTime });
             _gr4Col2.Add(new StatisticsModel() { Category = "Shortest Transporting Time", Number = (float)statisticsData?.ShortestTransportingTime });
-            
-            //Series is the left column of the window ONLY  used for testing the numbers of different charts
-            Series.Add(new SeriesData() { DisplayName = "First", Items = _gr1Col1 });
-            Series.Add(new SeriesData() { DisplayName = "Last", Items = _gr1Col2 });
-            
-          //  Series.Add(new SeriesData() { DisplayName = "Pie Chart", Items = _gr2Par1 });
-          //  Series.Add(new SeriesData() { DisplayName = "Pie Second", Items = _gr3Par1 });
 
-            Series.Add(new SeriesData() { DisplayName = "Longest", Items = _gr4Col1 });
-            Series.Add(new SeriesData() { DisplayName = "Shortest", Items = _gr4Col2 });
-            //  Series.Add(new SeriesData() { DisplayName = "BSU bags", Items = _gr2Col2 });
 
+
+            //_gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
+           
         }
 
         private object selectedItem = null;
