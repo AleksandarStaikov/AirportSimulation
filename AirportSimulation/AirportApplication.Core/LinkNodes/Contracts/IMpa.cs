@@ -5,7 +5,7 @@
     using System;
     using Common.Models.Contracts;
 
-    public interface IMpa
+    public interface IMpa : IChainLink
     {
         string Destination { get; }
         string NodeId { get; set; }

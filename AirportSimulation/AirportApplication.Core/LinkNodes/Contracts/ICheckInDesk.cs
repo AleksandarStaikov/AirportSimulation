@@ -5,7 +5,7 @@
     using Common.Models.Contracts;
     using System;
 
-    public interface ICheckInDesk
+    public interface ICheckInDesk : IChainLink
     {
         void Process(IBaggage baggage);
         string Destination { get; }

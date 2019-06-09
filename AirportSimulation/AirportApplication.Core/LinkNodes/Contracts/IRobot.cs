@@ -5,7 +5,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IRobot
+    public interface IRobot : IChainLink
     {
         void Process(IBaggage baggage);
         string Destination { get; }

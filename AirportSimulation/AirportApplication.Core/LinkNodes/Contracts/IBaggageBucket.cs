@@ -6,7 +6,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IBaggageBucket
+    public interface IBaggageBucket : IChainLink
     {
         bool isDistributing { get; set; }
         string FlightNumber { get; }

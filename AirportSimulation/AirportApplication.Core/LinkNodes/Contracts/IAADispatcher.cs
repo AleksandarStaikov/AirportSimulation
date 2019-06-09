@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using Abstractions.Core.Contracts;
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IAADispatcher
+    public interface IAADispatcher : IChainLink
     {
         string Destination { get; }
         string NodeId { get; set; }
