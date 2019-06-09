@@ -80,7 +80,7 @@
                 return tempCell;
             }
 
-            while(!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
+            while(!(tempCell.NextNodes[0] is SingleCellBuildingComponent)) //TODO: Fix index out of bounds
             {
                 tempCell = tempCell.NextNodes[0] as MultipleCellComponent;
             }
