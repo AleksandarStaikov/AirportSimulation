@@ -5,5 +5,7 @@
     internal interface ICreatable
     {
         NodeCreationData GetCreationData();
+
+        NodeCreationData GetSerializedData();
     }
 }

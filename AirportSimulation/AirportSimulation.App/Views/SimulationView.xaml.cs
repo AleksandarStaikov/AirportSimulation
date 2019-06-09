@@ -10,12 +10,18 @@
     using AirportSimulation.App.Models;
     using AirportSimulation.App.Helpers;
     using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Newtonsoft.Json.Linq;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Runtime.Serialization;
 
     public partial class SimulationView : UserControl
-	{
+    {
         private Action<BuildingComponentType> buildingComponentClicked = delegate { };
         private BlinkingCellsPainter cellsPainter;
-		private BitmapImage _currentBuildingComponentImage;
+        private BitmapImage _currentBuildingComponentImage;
         private BuildingComponentType _currentBuildingComponentType = BuildingComponentType.CheckIn;
         
 		public SimulationView()
@@ -23,9 +29,9 @@
 			InitializeComponent();
             cellsPainter = new BlinkingCellsPainter(SimulationGrid);
             InitializeClickableGridCells();
-		}
+        }
 
-		public SimulationGridOptions SimulationGridOptions { get; set; } = new SimulationGridOptions();
+        public SimulationGridOptions SimulationGridOptions { get; set; } = new SimulationGridOptions();
 
         private void InitializeClickableGridCells()
         {
@@ -61,36 +67,66 @@
 		{
 			var componentName = (sender as Button)?.Name;
 
-			if (componentName == null)
-				return;
+            if (componentName == null)
+                return;
 
-			_currentBuildingComponentType = (BuildingComponentType) Enum.Parse(typeof(BuildingComponentType), componentName, true);
-			_currentBuildingComponentImage = BuildingComponentsHelper.GetBuildingComponentImage(_currentBuildingComponentType);
+            _currentBuildingComponentType = (BuildingComponentType)Enum.Parse(typeof(BuildingComponentType), componentName, true);
+            _currentBuildingComponentImage = BuildingComponentsHelper.GetBuildingComponentImage(_currentBuildingComponentType);
 
             buildingComponentClicked(_currentBuildingComponentType);
-		}
+        }
 
         private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
             InitializeClickableGridCells();
-		}
+        }
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var data = ConvertToSettingsService.Convert();
-                //var test = JsonConvert.SerializeObject(SimulationGrid.Children, new JsonSerializerSettings
-                //{
-                //    ReferenceLoopHandling = ReferenceLoopHandling.Error,
-                //    NullValueHandling = NullValueHandling.Include,
-                //    Formatting = Formatting.Indented
-                //});
+                var data = ConvertToSettingsService.Serialize();
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    NullValueHandling = NullValueHandling.Include,
+                    Formatting = Formatting.Indented
+                };
+
+
+                using (var fs = new FileStream("../../myTest.txt", FileMode.Create, FileAccess.Write))
+                {
+                    try
+                    {
+                        var bf = new BinaryFormatter();
+                        bf.Serialize(fs, data);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
             }
             catch (StackOverflowException ex)
             {
                 var a = ex;
                 // ignored
+            }
+        }
+
+        private void Import_Click(object sender, RoutedEventArgs e)
+        {
+            using (var fs = new FileStream("../../myTest.txt", FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    var bf = new BinaryFormatter();
+                    var res = bf.Deserialize(fs);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
     }

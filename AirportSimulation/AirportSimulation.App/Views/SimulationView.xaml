@@ -346,7 +346,8 @@
             Margin="25 20">
             <Button 
                 Width="150"
-                FontSize="12">
+                FontSize="12"
+                Click="Import_Click">
                 <StackPanel>
                     <TextBlock>IMPORT</TextBlock>
                 </StackPanel>
