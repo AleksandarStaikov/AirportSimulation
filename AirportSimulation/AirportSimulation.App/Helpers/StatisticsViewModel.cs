@@ -24,7 +24,7 @@
             timer.Interval = TimeSpan.FromSeconds(2);
             timer.Tick += Timer_Tick;
 
-            Series = new List<SeriesData>();
+            //Series = new List<SeriesData>();
 
 
             // gr = Graph --- Col = 1 --- 
@@ -47,7 +47,7 @@
             _gr4Col1 = new ObservableCollection<StatisticsModel>();
             _gr4Col2 = new ObservableCollection<StatisticsModel>();
 
-            
+
 
             //Series is the left column of the window ONLY  used for testing the numbers of different charts
             //Series.Add(new SeriesData() { DisplayName = "First", Items = _gr1Col1 });
@@ -73,11 +73,11 @@
             statisticsData = _calculateStatistics();
 
             //fir column chart
-            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
-            _gr1Col2.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
+            _gr1Col1.Add(new StatisticsModel() { Category = "First Collected Bags", Number = Convert.ToInt32(statisticsData?.LastCollectedBag?.Log?.FirstOrDefault().LogCreated.TotalMinutes) });
+            _gr1Col1.Add(new StatisticsModel() { Category = "Last Collected Bags", Number = Convert.ToInt32(statisticsData?.LastCollectedBag?.Log?.LastOrDefault().LogCreated.TotalMinutes) });
 
-            _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault()) });
-            _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.LastDispatchedBag?.Log?.FirstOrDefault()) });
+            _gr1Col2.Add(new StatisticsModel() { Category = "First Dispatched Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault().LogCreated.TotalMinutes) });
+            _gr1Col2.Add(new StatisticsModel() { Category = "Last Dispatched Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.LastOrDefault().LogCreated.TotalMinutes) });
 
             // first pie chart
             _gr2Par1.Add(new StatisticsModel() { Category = "PSC Failed Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
@@ -87,12 +87,10 @@
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
 
-            //third pie chart - TO DO throws null
-            if (statisticsData.AscInvalidationPercentage != null && statisticsData.PscInvalidationPercentage !=  null)
-            {
+            //third pie chart - TO DO throws nu
                 _gr4Par1.Add(new StatisticsModel() { Category = "ACS Invalidation Percentage", Number = (float)statisticsData.AscInvalidationPercentage });
                 _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number = (float)statisticsData.PscInvalidationPercentage });
-            }
+          
 
             //second column chart -> missing the flight per fligh variable commented out below
             _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags Late at AA", Number = statisticsData?.TotalBagsArrivedLateAtAa?.Count ?? 0 });
@@ -123,7 +121,7 @@
 
 
             //_gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
-           
+
         }
 
         private object selectedItem = null;
@@ -146,12 +144,12 @@
             set;
         }
         // for column charts
-        public ObservableCollection<StatisticsModel> _gr1Col2
+        public ObservableCollection<StatisticsModel> _gr1Col1
         {
             get;
             set;
         }
-        public ObservableCollection<StatisticsModel> _gr1Col1
+        public ObservableCollection<StatisticsModel> _gr1Col2
         {
             get;
             set;

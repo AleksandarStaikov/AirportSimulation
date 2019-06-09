@@ -124,7 +124,7 @@
             else
             {
                 var transportingNode = nodes.FirstOrDefault(n => n.NodeId == transporterIdentifier);
-                var transporterNominalTimeInMilliseconds = transportingNode.Length * transportingNode.MoveTime;
+                var transporterNominalTimeInMilliseconds = transportingNode?.Length ?? 0 * transportingNode?.MoveTime ?? 0;
                 var actualTransportingTime = log.TimeElapsed.Milliseconds;
                 var transportationOverload = actualTransportingTime - transporterNominalTimeInMilliseconds;
                 return new Tuple<string, double>(transporterIdentifier,
@@ -158,11 +158,12 @@
             PscFailedBags = new List<Baggage>();
             PscSucceededBags = new List<Baggage>();
 
-
             AscFailedBags = new List<Baggage>();
             AscSucceededBags = new List<Baggage>();
 
             TotalBagsArrivedLateAtAa = new List<Baggage>();
+
+            
 
             
 

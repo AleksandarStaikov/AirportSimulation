@@ -60,6 +60,12 @@
                         if (nextNode.Status == NodeState.Free)
                         {
                             var tempBaggage = _baggageDistributors[destination].Dequeue();
+
+                            if (tempBaggage == null)
+                            {
+                                return;
+                            }
+
                             tempBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
 
                             nextNode.PassBaggage(tempBaggage);
