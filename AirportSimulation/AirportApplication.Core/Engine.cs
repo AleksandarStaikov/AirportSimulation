@@ -17,20 +17,17 @@
         private readonly IChainLinkFactory _chainLinkFactory;
         private readonly ITimerService _timerService;
         private readonly INodeConnectorService _nodeConnectorService;
-        private readonly IStatisticsCalculator _statisticsCalculator;
 
         private List<IPauseResume> _pauseResumeNodes;
         private SimulationSettings _settings;
 
         public Engine(IChainLinkFactory chainLinkFactory,
             ITimerService timerService,
-            INodeConnectorService nodeConnectorService,
-            IStatisticsCalculator statisticsCalculator)
+            INodeConnectorService nodeConnectorService)
         {
             _chainLinkFactory = chainLinkFactory;
             _timerService = timerService;
             _nodeConnectorService = nodeConnectorService;
-            _statisticsCalculator = statisticsCalculator;
         }
 
         public void Run(SimulationSettings settings)
@@ -105,11 +102,6 @@
             mpaToBsu.Start();
             bsuToMpa.Start();
             checkInDispatcher.Start();
-
-            //Stats
-            _statisticsCalculator.CalculateStatistics(settings);
-
-
         }
 
         public void RunDemo(SimulationSettings settings)

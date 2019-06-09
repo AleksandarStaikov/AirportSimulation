@@ -13,19 +13,16 @@
 
     partial class StatisticsViewModel : INotifyPropertyChanged
     {
-        private readonly Func<StatisticsData> _calculateStatistics;
+        private static Func<StatisticsData> _calculateStatistics;
 
         public StatisticsData statisticsData = new StatisticsData();
-        DispatcherTimer timer = new DispatcherTimer();
+        static DispatcherTimer timer = new DispatcherTimer();
         public int myVar;
 
         public StatisticsViewModel()
         {
             timer.Interval = TimeSpan.FromSeconds(2);
             timer.Tick += Timer_Tick;
-            timer.Start();
-
-            _calculateStatistics = ContainerConfig.Resolve<IEngine>().GetStatisticsCalculator();
 
             Series = new List<SeriesData>();
 
@@ -63,6 +60,12 @@
             //Series.Add(new SeriesData() { DisplayName = "Shortest", Items = _gr4Col2 });
             //Series.Add(new SeriesData() { DisplayName = "BSU bags", Items = _gr2Col2 });
 
+        }
+
+        public static void StartStatisticsTimer()
+        {
+            _calculateStatistics = ContainerConfig.Resolve<IEngine>().GetStatisticsCalculator();
+            timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
