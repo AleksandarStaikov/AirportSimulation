@@ -295,7 +295,7 @@
                 Width="150"
                 FontSize="12"
                 Click="ClearGridButton_Click"
-                IsEnabled="{Binding Path=SimulationGridOptions.CanClear, Mode=TwoWay}">
+                IsEnabled="True">
                 <StackPanel>
                     <TextBlock>CLEAR</TextBlock>
                 </StackPanel>
