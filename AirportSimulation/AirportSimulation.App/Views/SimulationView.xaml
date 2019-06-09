@@ -138,23 +138,23 @@
                     Grid.Column="0" 
                     Grid.Row="3">
                 <Button
-                        x:Name="Bridge"
-                        Height="50"
-                        Width="60"
-                        BorderThickness="0"
-                        Click="BuildingComponent_Click"
-                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
-                        Background="{StaticResource BridgeImageBrush}">
+                    x:Name="Bridge"
+                    Height="50"
+                    Width="60"
+                    BorderThickness="0"
+                    Click="BuildingComponent_Click"
+                    IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+                    Background="{StaticResource BridgeImageBrush}">
                     <Button.ToolTip>
                         <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
                             <StackPanel>
-                                <TextBlock FontWeight="Bold">Bridge Between Conveyours</TextBlock>
+                                <TextBlock FontWeight="Bold">Bridge Between Conveyors</TextBlock>
                             </StackPanel>
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
                 <TextBlock 
-                        Text="Bridge Between Conveyours" 
+                        Text="Bridge Between Conveyors" 
                         Foreground="Black" 
                         FontWeight="Bold"
                         HorizontalAlignment="Center"/>
@@ -306,9 +306,7 @@
                 ShowGridLines="True" 
                 Height="1000"
                 Width="1500"
-                IsEnabled="{Binding Path=SimulationGridOptions.IsGridEnabled, Mode=TwoWay}"
-                MouseLeftButtonDown="SimulationGrid_MouseLeftButtonDown"
-                MouseRightButtonDown="SimulationGrid_MouseRightButtonDown">
+                IsEnabled="{Binding Path=SimulationGridOptions.IsGridEnabled, Mode=TwoWay}">
             </Grid>
         </ScrollViewer>
 

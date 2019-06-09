@@ -8,6 +8,8 @@
 
         public Dictionary<NodeCreationData, int?> NextNodes { get; set; }
 
+        public (int, int) Cell { get; set; }
+
         public BuildingComponentType Type { get; set; }
 
         public int? Length { get; set; }

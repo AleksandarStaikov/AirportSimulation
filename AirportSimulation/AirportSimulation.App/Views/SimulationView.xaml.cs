@@ -21,12 +21,6 @@
 		public SimulationView()
 		{
 			InitializeComponent();
-
-            //(_currentBuildingComponentType, _currentBuildingComponentImage) =
-            //    _buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, _step,
-            //        true);
-
-            //_currentBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn);
             cellsPainter = new BlinkingCellsPainter(SimulationGrid);
             InitializeClickableGridCells();
 		}
@@ -62,17 +56,6 @@
         }
 
         private void EnableNextButton() => SimulationGridOptions.CanNext = true;
-        
-
-        private void SimulationGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-            
-        }
-
-		private void SimulationGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-		{
-            
-        }
 
 		private void BuildingComponent_Click(object sender, RoutedEventArgs e)
 		{
@@ -89,7 +72,6 @@
 
         private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
-            //TODO: Clear Grid
             InitializeClickableGridCells();
 		}
 
@@ -97,12 +79,13 @@
         {
             try
             {
-                var test = JsonConvert.SerializeObject(SimulationGrid.Children, new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Error,
-                    NullValueHandling = NullValueHandling.Include,
-                    Formatting = Formatting.Indented
-                });
+                var data = ConvertToSettingsService.Convert();
+                //var test = JsonConvert.SerializeObject(SimulationGrid.Children, new JsonSerializerSettings
+                //{
+                //    ReferenceLoopHandling = ReferenceLoopHandling.Error,
+                //    NullValueHandling = NullValueHandling.Include,
+                //    Formatting = Formatting.Indented
+                //});
             }
             catch (StackOverflowException ex)
             {
