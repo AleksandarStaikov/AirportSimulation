@@ -17,7 +17,7 @@
         private BlinkingCellsPainter cellsPainter;
 		private BitmapImage _currentBuildingComponentImage;
         private BuildingComponentType _currentBuildingComponentType = BuildingComponentType.CheckIn;
-
+        
 		public SimulationView()
 		{
 			InitializeComponent();
@@ -35,6 +35,8 @@
 
         private void InitializeClickableGridCells()
         {
+            SimulationGrid.Children.Clear();
+
             for (var i = 0; i < SimulationGrid.RowDefinitions.Count; i++)
             {
                 for (var j = 0; j < SimulationGrid.ColumnDefinitions.Count; j++)
@@ -60,6 +62,7 @@
         }
 
         private void EnableNextButton() => SimulationGridOptions.CanNext = true;
+        
 
         private void SimulationGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -86,7 +89,8 @@
 
         private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
-			//TODO: Clear Grid
+            //TODO: Clear Grid
+            InitializeClickableGridCells();
 		}
 
         private void Export_Click(object sender, RoutedEventArgs e)
