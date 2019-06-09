@@ -1,13 +1,13 @@
-﻿using AirportSimulation.App.Models;
-using AirportSimulation.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AirportSimulation.App.Helpers
+﻿namespace AirportSimulation.App.Helpers
 {
+    using AirportSimulation.App.Models;
+    using AirportSimulation.Common;
+    using AirportSimulation.Common.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+
     internal static class ConvertToSettingsService
     {
         public readonly static List<GenericBuildingComponent> StartNodes = new List<GenericBuildingComponent>();
@@ -16,9 +16,9 @@ namespace AirportSimulation.App.Helpers
 
         public static IEnumerable<NodeCreationData> Convert()
         {
-            foreach(GenericBuildingComponent startingNode in StartNodes)
+            foreach (GenericBuildingComponent startingNode in StartNodes)
             {
-                if(startingNode is ICreatable creatableNode)
+                if (startingNode is ICreatable creatableNode)
                 {
                     creatableNode.GetCreationData();
                 }
@@ -27,23 +27,19 @@ namespace AirportSimulation.App.Helpers
             return NodesCreationData.AsEnumerable();
         }
 
-        private static void DFS(GenericBuildingComponent node)
-        {
-            if(node is ICreatable creatableNode)
-            {
-                var data = ((ICreatable)node).GetCreationData();
-                NodesCreationData.Add(data);
+        public static ObservableCollection<string> GetAvailablePickUpAreas() => GetByType(BuildingComponentType.PA, "P");
 
-                Listed.Add(node.NodeId);
-            }
-            
-            foreach(GenericBuildingComponent nextNode in node.NextNodes)
-            {
-                if (!Listed.Contains(nextNode.NodeId))
-                {
-                    DFS(nextNode);
-                }
-            }
+        public static ObservableCollection<string> GetAvailableGates() => GetByType(BuildingComponentType.AA, "A");
+
+        private static ObservableCollection<string> GetByType(BuildingComponentType type, string prefix)
+        {
+            var oc = new ObservableCollection<string>();
+            var count = NodesCreationData.Count(n => n.Type == type);
+
+            for (int i = 1; i <= count; i++)
+                oc.Add($"{prefix}{i}");
+
+            return oc;
         }
     }
 }

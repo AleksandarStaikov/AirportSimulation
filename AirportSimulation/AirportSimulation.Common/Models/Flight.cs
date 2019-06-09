@@ -5,17 +5,17 @@
 
     public class Flight : IFlight
     {
-        public int BaggageCount { get; set; } = 100;
+        public int BaggageCount { get; set; }
 
-        public TimeSpan TimeToFlightSinceSimulationStart { get; set; } = new TimeSpan(0, 2, 0);
+        public TimeSpan TimeToFlightSinceSimulationStart { get; set; } = new TimeSpan(0, 0, 0);
 
-        public TimeSpan TimeToFlightPreparationSinceSimulationStart { get; set; } = new TimeSpan(0, 1, 0);
+        public TimeSpan TimeToFlightPreparationSinceSimulationStart { get; set; } = new TimeSpan(0, 0, 0);
 
-        public string FlightNumber { get; set; } = "FR6969";
+        public string FlightNumber { get; set; }
 
-        public string Gate { get; set; } = "A1";
+        public string Gate { get; set; }
 
-        public string PickUpArea { get; set; } = "P1";
+        public string PickUpArea { get; set; }
 
         public int DispatchedBaggageCount { get; set; } = 0;
 

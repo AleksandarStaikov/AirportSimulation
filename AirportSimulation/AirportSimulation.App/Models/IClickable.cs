@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.App.Models;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using AirportSimulation.Common;
+
     internal interface IClickable
     {
         void ClickHandler(MutantRectangle sender, BuildingComponentType type);

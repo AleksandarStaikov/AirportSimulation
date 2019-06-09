@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
-    class ManyToOneCell : MultipleCellComponent
+    using System.Collections.Generic;
+    using AirportSimulation.Common;
+    
+    internal class ManyToOneCell : MultipleCellComponent
     {
         public BuildingComponentType PredecessorType;
+
         public ManyToOneCell((int, int) cell) : base(BuildingComponentType.ManyToOneConveyor,cell)
         {
         }

@@ -238,7 +238,7 @@
             <Button 
                 Width="150"
                 FontSize="12" 
-                Click="Run_Click" 
+                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.OnNextButton_Command}"
                 IsEnabled="{Binding Path=SimulationGridOptions.CanNext, Mode=TwoWay}">
                 <StackPanel>
                     <TextBlock>NEXT</TextBlock>
@@ -252,7 +252,8 @@
             Margin="25 20">
             <Button 
                 Width="150"
-                FontSize="12">
+                FontSize="12"
+                Click="Export_Click">
                 <StackPanel>
                     <TextBlock>EXPORT</TextBlock>
                 </StackPanel>
@@ -294,7 +295,7 @@
                 Width="150"
                 FontSize="12"
                 Click="ClearGridButton_Click"
-                IsEnabled="{Binding Path=SimulationGridOptions.CanClear, Mode=TwoWay}">
+                IsEnabled="True">
                 <StackPanel>
                     <TextBlock>CLEAR</TextBlock>
                 </StackPanel>

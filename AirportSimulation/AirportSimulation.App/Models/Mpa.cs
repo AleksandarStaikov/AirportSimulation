@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using AirportSimulation.App.Helpers;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System.Collections.Generic;
+    using System.Windows.Media;
+    using AirportSimulation.App.Helpers;
+    using AirportSimulation.Common;
+    
     internal class Mpa : SingleCellBuildingComponent, IParent
     {
         private static Mpa _instance = null;
@@ -17,7 +13,8 @@ namespace AirportSimulation.App.Models
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
-                BuildingComponentType.AA
+                BuildingComponentType.AA,
+                BuildingComponentType.PA
             };
         }
 

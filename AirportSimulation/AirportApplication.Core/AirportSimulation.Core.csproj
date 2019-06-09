@@ -59,7 +59,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ContainerConfig.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Contracts\IEngine.cs" />
@@ -100,7 +99,6 @@
     <Compile Include="Services\NodeConnectorService.cs" />
     <Compile Include="Services\StatisticsCalculator.cs" />
     <Compile Include="Services\TimerService.cs" />
-    <Compile Include="ViewModels\SimulationSettingsContainerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

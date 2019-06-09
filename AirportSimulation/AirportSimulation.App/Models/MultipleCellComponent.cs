@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.App.Helpers;
-using AirportSimulation.Common;
-using AirportSimulation.Common.Models;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AirportSimulation.App.Helpers;
+    using AirportSimulation.Common;
+    using AirportSimulation.Common.Models;
+    
     internal abstract class MultipleCellComponent : GenericBuildingComponent, IParent
     {
         public int Index { get; protected set; } = 0;
@@ -77,6 +74,11 @@ namespace AirportSimulation.App.Models
         private MultipleCellComponent GetLastSegment()
         {
             var tempCell = this;
+
+            if (tempCell.NextNodes[0] == null)
+            {
+                return tempCell;
+            }
 
             while(!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
             {

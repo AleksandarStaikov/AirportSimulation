@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using AirportSimulation.App.Infrastructure;
     using AirportSimulation.Common;
-
+    
     internal class OverlappingBlinkingCell : GridCell, IClickable
     {
         private readonly List<BlinkingCell> Layers;

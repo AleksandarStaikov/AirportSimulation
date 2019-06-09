@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.App.Infrastructure;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
-    class DisabledCell : GridCell, IClickable
+    using AirportSimulation.App.Infrastructure;
+    using AirportSimulation.Common;
+    
+    internal class DisabledCell : GridCell, IClickable
     {
         public readonly GenericBuildingComponent ParentComponent;
         public DisabledCell((int, int) cell) : base(cell)
