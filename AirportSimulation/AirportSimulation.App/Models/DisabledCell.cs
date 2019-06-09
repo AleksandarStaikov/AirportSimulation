@@ -28,7 +28,7 @@ namespace AirportSimulation.App.Models
 
         public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            if (ParentComponent != null && ParentComponent is IParent)
+            if (ParentComponent != null)
             {
                 ((IParent)ParentComponent).ShowBlinkingChildren(type);
             }

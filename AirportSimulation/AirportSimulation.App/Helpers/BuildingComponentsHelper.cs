@@ -41,7 +41,8 @@
 				{BuildingComponentType.ASC, "Resources/AdvancedCheckBaggage.png"},
 				{BuildingComponentType.AA, "Resources/airplane-shape.png"},
 				{BuildingComponentType.MPA, "Resources/MPApng.png"},
-				{BuildingComponentType.ManyToOneConveyor, "Resources/manytomanyConv.png"}
+				{BuildingComponentType.ManyToOneConveyor, "Resources/manytomanyConv.png"},
+                {BuildingComponentType.Bridge, "Resources/conveyor-bridge.png" }
 			};
 
 		private static readonly Dictionary<int, BuildingComponentType> _buildingComponentsSteps =

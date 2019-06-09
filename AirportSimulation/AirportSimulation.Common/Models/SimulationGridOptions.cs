@@ -15,7 +15,7 @@
         private bool _isGridEnabled = true;
         private bool _canCreate;
         private bool _canClear;
-        private bool _canNext = true;
+        private bool _canNext = false;
 
         public static int GRID_MAX_ROWS = 14;
         public static int GRID_MAX_COLUMNS = 19;

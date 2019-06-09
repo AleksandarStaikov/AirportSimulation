@@ -28,12 +28,21 @@
 
             if (IsConveyor(type))  //TODO: Add factory as a property?
             {
-                content = new MultipleCellComponentFactory().CreateComponent(type, sender);
+                content = new MultipleCellComponentFactory().CreateComponent(type, sender.Cell);
+                if(ParentComponent is MultipleCellComponent component) //TODO: Guid from bridged component
+                {
+                    content.NodeId = component.NodeId;
+                }
                 
             }
             else
             {
-                content = new SingleCellComponentFactory().CreateComponent(type, sender);
+                content = new SingleCellComponentFactory().CreateComponent(type, sender.Cell);
+                if(content is Aa)
+                {
+                    sender.ReadyToGoNext?.Invoke();
+                    sender.ReadyToGoNext = null;
+                }
             }
 
             ParentComponent.ChildClicked(content);

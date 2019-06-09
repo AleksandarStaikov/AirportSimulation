@@ -21,10 +21,13 @@ namespace AirportSimulation.App.Models
         {
             if(type == BuildingComponentType.CheckIn)
             {
-                
+                var content = new SingleCellComponentFactory().CreateComponent(type, sender.Cell);
+                ((CheckIn)content).PopulatePossibleNeighbours(sender);
+
+                sender.ChangeContent(content);
             }
-            var content = new SingleCellComponentFactory().CreateComponent(type, sender);
-            sender.ChangeContent(content);
+            
+            
         }
 
         public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)

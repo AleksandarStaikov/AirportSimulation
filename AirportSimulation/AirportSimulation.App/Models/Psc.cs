@@ -21,13 +21,12 @@ namespace AirportSimulation.App.Models
 
         public void ChildClicked(GenericBuildingComponent successor)
         {
-            if (successor.GetType().BaseType == typeof(MultipleCellComponent))
+            if (successor is MultipleCellComponent component)
             {
-                var temp = successor as MultipleCellComponent;
-                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                if (temp is ManyToOneCell)
+                component.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+                if (component is ManyToOneCell)
                 {
-                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    ((ManyToOneCell)component).PredecessorType = this.Type;
                 }
             }
             NextNodes.Add(successor);

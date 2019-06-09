@@ -17,7 +17,7 @@ namespace AirportSimulation.App.Models
     {
         public BuildingComponentType Type { get; }
 
-        public string NodeId { get; }
+        public string NodeId { get; set; }
 
         public readonly List<MutantRectangle> PossibleNeighbours;
 
@@ -30,7 +30,6 @@ namespace AirportSimulation.App.Models
         public GenericBuildingComponent(BuildingComponentType type, (int, int) cell) : base(cell)
         {
             Type = type;
-            NodeId = Guid.NewGuid().ToString();
 
             PossibleNeighbours = new List<MutantRectangle>();
             NextNodes = new List<GenericBuildingComponent>();

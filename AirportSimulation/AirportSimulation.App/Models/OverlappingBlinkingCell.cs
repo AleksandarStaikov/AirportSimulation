@@ -25,7 +25,6 @@
                 else
                 {
                     blinkingCell.ParentComponent.ChildClicked(sender.Content as GenericBuildingComponent);
-                    //Layers.Remove(blinkingCell);
                 }
             }
         }

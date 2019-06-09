@@ -19,6 +19,7 @@
             <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png" Stretch="Fill"/>
             <ImageBrush x:Key="ManyToOneConveyorImageBrush" ImageSource="/Resources/manytomanyConv.png" Stretch="Fill"/>
             <ImageBrush x:Key="MPAImageBrush" ImageSource="/Resources/MPApng.png" Stretch="Fill"/>
+            <ImageBrush x:Key="BridgeImageBrush" ImageSource="/Resources/conveyor-bridge.png" Stretch="Fill"/>
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
@@ -50,6 +51,7 @@
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -73,6 +75,8 @@
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
+
+                
 
                 <Button 
                     x:Name="Conveyor"
@@ -112,10 +116,29 @@
                     </Button.ToolTip>
                 </Button>
 
+                <Button
+                    x:Name="Bridge"
+                    Grid.Column="0" 
+                    Grid.Row="3"
+                    Height="50"
+                    Width="60"
+                    BorderThickness="0"
+                    Click="BuildingComponent_Click"
+                    IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+                    Background="{StaticResource BridgeImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Bridge between conveyours</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+
                 <Button 
                     x:Name="PSC"
                     Grid.Column="0" 
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Height="50"
                     Width="60"
                     BorderThickness="0"
@@ -134,7 +157,7 @@
                 <Button
                     x:Name="ASC"
                     Grid.Column="0"
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Height="50"
                     Width="60"
                     BorderThickness="0"
@@ -153,7 +176,7 @@
                 <Button 
                     x:Name="AA"
                     Grid.Column="0" 
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Height="50"
                     Width="60"
                     BorderThickness="0"
@@ -172,7 +195,7 @@
                 <Button
                     x:Name="PA"
                     Grid.Column="0" 
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Height="50"
                     Width="60"
                     BorderThickness="0"
@@ -191,7 +214,7 @@
                 <Button
                     x:Name="MPA"
                     Grid.Column="0" 
-                    Grid.Row="7"
+                    Grid.Row="8"
                     Height="50"
                     Width="60"
                     BorderThickness="0"
@@ -206,6 +229,7 @@
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
+                
             </Grid>
         </ScrollViewer>
 

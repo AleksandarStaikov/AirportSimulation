@@ -30,9 +30,11 @@
 
         private bool IsMutable(MutantRectangle rectangle)
         {
-            if (rectangle.Content is DisabledCell)
+            if (rectangle.Content is DisabledCell disabledCell)
             {
-                if(((DisabledCell)rectangle.Content).ParentComponent == null || ((DisabledCell)rectangle.Content).ParentComponent == _succeedableComponent)
+                if(disabledCell.ParentComponent == null || 
+                    disabledCell.ParentComponent == _succeedableComponent ||
+                    _succeedableComponent.Type == BuildingComponentType.Bridge)
                 {
                     return true;
                 }

@@ -21,7 +21,7 @@ namespace AirportSimulation.App.Models
         public SingleCellBuildingComponent(BuildingComponentType type, (int, int) cell) 
             : base(type, cell)
         {
-            
+            NodeId = Guid.NewGuid().ToString();
         }
 
         //public NodeCreationData GetCreationData()
