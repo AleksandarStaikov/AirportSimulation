@@ -10,6 +10,7 @@
     using Common.Models;
     using Contracts.Services;
     using LinkNodes;
+    using LinkNodes.Contracts;
 
     public class ChainLinkFactory : IChainLinkFactory
     {
@@ -92,7 +93,7 @@
             }
         }
 
-        public CheckInDesk CreateCheckInDesk()
+        public ICheckInDesk CreateCheckInDesk()
         {
             ValidateSettings();
             var checkInDesk = _checkInDeskFactory(Guid.NewGuid().ToString());
@@ -100,7 +101,7 @@
             return checkInDesk;
         }
 
-        public Psc CreatePsc()
+        public IPsc CreatePsc()
         {
             ValidateSettings();
             var psc = _pscFactory(_simulationSettings.Pscs, Guid.NewGuid().ToString());
@@ -108,7 +109,7 @@
             return psc;
         }
 
-        public Asc CreateAsc()
+        public IAsc CreateAsc()
         {
             ValidateSettings();
             var asc = _ascFactory(_simulationSettings.Ascs, Guid.NewGuid().ToString());
@@ -116,7 +117,7 @@
             return asc;
         }
 
-        public Mpa CreateMpa()
+        public IMpa CreateMpa()
         {
             ValidateSettings();
             var mpa = _mpaFactory(Guid.NewGuid().ToString());
@@ -124,7 +125,7 @@
             return mpa;
         }
 
-        public BSU CreateBsu()
+        public IBSU CreateBsu()
         {
             ValidateSettings();
             var bsu = _bsuFactory(Guid.NewGuid().ToString());
@@ -132,7 +133,7 @@
             return bsu;
         }
 
-        public Aa CreateAa()
+        public IAa CreateAa()
         {
             ValidateSettings();
             var aa = _aaFactory(_gatesCount++, Guid.NewGuid().ToString());
@@ -140,7 +141,7 @@
             return aa;
         }
 
-        public PickUpArea CreatePua()
+        public IPickUpArea CreatePua()
         {
             ValidateSettings();
             var pickUpArea = _puaFactory(_puasCount++, Guid.NewGuid().ToString());
@@ -148,7 +149,7 @@
             return pickUpArea;
         }
 
-        public OneToOneConveyor CreateOneToOneConveyor(int length)
+        public IOneToOneConveyor CreateOneToOneConveyor(int length)
         {
             ValidateSettings();
             var oneToOneConveyor = _oneToOneConveyorFactory(length, Guid.NewGuid().ToString());
@@ -156,7 +157,7 @@
             return oneToOneConveyor;
         }
 
-        public ManyToOneConveyor CreateManyToOneConveyor(int length)
+        public IManyToOneConveyor CreateManyToOneConveyor(int length)
         {
             ValidateSettings();
             var manyToOneConveyor = _manyToOneConveyorFactory(length, Guid.NewGuid().ToString());
@@ -164,7 +165,7 @@
             return manyToOneConveyor;
         }
 
-        public ConveyorConnector CreateConveyorConnector()
+        public IConveyorConnector CreateConveyorConnector()
         {
             ValidateSettings();
             var conveyorConnector = _conveyorConnectorFactory(Guid.NewGuid().ToString());
@@ -187,7 +188,7 @@
 
         #region EndNodes
 
-        public CheckInDispatcher CreateCheckInDispatcher()
+        public ICheckInDispatcher CreateCheckInDispatcher()
         {
             ValidateSettings();
             var checkInDispatcher = _checkInDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
@@ -195,7 +196,7 @@
             return checkInDispatcher;
         }
 
-        public AADispatcher CreateAaDispatcher()
+        public IAADispatcher CreateAaDispatcher()
         {
             ValidateSettings();
             var aaDispatcher = _aaDispatcherFactory(_simulationSettings, Guid.NewGuid().ToString());
@@ -203,7 +204,7 @@
             return aaDispatcher;
         }
 
-        public BagCollector CreateBagCollector()
+        public IBagCollector CreateBagCollector()
         {
             ValidateSettings();
             var bagCollector = _bagCollectorFactory(Guid.NewGuid().ToString());

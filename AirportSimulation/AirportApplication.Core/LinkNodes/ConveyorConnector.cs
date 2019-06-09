@@ -5,6 +5,7 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
     using System;
+    using Common.Models.Contracts;
 
     public class ConveyorConnector : ChainLink, IConveyorConnector
     {
@@ -23,7 +24,7 @@
 
         public override Action OnStatusChangedToFree { get; set; }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             _nextNode.PassBaggage(baggage, this);
         }

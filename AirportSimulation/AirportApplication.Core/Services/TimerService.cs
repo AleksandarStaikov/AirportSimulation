@@ -8,10 +8,11 @@
     using System.Linq;
     using System.Threading;
     using System.Windows.Threading;
+    using Common.Models.Contracts;
 
     public class TimerService : ITimerService
     {
-        private SimulationSettings _simulationSettings;
+        private ISimulationSettings _simulationSettings;
         private Dispatcher _mainThread;
 
         private Stopwatch _watch;
@@ -72,7 +73,7 @@
             return (int)span.Ticks / 10000;
         }
 
-        public void SetSettings(SimulationSettings settings)
+        public void SetSettings(ISimulationSettings settings)
         {
             _simulationSettings = settings;
             _simulationSettings.OutgoingFlights = _simulationSettings

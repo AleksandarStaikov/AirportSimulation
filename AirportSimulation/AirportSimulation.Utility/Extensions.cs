@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.Utility
 {
     using AirportSimulation.Common.Models;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Controls;
@@ -11,7 +12,7 @@
 
 		public static bool IsCellNull(this (int?, int?) cell) => !cell.Item1.HasValue && !cell.Item2.HasValue;
 
-        public static ObservableCollection<T> ToObservableCollection<T>(this T[] collection)
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection)
         {
             var oc = new ObservableCollection<T>();
             collection.ToList().ForEach(x => oc.Add(x));

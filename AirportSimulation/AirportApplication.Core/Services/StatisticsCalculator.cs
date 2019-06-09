@@ -173,9 +173,9 @@
         //Column Chart
         public List<Baggage> TotalBagsArrivedLateAtAa { get; set; }
 
-        public IEnumerable<IGrouping<Flight, Baggage>> BagsLateForFlightPerFlight { get; set; }
+        public IEnumerable<IGrouping<IFlight, Baggage>> BagsLateForFlightPerFlight { get; set; }
 
-        public Dictionary<Flight, double> DelaysPerFlight { get; set; }
+        public Dictionary<IFlight, double> DelaysPerFlight { get; set; }
 
         public List<Baggage> TotalTransferredBags { get; set; }
 

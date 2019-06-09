@@ -1,13 +1,9 @@
 ﻿namespace AirportSimulation.App
 {
-    using AirportSimulation.App.Views;
     using Core;
     using NLog;
     using System;
     using System.Windows;
-    using Autofac;
-    using Common.Models;
-    using Core.Contracts;
 
     public partial class App : Application
     {

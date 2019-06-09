@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.Core.Commands
+﻿namespace AirportSimulation.Common
 {
     using System;
     using System.Windows.Input;

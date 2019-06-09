@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-using System.Windows.Shapes;
-using System.Windows.Media.Imaging;
-using AirportSimulation.App.Infrastructure;
-using System.Windows;
-using AirportSimulation.App.Helpers;
-using AirportSimulation.Common.Models;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AirportSimulation.Common;
+    using AirportSimulation.App.Helpers;
+    using AirportSimulation.Common.Models;
+    
     internal abstract class GenericBuildingComponent : GridCell, ICreatable
     {
         public BuildingComponentType Type { get; }

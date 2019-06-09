@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
-    interface ISucceedable
+    internal interface ISucceedable
     {
         void PopulateAdjacentRectangles(MutantRectangle parentContainer);
 

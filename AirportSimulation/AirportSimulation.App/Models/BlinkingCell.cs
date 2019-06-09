@@ -1,17 +1,8 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using AirportSimulation.Common;
-    using System.Windows;
     using AirportSimulation.App.Infrastructure;
-    using System.Windows.Shapes;
-    using System.Windows.Media;
-    using System.Windows.Input;
-
+    
     internal class BlinkingCell : GridCell, IClickable 
     {
         public readonly IParent ParentComponent;

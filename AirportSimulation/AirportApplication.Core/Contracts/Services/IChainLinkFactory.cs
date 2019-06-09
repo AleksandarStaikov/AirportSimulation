@@ -3,23 +3,24 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
     using LinkNodes;
+    using LinkNodes.Contracts;
 
     public interface IChainLinkFactory
     {
         IChainLink CreateChainLink(NodeCreationData nodeData, SimulationSettings settings);
-        CheckInDesk CreateCheckInDesk();
-        Psc CreatePsc();
-        Asc CreateAsc();
-        Mpa CreateMpa();
-        BSU CreateBsu();
-        Aa CreateAa();
-        PickUpArea CreatePua();
-        OneToOneConveyor CreateOneToOneConveyor(int length);
-        ManyToOneConveyor CreateManyToOneConveyor(int length);
-        ConveyorConnector CreateConveyorConnector();
-        CheckInDispatcher CreateCheckInDispatcher();
-        AADispatcher CreateAaDispatcher();
-        BagCollector CreateBagCollector();
+        ICheckInDesk CreateCheckInDesk();
+        IPsc CreatePsc();
+        IAsc CreateAsc();
+        IMpa CreateMpa();
+        IBSU CreateBsu();
+        IAa CreateAa();
+        IPickUpArea CreatePua();
+        IOneToOneConveyor CreateOneToOneConveyor(int length);
+        IManyToOneConveyor CreateManyToOneConveyor(int length);
+        IConveyorConnector CreateConveyorConnector();
+        ICheckInDispatcher CreateCheckInDispatcher();
+        IAADispatcher CreateAaDispatcher();
+        IBagCollector CreateBagCollector();
 
         void SetSettings(SimulationSettings settings);
     }

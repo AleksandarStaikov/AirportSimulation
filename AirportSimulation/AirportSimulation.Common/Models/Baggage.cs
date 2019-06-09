@@ -1,9 +1,10 @@
 ﻿namespace AirportSimulation.Common.Models
 {
+    using Contracts;
     using System;
     using System.Collections.Generic;
 
-    public class Baggage
+    public class Baggage : IBaggage
     {
         public static List<Baggage> AllBaggage = new List<Baggage>();
 
@@ -17,7 +18,7 @@
 
         public BaggageType BaggageType { get; set; }
 
-        public Flight Flight { get; set; }
+        public IFlight Flight { get; set; }
 
         public string Destination { get; set; }
 

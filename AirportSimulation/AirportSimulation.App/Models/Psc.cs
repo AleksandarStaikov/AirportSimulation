@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System.Collections.Generic;
+    using AirportSimulation.Common;
+    
     internal class Psc : SingleCellBuildingComponent, IParent
     {
         public Psc((int, int) cell) : base(BuildingComponentType.PSC, cell)

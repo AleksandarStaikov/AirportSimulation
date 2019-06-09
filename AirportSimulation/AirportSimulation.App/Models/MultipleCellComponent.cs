@@ -26,7 +26,7 @@ namespace AirportSimulation.App.Models
 
         public virtual void ChildClicked(GenericBuildingComponent successor)
         {
-            if(successor is MultipleCellComponent component)
+            if (successor is MultipleCellComponent component)
             {
                 component.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
                 component.Index = Index + 1;
@@ -82,7 +82,7 @@ namespace AirportSimulation.App.Models
         {
             var tempCell = this;
 
-            while(!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
+            while (!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
             {
                 tempCell = tempCell.NextNodes[0] as MultipleCellComponent;
             }
@@ -97,7 +97,7 @@ namespace AirportSimulation.App.Models
 
             if (type == BuildingComponentType.Bridge)
             {
-                sender.Fill = RectangleFactory.CreateBlinkingRectangle().Fill;                
+                sender.Fill = RectangleFactory.CreateBlinkingRectangle().Fill;
             }
             else
             {
@@ -107,7 +107,7 @@ namespace AirportSimulation.App.Models
 
         public void ClickHandler(MutantRectangle sender, BuildingComponentType type)
         {
-            if(type == BuildingComponentType.Bridge)
+            if (type == BuildingComponentType.Bridge)
             {
                 var bridge = new SingleCellComponentFactory().CreateComponent(type, sender.Cell) as ConveyorBridge;
 

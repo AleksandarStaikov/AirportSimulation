@@ -1,17 +1,10 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using AirportSimulation.Common.Models;
-    using AirportSimulation.App.Infrastructure;
     using AirportSimulation.App.Helpers;
-    using System.Windows.Controls;
     using AirportSimulation.Common;
+    using System.Windows.Controls;
 
-    class Succeedable : ISucceedable //TODO: Delete Succeedable
+    internal class Succeedable : ISucceedable //TODO: Delete Succeedable
     {
         private GenericBuildingComponent _succeedableComponent;
 
@@ -47,7 +40,6 @@
             return false;
         }
 
-
         public void HideBlinkingCells()
         {
             foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
@@ -57,7 +49,6 @@
                     var cell = adjancentRectangle.Cell;
                     adjancentRectangle.ChangeContent(new DisabledCell(_succeedableComponent as IParent, cell));
                 }
-                
             }
         }
 
