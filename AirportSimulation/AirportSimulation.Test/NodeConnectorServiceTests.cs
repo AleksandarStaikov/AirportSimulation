@@ -1,12 +1,7 @@
 ﻿namespace AirportSimulation.Test
 {
-    using System;
-    using System.Collections.Generic;
-    using Abstractions.Contracts;
     using Abstractions.Core.Contracts;
     using Autofac;
-    using Autofac.Core;
-    using Autofac.Core.Activators.Reflection;
     using Autofac.Extras.Moq;
     using Common;
     using Common.Models;
@@ -16,7 +11,8 @@
     using Core.Services;
     using Moq;
     using NUnit.Framework;
-    using Shouldly;
+    using System;
+    using System.Collections.Generic;
 
     [TestFixture]
     public class NodeConnectorServiceTests
@@ -70,7 +66,64 @@
                 };
 
                 connector.ConnectNodes(nodes, simulationSettings.Nodes);
+            }
+        }
 
+        [Test]
+        public void NodeConnectorService_ShouldAttachEndNodes()
+        {
+            using (var mock = AutoMock.GetLoose((a) =>
+            {
+                a.RegisterType<ChainLinkFactory>().AsImplementedInterfaces();
+                a.RegisterType<ConveyorConnector>().AsImplementedInterfaces();
+            }))
+            {
+                var factoryMock = new Mock<IChainLinkFactory>();
+                factoryMock.Setup(f => f.CreateConveyorConnector()).Returns(new Mock<IConveyorConnector>().Object);
+                var connector = new NodeConnectorService(factoryMock.Object);
+
+                var conveyorId = Guid.NewGuid().ToString();
+                var aaId = Guid.NewGuid().ToString();
+
+                var checkInDispatcherMock = new Mock<ICheckInDispatcher>();
+                var aaDispatcherMock = new Mock<IAADispatcher>();
+                var bagCollectorMock = new Mock<IBagCollector>();
+                var conveyorMock = new Mock<IOneToOneConveyor>();
+                conveyorMock.Setup(m => m.NodeId).Returns(conveyorId);
+                var aaMock = new Mock<IAa>();
+                aaMock.Setup(m => m.NodeId).Returns(aaId);
+                aaMock.Setup(m => m.AddSuccessor(bagCollectorMock.Object));
+
+                var aa = new NodeCreationData()
+                {
+                    Id = aaId,
+                    NextNodes = null,
+                    Type = BuildingComponentType.AA
+                };
+                var conveyor = new NodeCreationData()
+                {
+                    Id = conveyorId,
+                    NextNodes = new Dictionary<NodeCreationData, int?>() { { aa, 0 } },
+                    Type = BuildingComponentType.Conveyor
+                };
+
+                var simulationSettings = new SimulationSettings()
+                {
+                    Nodes = new List<NodeCreationData>() { aa, conveyor }
+                };
+
+                var nodes = new List<IChainLink>()
+                {
+                    bagCollectorMock.Object,
+                    aaDispatcherMock.Object,
+                    checkInDispatcherMock.Object,
+                    conveyorMock.Object,
+                    aaMock.Object
+                };
+
+                connector.ConnectNodes(nodes, simulationSettings.Nodes);
+
+                aaMock.Verify(m => m.AddSuccessor(bagCollectorMock.Object), Times.Once);
             }
         }
     }

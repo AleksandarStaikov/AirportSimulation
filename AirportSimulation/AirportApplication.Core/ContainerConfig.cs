@@ -34,7 +34,7 @@
 
             builder
                 .RegisterType<Engine>()
-                .InstancePerDependency()
+                .SingleInstance()
                 .AsImplementedInterfaces();
 
             builder
@@ -51,11 +51,6 @@
                 .RegisterType<NodeConnectorService>()
                 .SingleInstance()
                 .AsImplementedInterfaces();
-
-            //builder
-            //    .RegisterType<StatisticsCalculator>()
-            //    .SingleInstance()
-            //    .AsImplementedInterfaces();
 
             builder.RegisterType<CheckInDesk>();
             builder.RegisterType<Psc>();

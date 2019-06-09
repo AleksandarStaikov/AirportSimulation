@@ -38,8 +38,10 @@
                 nodeData = new NodeCreationData
                 {
                     Id = this.NodeId,
-                    Type = this.Type
+                    Type = this.Type,
+                    Cell = this.Cell
                 };
+
                 Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
 
                 int? index = null;

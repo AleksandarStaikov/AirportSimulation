@@ -1,9 +1,11 @@
 ﻿namespace AirportSimulation.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Abstractions.Contracts;
     using Abstractions.Core;
+    using Common;
     using Common.Models;
     using Contracts;
     using Contracts.Services;
@@ -18,6 +20,7 @@
         private readonly INodeConnectorService _nodeConnectorService;
 
         private List<IPauseResume> _pauseResumeNodes;
+        private SimulationSettings _settings;
 
         public Engine(IChainLinkFactory chainLinkFactory,
             ITimerService timerService,
@@ -32,7 +35,8 @@
         {
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
-            
+
+
             var checkIn = _chainLinkFactory.CreateCheckInDesk();
             var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
             var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
@@ -141,8 +145,11 @@
 
         public void ActualRun(SimulationSettings settings)
         {
+            _settings = settings;
             _chainLinkFactory.SetSettings(settings);
             _timerService.SetSettings(settings);
+
+            settings.Nodes = settings.Nodes.Concat(AddBsu(settings.Nodes)).ToList();
 
             var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings)).ToList();
             nodes.Add(_chainLinkFactory.CreateCheckInDispatcher());
@@ -157,6 +164,11 @@
             _pauseResumeNodes.ForEach(n => n.Start());
         }
 
+        public Func<StatisticsData> GetStatisticsCalculator()
+        {
+            return () => { return StatisticsCalculator.CalculateStatistics(this._settings); };
+        }
+
         public void Pause()
         {
             _timerService.Stop();
@@ -167,6 +179,38 @@
         {
             _timerService.Start();
             _pauseResumeNodes.ForEach(n => n.Start());
+        }
+
+        private IEnumerable<NodeCreationData> AddBsu(IEnumerable<NodeCreationData> nodes)
+        {
+            var addition = new List<NodeCreationData>();
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Length = 5,
+                Type = BuildingComponentType.Conveyor,
+                NextNodes = nodes.Where(n => n.Type == BuildingComponentType.MPA).ToDictionary(key => key, value => new int?())
+            });
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Type = BuildingComponentType.BSU,
+                NextNodes = new List<NodeCreationData>(){ addition[0] }.ToDictionary(key => key, value => new int?())
+            });
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Length = 5,
+                Type = BuildingComponentType.Conveyor,
+                NextNodes = new List<NodeCreationData>() { addition[1] }.ToDictionary(key => key, value => new int?())
+            });
+
+            nodes.FirstOrDefault(n => n.Type == BuildingComponentType.MPA).NextNodes.Add(addition[2], 0);
+
+            return addition;
         }
     }
 }

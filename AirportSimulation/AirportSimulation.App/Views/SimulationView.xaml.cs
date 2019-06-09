@@ -23,16 +23,10 @@
         private BlinkingCellsPainter cellsPainter;
         private BitmapImage _currentBuildingComponentImage;
         private BuildingComponentType _currentBuildingComponentType = BuildingComponentType.CheckIn;
-
-        public SimulationView()
-        {
-            InitializeComponent();
-
-            //(_currentBuildingComponentType, _currentBuildingComponentImage) =
-            //    _buildingComponentHelper.EnableNextComponentButtonAndGetTypeAndImage(SimulationGridOptions, _step,
-            //        true);
-
-            //_currentBuildingComponentImage = _buildingComponentHelper.GetBuildingComponentImage(BuildingComponentType.CheckIn);
+        
+		public SimulationView()
+		{
+			InitializeComponent();
             cellsPainter = new BlinkingCellsPainter(SimulationGrid);
             InitializeClickableGridCells();
         }
@@ -69,20 +63,9 @@
 
         private void EnableNextButton() => SimulationGridOptions.CanNext = true;
 
-
-        private void SimulationGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void SimulationGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void BuildingComponent_Click(object sender, RoutedEventArgs e)
-        {
-            var componentName = (sender as Button)?.Name;
+		private void BuildingComponent_Click(object sender, RoutedEventArgs e)
+		{
+			var componentName = (sender as Button)?.Name;
 
             if (componentName == null)
                 return;
@@ -94,8 +77,7 @@
         }
 
         private void ClearGridButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO: Clear Grid
+		{
             InitializeClickableGridCells();
         }
 

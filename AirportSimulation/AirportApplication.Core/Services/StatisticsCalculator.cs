@@ -7,8 +7,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Threading;
 
-    public static class StatisticsCalculator// : IStatisticsCalculator
+    public class StatisticsCalculator// : IStatisticsCalculator
     {
         public static StatisticsData CalculateStatistics(ISimulationSettings simulationSettings)
         {
@@ -146,10 +147,27 @@
 
             return (endTime - startTime).TotalMinutes;
         }
+
     }
 
     public class StatisticsData
     {
+
+        public StatisticsData()
+        {
+            PscFailedBags = new List<Baggage>();
+            PscSucceededBags = new List<Baggage>();
+
+
+            AscFailedBags = new List<Baggage>();
+            AscSucceededBags = new List<Baggage>();
+
+            TotalBagsArrivedLateAtAa = new List<Baggage>();
+
+            
+
+        }
+
         //Colum Chart -- DONE
         public Baggage FirstDispatchedBag { get; set; }
         public Baggage LastDispatchedBag { get; set; }
