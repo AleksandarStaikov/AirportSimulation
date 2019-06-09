@@ -22,7 +22,7 @@
         private readonly ISimulationSettings _simulationSettings;
 
         private List<Queue<IBaggage>> _checkInQueues;
-        private List<CheckInDesk> _checkIns;
+        private List<ICheckInDesk> _checkIns;
         private List<Timer> _flightDropOffTimers;
 
         public CheckInDispatcher(ISimulationSettings simulationSettings,string nodeId,  ITimerService timerService)
@@ -36,7 +36,7 @@
 
         public override string Destination => this.GetType().Name;
 
-        public void SetCheckIns(List<CheckInDesk> checkIns)
+        public void SetCheckIns(List<ICheckInDesk> checkIns)
         {
             Condition
                 .Requires(checkIns.Count)

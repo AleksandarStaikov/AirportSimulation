@@ -5,7 +5,7 @@
     using System;
     using Common.Models.Contracts;
 
-    public interface IPsc
+    public interface IPsc : IChainLink
     {
         void Process(IBaggage baggage);
         string Destination { get; }

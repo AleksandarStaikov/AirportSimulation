@@ -5,7 +5,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IBSU
+    public interface IBSU : IChainLink
     {
         string Destination { get; }
         string NodeId { get; set; }

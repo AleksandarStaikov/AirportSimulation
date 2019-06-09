@@ -5,7 +5,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IPickUpArea
+    public interface IPickUpArea : IChainLink
     {
         string Destination { get; }
         string NodeId { get; set; }

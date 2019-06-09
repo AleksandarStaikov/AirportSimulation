@@ -5,7 +5,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IAsc
+    public interface IAsc : IChainLink
     {
         void Process(IBaggage baggage);
         string Destination { get; }

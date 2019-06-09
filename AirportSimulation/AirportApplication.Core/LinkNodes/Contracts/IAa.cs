@@ -5,7 +5,7 @@
     using Common.Models;
     using Common.Models.Contracts;
 
-    public interface IAa
+    public interface IAa : IChainLink
     {
         int DropOffNumber { get; }
         string Destination { get; }

@@ -14,7 +14,7 @@
     using Shouldly;
 
     [TestFixture]
-    public class LinkNodesTest
+    public class LinkNodesTests
     {
         [Test]
         public void Asc_ShouldPassBaggageToMpa_WhenFailPercentageIsZero()
