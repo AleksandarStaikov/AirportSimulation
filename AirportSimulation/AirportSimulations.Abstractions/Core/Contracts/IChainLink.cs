@@ -1,7 +1,8 @@
 ﻿namespace AirportSimulation.Abstractions.Core.Contracts
 {
-    using System;
     using Common.Models;
+    using Common.Models.Contracts;
+    using System;
 
     public interface IChainLink
     {
@@ -9,6 +10,6 @@
         NodeState Status { get; set; }
         string Destination { get; }
         Action OnStatusChangedToFree { get; set; }
-        void PassBaggage(Baggage baggage);
+        void PassBaggage(IBaggage baggage);
     }
 }

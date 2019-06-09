@@ -1,13 +1,9 @@
-﻿using AirportSimulation.App.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-
-namespace AirportSimulation.App.Helpers
+﻿namespace AirportSimulation.App.Helpers
 {
+    using AirportSimulation.App.Models;
+    using System.Collections.Generic;
+    using System.Windows.Controls;
+
     class BlinkingCellsPainter
     {
         private static Grid _grid;

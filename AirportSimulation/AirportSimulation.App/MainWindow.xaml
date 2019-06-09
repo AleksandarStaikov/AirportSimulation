@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
-        xmlns:local="clr-namespace:AirportSimulation.App"
+        xmlns:local="clr-namespace:AirportSimulation.Common.Models;assembly=AirportSimulation.Common"
         xmlns:views="clr-namespace:AirportSimulation.App.Views"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <TabControl x:Name="MainTabMenu">
-            <TabItem>
+            <!--<TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Administration" />
@@ -19,7 +20,7 @@
                 <Grid>
                     <views:AdminView x:Name="AdminView"/>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -30,7 +31,7 @@
                     <views:SimulationView x:Name="SimulationView"/>
                 </Grid>
             </TabItem>
-            <TabItem Selector.IsSelected="True">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Flights Organizer" />

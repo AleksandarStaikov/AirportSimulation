@@ -10,7 +10,6 @@
             Pscs =  new PscSettings();
             Ascs = new AscSettings();
 
-
             ConveyorSettingsMpaToAa = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsMpaToPickUp = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsCheckInToPsc = new List<ConveyorSettings>() { new ConveyorSettings() };
@@ -18,12 +17,8 @@
             ConveyorSettingsAscToMpu = new List<ConveyorSettings>() { new ConveyorSettings() };
             ConveyorSettingsPscToAsc = new List<ConveyorSettings>() { new ConveyorSettings() };
 
-            OutgoingFlights = new List<Flight>() { new Flight(){} };
-			IncomingFlights = new List<Flight>() { new Flight()
-            {
-                Gate = "A2",
-                FlightState = FlightState.Incoming
-            } };
+            OutgoingFlights = new List<Flight>();
+            IncomingFlights = new List<Flight>();
         }
 
         public IEnumerable<NodeCreationData> Nodes { get; set; }

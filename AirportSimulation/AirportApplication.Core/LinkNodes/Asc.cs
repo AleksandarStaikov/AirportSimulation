@@ -6,8 +6,9 @@
     using Abstractions.Core.Contracts;
     using Common.Models;
     using Common.Models.Contracts;
+    using Contracts;
 
-    public class Asc : ProcessingNode, IProcessingNode
+    public class Asc : ProcessingNode, IProcessingNode, IAsc
     {
         public delegate Asc Factory(IAscSettings ascSettings, string nodeId);
 
@@ -21,7 +22,7 @@
             _randomGen = new Random();
         }
 
-        public override void Process(Baggage baggage)
+        public override void Process(IBaggage baggage)
         {
             var isFail = _randomGen.Next(0, 101) < _ascSettings.AscInvalidationPercentage;
 

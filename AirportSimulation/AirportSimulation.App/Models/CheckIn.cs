@@ -1,15 +1,8 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using AirportSimulation.Common;
-    using AirportSimulation.App.Infrastructure;
-    using AirportSimulation.Common.Models;
     using AirportSimulation.App.Helpers;
-    using System.Windows.Media;
 
     internal class CheckIn : SingleCellBuildingComponent, IParent
     {

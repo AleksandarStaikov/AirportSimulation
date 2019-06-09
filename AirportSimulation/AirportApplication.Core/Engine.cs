@@ -9,6 +9,7 @@
     using Contracts;
     using Contracts.Services;
     using LinkNodes;
+    using LinkNodes.Contracts;
     using Services;
 
     public class Engine : IEngine
@@ -60,7 +61,7 @@
             var bagCollector = _chainLinkFactory.CreateBagCollector();
 
             //Linking
-            checkInDispatcher.SetCheckIns(new List<CheckInDesk> { checkIn });
+            checkInDispatcher.SetCheckIns(new List<ICheckInDesk> { checkIn });
 
             checkIn.AddSuccessor(checkInToConveyorConnector);
             //checkIn1.AddSuccessor(checkIn1ToConveyorConnector);
@@ -129,7 +130,7 @@
             var aa = _chainLinkFactory.CreateAa();
             var bagCollector = _chainLinkFactory.CreateBagCollector();
 
-            checkInDisp.SetCheckIns(new List<CheckInDesk>() { checkIn });
+            checkInDisp.SetCheckIns(new List<ICheckInDesk>() { checkIn });
             checkIn.AddSuccessor(firstCheckInConnector);
             firstCheckInConnector.SetNextNode(checkInToPsc, 0);
             checkInToPsc.SetSuccessor(psc);

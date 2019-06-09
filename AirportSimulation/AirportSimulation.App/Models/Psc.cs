@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System.Collections.Generic;
+    using AirportSimulation.Common;
+    
     internal class Psc : SingleCellBuildingComponent, IParent
     {
         public Psc((int, int) cell) : base(BuildingComponentType.PSC, cell)
@@ -21,13 +17,12 @@ namespace AirportSimulation.App.Models
 
         public void ChildClicked(GenericBuildingComponent successor)
         {
-            if (successor.GetType().BaseType == typeof(MultipleCellComponent))
+            if (successor is MultipleCellComponent component)
             {
-                var temp = successor as MultipleCellComponent;
-                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                if (temp is ManyToOneCell)
+                component.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+                if (component is ManyToOneCell)
                 {
-                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    ((ManyToOneCell)component).PredecessorType = this.Type;
                 }
             }
             NextNodes.Add(successor);

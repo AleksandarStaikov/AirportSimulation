@@ -1,9 +1,10 @@
 ﻿namespace AirportSimulation.Abstractions.Core
 {
-    using System;
     using Abstractions.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
     using Contracts;
+    using System;
 
     public abstract class ChainLink : IChainLink
     {
@@ -36,6 +37,6 @@
 
         public virtual Action OnStatusChangedToFree { get; set; }
 
-        public abstract void PassBaggage(Baggage baggage);
+        public abstract void PassBaggage(IBaggage baggage);
     }
 }

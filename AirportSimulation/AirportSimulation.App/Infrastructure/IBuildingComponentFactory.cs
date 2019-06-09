@@ -11,7 +11,7 @@
 
     internal interface IBuildingComponentFactory
     {
-        GenericBuildingComponent CreateComponent(BuildingComponentType type, MutantRectangle container);
+        GenericBuildingComponent CreateComponent(BuildingComponentType type, (int, int) cell);
         
     }
 }
