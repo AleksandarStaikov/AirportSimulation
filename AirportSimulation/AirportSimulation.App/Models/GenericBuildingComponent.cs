@@ -32,9 +32,9 @@
         public virtual NodeCreationData GetCreationData()
         {
             NodeCreationData nodeData = null;
-            if (!ConvertToSettingsService.Listed.Contains(this.NodeId))
+            if (!ConvertToSettingsService.ListedForCreation.Contains(this.NodeId))
             {
-                ConvertToSettingsService.Listed.Add(this.NodeId);
+                ConvertToSettingsService.ListedForCreation.Add(this.NodeId);
                 nodeData = new NodeCreationData
                 {
                     Id = this.NodeId,
@@ -59,6 +59,43 @@
             else
             {
                 nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == this.NodeId);
+            }
+
+            return nodeData;
+        }
+
+        public virtual NodeCreationData GetSerializedData()
+        {
+            NodeCreationData nodeData = null;
+            if (!ConvertToSettingsService.ListedForSerialization.Contains(this.NodeId))
+            {
+                
+                nodeData = new NodeCreationData
+                {
+                    Id = this.NodeId,
+                    Type = this.Type,
+                    Cell = this.Cell,
+                };
+                Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
+
+                int? index = null;
+
+                foreach (ICreatable nextNode in this.NextNodes)
+                {
+                    if (nextNode is ManyToOneCell manyToOne)
+                    {
+                        index = manyToOne.Index;
+                    }
+                    nextNodesData.Add(nextNode.GetSerializedData(), index ?? null);
+                }
+
+                nodeData.NextNodes = nextNodesData;
+                ConvertToSettingsService.NodesSerializedData.Add(nodeData);
+                ConvertToSettingsService.ListedForSerialization.Add(this.NodeId);
+            }
+            else
+            {
+                nodeData = ConvertToSettingsService.NodesSerializedData.FirstOrDefault(data => data.Id == this.NodeId);
             }
 
             return nodeData;

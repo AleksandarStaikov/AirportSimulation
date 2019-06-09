@@ -106,6 +106,7 @@
     <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
     <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
     <Compile Include="Models\ConveyorBridge.cs" />
+    <Compile Include="Models\DeserializedNodes.cs" />
     <Compile Include="Models\FlightsOrganizer.cs" />
     <Compile Include="Models\ICreatable.cs" />
     <Compile Include="Models\IParent.cs" />

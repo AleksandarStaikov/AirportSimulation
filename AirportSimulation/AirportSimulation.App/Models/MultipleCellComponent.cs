@@ -49,7 +49,7 @@ namespace AirportSimulation.App.Models
         public override NodeCreationData GetCreationData()
         {
             NodeCreationData nodeData = null;
-            if (!ConvertToSettingsService.Listed.Contains(this.NodeId))
+            if (!ConvertToSettingsService.ListedForCreation.Contains(this.NodeId))
             {
                 nodeData = new NodeCreationData();
                 Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
@@ -67,7 +67,7 @@ namespace AirportSimulation.App.Models
                 nodeData.Type = lastSegment.Type;
                 nodeData.Length = lastSegment.Index + 1;
 
-                ConvertToSettingsService.Listed.Add(this.NodeId);
+                ConvertToSettingsService.ListedForCreation.Add(this.NodeId);
             }
             else
             {
