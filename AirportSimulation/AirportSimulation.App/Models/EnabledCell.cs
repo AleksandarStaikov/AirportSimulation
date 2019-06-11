@@ -18,8 +18,6 @@
 
                 sender.ChangeContent(content);
             }
-            
-            
         }
 
         public void ComponentSelectedHandler(MutantRectangle sender, BuildingComponentType type)

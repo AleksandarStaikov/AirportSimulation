@@ -1,13 +1,12 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using AirportSimulation.Common;
-    using AirportSimulation.App.Helpers;
-    using AirportSimulation.Common.Models;
-    
-    internal abstract class GenericBuildingComponent : GridCell, ICreatable
+	using System.Collections.Generic;
+	using System.Linq;
+	using Common;
+	using Common.Models;
+	using Helpers;
+
+	internal abstract class GenericBuildingComponent : GridCell, ICreatable
     {
         public BuildingComponentType Type { get; }
 
@@ -21,7 +20,7 @@
 
         public List<GenericBuildingComponent> NextNodes { get; protected set; }
 
-        public GenericBuildingComponent(BuildingComponentType type, (int, int) cell) : base(cell)
+		protected GenericBuildingComponent(BuildingComponentType type, (int, int) cell) : base(cell)
         {
             Type = type;
 
@@ -32,21 +31,21 @@
         public virtual NodeCreationData GetCreationData()
         {
             NodeCreationData nodeData = null;
-            if (!ConvertToSettingsService.ListedForCreation.Contains(this.NodeId))
+            if (!ConvertToSettingsService.ListedForCreation.Contains(NodeId))
             {
-                ConvertToSettingsService.ListedForCreation.Add(this.NodeId);
+                ConvertToSettingsService.ListedForCreation.Add(NodeId);
                 nodeData = new NodeCreationData
                 {
-                    Id = this.NodeId,
-                    Type = this.Type,
-                    Cell = this.Cell
+                    Id = NodeId,
+                    Type = Type,
+                    Cell = Cell
                 };
 
                 Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
 
                 int? index = null;
 
-                foreach (ICreatable nextNode in this.NextNodes)
+                foreach (ICreatable nextNode in NextNodes)
                 {
                     if (nextNode is ManyToOneCell manyToOne)
                     {
@@ -60,7 +59,7 @@
             }
             else
             {
-                nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == this.NodeId);
+                nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == NodeId);
             }
 
             return nodeData;
@@ -68,36 +67,37 @@
 
         public virtual NodeCreationData GetSerializedData()
         {
-            NodeCreationData nodeData = null;
-            if (!ConvertToSettingsService.ListedForSerialization.Contains(this.NodeId))
+            NodeCreationData nodeData;
+
+            if (!ConvertToSettingsService.ListedForSerialization.Contains(NodeId))
             {
-                
                 nodeData = new NodeCreationData
                 {
-                    Id = this.NodeId,
-                    Type = this.Type,
-                    Cell = this.Cell,
+                    Id = NodeId,
+                    Type = Type,
+                    Cell = Cell
                 };
-                Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
 
+                var nextNodesData = new Dictionary<NodeCreationData, int?>();
                 int? index = null;
 
-                foreach (ICreatable nextNode in this.NextNodes)
+                foreach (ICreatable nextNode in NextNodes)
                 {
                     if (nextNode is ManyToOneCell manyToOne)
                     {
                         index = manyToOne.Index;
                     }
+
                     nextNodesData.Add(nextNode.GetSerializedData(), index ?? null);
                 }
 
                 nodeData.NextNodes = nextNodesData;
                 ConvertToSettingsService.NodesSerializedData.Add(nodeData);
-                ConvertToSettingsService.ListedForSerialization.Add(this.NodeId);
+                ConvertToSettingsService.ListedForSerialization.Add(NodeId);
             }
             else
             {
-                nodeData = ConvertToSettingsService.NodesSerializedData.FirstOrDefault(data => data.Id == this.NodeId);
+                nodeData = ConvertToSettingsService.NodesSerializedData.FirstOrDefault(data => data.Id == NodeId);
             }
 
             return nodeData;

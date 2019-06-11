@@ -13,6 +13,7 @@
 	using System.IO;
 	using System.Linq;
 	using System.Runtime.Serialization.Formatters.Binary;
+	using System.Windows.Media;
 	using Microsoft.Win32;
 	using NLog;
 
@@ -80,6 +81,7 @@
 		private void ClearGridButton_Click(object sender, RoutedEventArgs e)
 		{
 			InitializeClickableGridCells();
+			ConvertToSettingsService.ClearNodesSerializedData();
 		}
 
 		private void Export_Click(object sender, RoutedEventArgs e)
@@ -128,7 +130,7 @@
 					{
 						var bf = new BinaryFormatter();
 						var importedData = (List<NodeCreationData>)bf.Deserialize(fs);
-
+						VisualizeSimulationGridFromImportedData(importedData);
 						// TODO : VisualizeSimulationGridFromImportedData(importedData)
 					}
 				}
@@ -136,6 +138,28 @@
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
+			}
+		}
+
+		private void VisualizeSimulationGridFromImportedData(List<NodeCreationData> importedData)
+		{
+			SimulationGrid.Children.Clear();
+
+			for (var index = importedData.Count - 1; index >= 0 ; index--)
+			{
+				var component = importedData[index];
+				var (row, col) = component.Cell;
+
+				var enabledRectangle = new MutantRectangle(component.Cell, new ImageBrush
+				{
+					ImageSource = BuildingComponentsHelper.GetBuildingComponentImage(component.Type),
+					Stretch = Stretch.Fill
+				});
+
+				Grid.SetRow(enabledRectangle, row);
+				Grid.SetColumn(enabledRectangle, col);
+
+				SimulationGrid.Children.Add(enabledRectangle);
 			}
 		}
 

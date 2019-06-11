@@ -1,17 +1,16 @@
 ﻿namespace AirportSimulation.App
 {
-    using AirportSimulation.App.Helpers;
-    using AirportSimulation.App.Models;
-    using AirportSimulation.Common;
-    using AirportSimulation.Common.Models;
-    using AirportSimulation.Core;
-    using AirportSimulation.Core.Contracts;
-    using System;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Input;
+	using System.Linq;
+	using System.Windows;
+	using System.Windows.Input;
+	using Common;
+	using Common.Models;
+	using Core;
+	using Core.Contracts;
+	using Helpers;
+	using Models;
 
-    public partial class MainWindow : Window
+	public partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -41,14 +40,13 @@
 
         private void SwitchTab(MainWindow obj)
         {
-            var a = ConvertToSettingsService.Convert();
             FlightsView.IncomingPickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
             FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
             FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
 
             DisableBuildingComponentsButtons();
 
-            this.MainTabMenu.SelectedIndex = 1;
+            MainTabMenu.SelectedIndex = 1;
         }
 
         public ICommand OnRunButton_Command { get; set; }

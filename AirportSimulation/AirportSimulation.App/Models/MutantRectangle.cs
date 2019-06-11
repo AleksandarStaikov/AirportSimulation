@@ -5,7 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Shapes;
-    using AirportSimulation.Common;
+    using Common;
     
     internal class MutantRectangle : Shape
     {
@@ -13,16 +13,15 @@
         public GridCell Content;
         public Action ReadyToGoNext;
 
-        public MutantRectangle()
-        {
+		public MutantRectangle((int, int) cell, Brush fill) : this(cell)
+		{
+			Fill = fill;
+		}
 
-        }
-
-        public MutantRectangle((int, int) cell) : base()
-        {
+        public MutantRectangle((int, int) cell)
+		{
             Fill = new SolidColorBrush(Colors.Transparent);
             Cell = cell;
-
             Content = new EnabledCell(cell);
         }
 

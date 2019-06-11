@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Windows.Media;
-    using AirportSimulation.App.Helpers;
-    using AirportSimulation.Common;
+    using Helpers;
+    using Common;
     
     internal class Mpa : SingleCellBuildingComponent, IParent
     {
