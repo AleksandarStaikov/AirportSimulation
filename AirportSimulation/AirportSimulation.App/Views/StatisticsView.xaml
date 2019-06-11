@@ -1,48 +1,17 @@
 ﻿<UserControl x:Class="AirportSimulation.App.Views.StatisticsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AirportSimulation.App.Views"
-             xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
-             mc:Ignorable="d"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        
-        <chart:PieChart        
-            Style="{StaticResource MinimalChartStyle}"
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="5"
-            Name="pieChart" ChartTitle="Test"
-            ChartSubTitle="(800)"
-            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-            <chart:PieChart.Series>
-                <chart:ChartSeries/>
-            </chart:PieChart.Series>
-        </chart:PieChart>
-
-        <chart:ClusteredColumnChart 
-            Style="{StaticResource MinimalChartStyle}"
-            Grid.Column="1"
-            Grid.Row="0"
-            Margin="5"
-            Name="columnChart"  ChartTitle="Statistics"
-                              ChartSubTitle="Bar Chart"
-                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-            <chart:ClusteredColumnChart.Series>
-                <chart:ChartSeries/>
-            </chart:ClusteredColumnChart.Series>
-        </chart:ClusteredColumnChart>
-
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AirportSimulation.App.Models"
+        mc:Ignorable="d">
+	<UserControl.DataContext>
+		<local:StatisticsViewModel></local:StatisticsViewModel>
+	</UserControl.DataContext>
+    <Grid x:Name="StatsGrid">
+        <ContentControl Content="{Binding}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ContentTemplate="{StaticResource PageContent}" />
+        <Grid.LayoutTransform>
+            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.0" ScaleY="1.0" />
+        </Grid.LayoutTransform>
     </Grid>
-
 </UserControl>

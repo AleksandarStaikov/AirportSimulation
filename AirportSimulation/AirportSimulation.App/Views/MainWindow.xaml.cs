@@ -1,17 +1,16 @@
-﻿namespace AirportSimulation.App
+﻿namespace AirportSimulation.App.Views
 {
-    using AirportSimulation.App.Helpers;
-    using AirportSimulation.App.Models;
-    using AirportSimulation.Common;
-    using AirportSimulation.Common.Models;
-    using AirportSimulation.Core;
-    using AirportSimulation.Core.Contracts;
-    using System;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Input;
+	using System.Linq;
+	using System.Windows;
+	using System.Windows.Input;
+	using Common;
+	using Common.Models;
+	using Core;
+	using Core.Contracts;
+	using Helpers;
+	using Models;
 
-    public partial class MainWindow : Window
+	public partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -47,7 +46,7 @@
 
             DisableBuildingComponentsButtons();
 
-            this.MainTabMenu.SelectedIndex = 1;
+            MainTabMenu.SelectedIndex = 1;
         }
 
         public ICommand OnRunButton_Command { get; set; }
