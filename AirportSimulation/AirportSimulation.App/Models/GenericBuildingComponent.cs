@@ -38,7 +38,6 @@
                 {
                     Id = NodeId,
                     Type = Type,
-                    Cell = Cell
                 };
 
                 Dictionary<NodeCreationData, int?> nextNodesData = new Dictionary<NodeCreationData, int?>();
@@ -75,8 +74,17 @@
                 {
                     Id = NodeId,
                     Type = Type,
-                    Cell = Cell
+                    Cell = new List<(int Row, int Column)>()
                 };
+
+                if(this is Mpa mpa)
+                {
+                    nodeData.Cell.AddRange(mpa.Cell);
+                } else
+                {
+                    nodeData.Cell.Add(Cell);
+                }
+                
 
                 var nextNodesData = new Dictionary<NodeCreationData, int?>();
                 int? index = null;

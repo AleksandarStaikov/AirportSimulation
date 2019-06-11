@@ -16,8 +16,9 @@
 	using System.Windows.Media;
 	using Microsoft.Win32;
 	using NLog;
+    using AirportSimulation.App.Infrastructure;
 
-	public partial class SimulationView : UserControl
+    public partial class SimulationView : UserControl
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -125,7 +126,10 @@
 				using (var fs = stream ?? new FileStream("../../simulationImportExportFile", FileMode.OpenOrCreate, FileAccess.ReadWrite))
 				{
 					if (export)
-						new BinaryFormatter().Serialize(fs, data ?? new List<NodeCreationData>());
+                    {
+                        new BinaryFormatter().Serialize(fs, data ?? new List<NodeCreationData>());
+                        ConvertToSettingsService.ClearNodesSerializedData();
+                    }
 					else
 					{
 						var bf = new BinaryFormatter();
@@ -148,18 +152,32 @@
 			for (var index = importedData.Count - 1; index >= 0 ; index--)
 			{
 				var component = importedData[index];
-				var (row, col) = component.Cell;
+                foreach((int, int) cell in component.Cell)
+                {
+                    var (row, col) = cell;
 
-				var enabledRectangle = new MutantRectangle(component.Cell, new ImageBrush
-				{
-					ImageSource = BuildingComponentsHelper.GetBuildingComponentImage(component.Type),
-					Stretch = Stretch.Fill
-				});
+                    var enabledRectangle = new MutantRectangle(cell, new ImageBrush
+                    {
+                        ImageSource = BuildingComponentsHelper.GetBuildingComponentImage(component.Type),
+                        Stretch = Stretch.Fill
+                    });
+                    //var enabledRectangle = new MutantRectangle(cell);
 
-				Grid.SetRow(enabledRectangle, row);
-				Grid.SetColumn(enabledRectangle, col);
+                    //if(component.Type == BuildingComponentType.Conveyor || component.Type == BuildingComponentType.ManyToOneConveyor)
+                    //{
+                    //    enabledRectangle.Content = new MultipleCellComponentFactory().CreateComponent(component.Type, cell);
+                    //}
+                    //else
+                    //{
+                    //    enabledRectangle.Content = new SingleCellComponentFactory().CreateComponent(component.Type, cell);
+                    //}
 
-				SimulationGrid.Children.Add(enabledRectangle);
+                    Grid.SetRow(enabledRectangle, row);
+                    Grid.SetColumn(enabledRectangle, col);
+
+                    SimulationGrid.Children.Add(enabledRectangle);
+                    EnableNextButton();
+                }
 			}
 		}
 

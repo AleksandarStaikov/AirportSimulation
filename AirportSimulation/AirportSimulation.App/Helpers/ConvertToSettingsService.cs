@@ -16,7 +16,7 @@
         public static readonly List<NodeCreationData> NodesCreationData = new List<NodeCreationData>();
         public static readonly List<NodeCreationData> NodesSerializedData = new List<NodeCreationData>();
 
-        public static IEnumerable<NodeCreationData> Convert()
+        public static IEnumerable<NodeCreationData> ConvertToCreationData()
         {
             foreach (GenericBuildingComponent startingNode in StartNodes)
             {
@@ -43,11 +43,27 @@
             return NodesSerializedData;
         }
 
+        public static List<NodeCreationData> SerializedToCreation(List<NodeCreationData> serializedData)
+        {
+            foreach(NodeCreationData component in serializedData)
+            {
+
+            }
+
+            return null;
+        }
+
 		public static void ClearNodesSerializedData()
 		{
 			ListedForSerialization.Clear();
 			NodesSerializedData.Clear();
 		}
+
+        public static void ClearNodeCreationData()
+        {
+            ListedForCreation.Clear();
+            NodesCreationData.Clear();
+        }
 
         public static ObservableCollection<string> GetAvailablePickUpAreas() => GetByType(BuildingComponentType.PA, "P");
 

@@ -10,7 +10,7 @@
 
         public Dictionary<NodeCreationData, int?> NextNodes { get; set; }
 
-        public (int Row, int Column) Cell { get; set; }
+        public List<(int Row, int Column)> Cell { get; set; }
 
         public BuildingComponentType Type { get; set; }
 

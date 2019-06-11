@@ -8,6 +8,7 @@
     internal class Mpa : SingleCellBuildingComponent, IParent
     {
         private static Mpa _instance = null;
+        public new List<(int row, int column)> Cell;
 
         protected Mpa((int, int) cell) : base(BuildingComponentType.MPA, cell)
         {
@@ -25,11 +26,12 @@
                 _instance = new Mpa(cell)
                 {
                     Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.MPA)),
+                    Cell = new List<(int row, int column)>()
                 };
                 _instance.successorEnabler = new Succeedable(_instance);
             }
 
-            _instance.Cell = cell;
+            _instance.Cell.Add(cell);
 
             return _instance;
         }
