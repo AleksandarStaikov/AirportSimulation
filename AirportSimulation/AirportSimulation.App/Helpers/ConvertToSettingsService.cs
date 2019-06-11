@@ -45,12 +45,37 @@
 
         public static List<NodeCreationData> SerializedToCreation(List<NodeCreationData> serializedData)
         {
-            foreach(NodeCreationData component in serializedData)
-            {
+            
+            serializedData.Reverse();
+            int lenght = 0;
 
+            foreach (NodeCreationData component in serializedData)
+            {
+                if(!ListedForCreation.Contains(component.Id))
+                {
+                    lenght++;
+                    var nextNode = component.NextNodes.Keys.FirstOrDefault();
+                    if (nextNode == null || nextNode.Type != component.Type)
+                    {
+                        NodeCreationData nodeData = new NodeCreationData();
+
+                        nodeData.Id = component.Id;
+                        nodeData.Length = lenght;
+                        if (component.ConveyorIndex != null)
+                        {
+                            nodeData.ConveyorIndex = component.ConveyorIndex;
+                        }
+                        nodeData.NextNodes = component.NextNodes;
+                        nodeData.Type = component.Type;
+
+                        lenght = 0;
+                        NodesCreationData.Add(nodeData);
+                        //ListedForCreation.Add(component.Id);
+                    }
+                }
             }
 
-            return null;
+            return NodesCreationData;
         }
 
 		public static void ClearNodesSerializedData()

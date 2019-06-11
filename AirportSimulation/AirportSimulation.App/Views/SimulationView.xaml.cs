@@ -176,10 +176,12 @@
                     Grid.SetColumn(enabledRectangle, col);
 
                     SimulationGrid.Children.Add(enabledRectangle);
-                    EnableNextButton();
                 }
 			}
-		}
+
+            ConvertToSettingsService.SerializedToCreation(importedData);
+            EnableNextButton();
+        }
 
 		private T GetDialogInformation<T>(bool export = true) where T : FileDialog
 		{
