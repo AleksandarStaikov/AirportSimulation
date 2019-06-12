@@ -3,7 +3,6 @@
     public enum BuildingComponentType
     {
         CheckIn = 1,
-        
         PSC = 2,
         ASC = 3,
         AA = 4,

@@ -68,13 +68,14 @@ namespace AirportSimulation.App.Models
                 nodeData.Length = lastSegment.Index + 1;
 
                 ConvertToSettingsService.ListedForCreation.Add(this.NodeId);
+                ConvertToSettingsService.NodesCreationData.Add(nodeData);
             }
             else
             {
                 nodeData = ConvertToSettingsService.NodesCreationData.FirstOrDefault(data => data.Id == this.NodeId);
             }
 
-            ConvertToSettingsService.NodesCreationData.Add(nodeData);
+            
             return nodeData;
         }
 
@@ -82,6 +83,7 @@ namespace AirportSimulation.App.Models
         {
             var tempCell = this;
 
+            
             while (!(tempCell.NextNodes[0] is SingleCellBuildingComponent))
             {
                 tempCell = tempCell.NextNodes[0] as MultipleCellComponent;

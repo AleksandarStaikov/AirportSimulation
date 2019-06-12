@@ -13,8 +13,8 @@
 
         public override void ShowBlinkingChildren(BuildingComponentType type) //TODO: review repeated code
         {
-            if (((PredecessorType == type && NextNodes.Count != 0) != 
-                (NextNodes.Count == 0 && (AllowedNonConveyorSuccessors.Contains(type) || type == this.Type)))) //TODO: Simplify expression //TODO: Many SingleCell to one MultiCell
+            if ((PredecessorType == type && NextNodes.Count != 0) || 
+                (NextNodes.Count == 0 && (AllowedNonConveyorSuccessors.Contains(type) || type == this.Type))) //TODO: Simplify expression //TODO: Many SingleCell to one MultiCell
             {
                 successorEnabler.ShowBlinkingCells();
             }
@@ -30,12 +30,12 @@
             {
                 ((IParent)successor).ChildClicked(this);
             }
+            else if(successor is ManyToOneCell mtoSuccessor)
+            {
+                mtoSuccessor.PredecessorType = PredecessorType;
+            }
 
             base.ChildClicked(successor);
-            AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
-                {
-                    PredecessorType
-                };
         }
     }
 }

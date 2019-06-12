@@ -84,7 +84,7 @@
 			NodesSerializedData.Clear();
 		}
 
-        public static void ClearNodeCreationData()
+        public static void ClearNodesCreationData()
         {
             ListedForCreation.Clear();
             NodesCreationData.Clear();

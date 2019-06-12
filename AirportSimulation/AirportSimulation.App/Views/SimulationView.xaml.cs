@@ -83,6 +83,7 @@
 		{
 			InitializeClickableGridCells();
 			ConvertToSettingsService.ClearNodesSerializedData();
+            ConvertToSettingsService.ClearNodesCreationData();
 		}
 
 		private void Export_Click(object sender, RoutedEventArgs e)
