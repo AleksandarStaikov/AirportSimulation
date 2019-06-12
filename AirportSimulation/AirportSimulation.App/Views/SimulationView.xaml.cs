@@ -180,7 +180,7 @@
                 }
 			}
 
-            ConvertToSettingsService.SerializedToCreation(importedData);
+            ConvertToSettingsService.SerializedToCreation();
             EnableNextButton();
         }
 

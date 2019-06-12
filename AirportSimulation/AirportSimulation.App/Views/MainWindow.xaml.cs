@@ -21,6 +21,7 @@
 
         private void RunSimulation(MainWindow obj)
         {
+            MainTabMenu.SelectedIndex = 2;
             var engine = ContainerConfig.Resolve<IEngine>();
 
             var settings = new SimulationSettings
@@ -31,7 +32,7 @@
                 Ascs = FlightsOrganizer.CurrentAscSettings,
                 Pscs = FlightsOrganizer.CurrentPscSettings,
                 TransBaggagePercentage = FlightsOrganizer.TransBaggagePercentage,
-                Nodes = ConvertToSettingsService.ConvertToCreationData()
+                Nodes = ConvertToSettingsService.SerializedToCreation()
             };
 
             engine.ActualRun(settings);
@@ -40,6 +41,7 @@
 
         private void SwitchTab(MainWindow obj)
         {
+            ConvertToSettingsService.ConvertToCreationData();
             FlightsView.IncomingPickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
             FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
             FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
