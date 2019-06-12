@@ -16,15 +16,20 @@
 
             var statisticsData = new StatisticsData();
 
-            SetDispatchedTimes(statisticsData, baggage);
-            SetCollectedTimes(statisticsData, baggage);
-            SetPscSucceededAndFailed(statisticsData, baggage);
-            SetAscSucceededAndFailed(statisticsData, baggage);
-            SetFlightDelays(statisticsData, baggage);
-            SetTransferredBagsCount(statisticsData, baggage);
-            SetBsuRelatedStatistics(statisticsData, baggage);
-
-            SetTransportingTimeRelatedData(statisticsData, baggage);
+            try
+            {
+                SetDispatchedTimes(statisticsData, baggage);
+                SetCollectedTimes(statisticsData, baggage);
+                SetPscSucceededAndFailed(statisticsData, baggage);
+                SetAscSucceededAndFailed(statisticsData, baggage);
+                SetFlightDelays(statisticsData, baggage);
+                SetTransferredBagsCount(statisticsData, baggage);
+                SetBsuRelatedStatistics(statisticsData, baggage);
+                SetTransportingTimeRelatedData(statisticsData, baggage);
+            }
+            catch (Exception e)
+            {
+            }
 
             return statisticsData;
         }

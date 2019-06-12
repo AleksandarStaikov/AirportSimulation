@@ -32,7 +32,7 @@
                 Ascs = FlightsOrganizer.CurrentAscSettings,
                 Pscs = FlightsOrganizer.CurrentPscSettings,
                 TransBaggagePercentage = FlightsOrganizer.TransBaggagePercentage,
-                Nodes = ConvertToSettingsService.NodesSerializedData,
+                Nodes = ConvertToSettingsService.NodesCreationData,
             };
 
             engine.ActualRun(settings);
