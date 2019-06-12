@@ -7,7 +7,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Threading;
 
     public class StatisticsCalculator// : IStatisticsCalculator
     {
@@ -24,6 +23,7 @@
             SetFlightDelays(statisticsData, baggage);
             SetTransferredBagsCount(statisticsData, baggage);
             SetBsuRelatedStatistics(statisticsData, baggage);
+
             SetTransportingTimeRelatedData(statisticsData, baggage);
 
             return statisticsData;
@@ -39,10 +39,10 @@
 
         private static void SetCollectedTimes(StatisticsData data, List<Baggage> baggage)
         {
-            var orderedByFirstLogTime = baggage.OrderBy(b => b.Log.LastOrDefault()?.LogCreated).ToList();
+            var orderedByFirstLogTime = baggage.OrderBy(b => b.Log.LastOrDefault()?.LogCreated)?.ToList();
 
-            data.FirstCollectedBag = orderedByFirstLogTime?.FirstOrDefault();
-            data.LastCollectedBag = orderedByFirstLogTime?.LastOrDefault();
+            data.FirstCollectedBag = orderedByFirstLogTime.FirstOrDefault().Log.FirstOrDefault().LogCreated.TotalSeconds;
+            data.LastCollectedBag = orderedByFirstLogTime.FirstOrDefault().Log.LastOrDefault().LogCreated.TotalSeconds;
         }
 
         private static void SetPscSucceededAndFailed(StatisticsData data, List<Baggage> baggage)
@@ -80,6 +80,14 @@
             data.TotalBagsThatWentToBsu =
                 baggages.Where(bag => bag.Log.Any(log => log.Description.Contains(typeof(BSU).Name))).ToList();
 
+
+
+            data.AverageBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Average(b => GetBsuStayTimeInSeconds(b));
+            data.MinBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Min(b => GetBsuStayTimeInSeconds(b));
+            data.MaxBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Max(b => GetBsuStayTimeInSeconds(b));
+
+
+
             data.AverageBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Average(b => GetBsuStayTime(b));
 
             data.MinBsuStayTimeInMinutes = (double)data.TotalBagsThatWentToBsu.DefaultIfEmpty().Min(b => GetBsuStayTime(b));
@@ -87,10 +95,10 @@
             data.MaxBsuStayTimeInMinutes = (double)data.TotalBagsThatWentToBsu.DefaultIfEmpty().Max(b => GetBsuStayTime(b));
 
             data.LongestSystemStayWithoutBsu = baggages.DefaultIfEmpty().Max(bag =>
-                (bag?.Log?.LastOrDefault()?.LogCreated - bag?.Log?.FirstOrDefault()?.LogCreated)?.TotalMinutes ?? 0 - GetBsuStayTime(bag));
-            
+                (bag.Log.LastOrDefault().LogCreated - bag.Log.FirstOrDefault().LogCreated).TotalSeconds - GetBsuStayTimeInSeconds(bag));
+
             data.ShortestSystemStayWithoutBsu = baggages.DefaultIfEmpty().Min(bag =>
-                (bag?.Log?.LastOrDefault()?.LogCreated - bag?.Log?.FirstOrDefault()?.LogCreated)?.TotalMinutes ?? 0 - GetBsuStayTime(bag));
+                (bag.Log.LastOrDefault().LogCreated - bag.Log.FirstOrDefault().LogCreated).TotalSeconds - GetBsuStayTimeInSeconds(bag));
         }
 
         private static void SetTransportingTimeRelatedData(StatisticsData data, List<Baggage> baggage)
@@ -98,9 +106,9 @@
             var allTransportingLogs = baggage.SelectMany(b => b.Log)
                 .Where(log => log.Description.Contains(LoggingConstants.BagReceivedText)).ToList();
 
-            data.LongestTransportingTime = allTransportingLogs.DefaultIfEmpty().Max(log => log?.TimeElapsed.TotalMinutes ?? 0);
+            data.LongestTransportingTime = allTransportingLogs.DefaultIfEmpty().Max(log => log.TimeElapsed.TotalSeconds);
 
-            data.ShortestTransportingTime = allTransportingLogs.DefaultIfEmpty().Min(log => log?.TimeElapsed.TotalMinutes ?? 0);
+            data.ShortestTransportingTime = allTransportingLogs.DefaultIfEmpty().Min(log => log?.TimeElapsed.TotalSeconds ?? 0);
 
             var nodes = ChainLinkFactory.Nodes.OfType<ITransportingNode>().ToList();
             var transportationWaits = allTransportingLogs.Select(log => CalculateLogWait(log, nodes)).OrderBy(t => t.Item2).ToList();
@@ -119,7 +127,7 @@
             var transporterIdentifier = log.Description.Split(new[] { LoggingConstants.BagTransporterIdText }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList()[1];
             if (log.Description.Contains("Queue"))
             {
-                return new Tuple<string, double>(transporterIdentifier, log.TimeElapsed.TotalMinutes);
+                return new Tuple<string, double>(transporterIdentifier, log.TimeElapsed.TotalSeconds);
             }
             else
             {
@@ -128,7 +136,7 @@
                 var actualTransportingTime = log.TimeElapsed.Milliseconds;
                 var transportationOverload = actualTransportingTime - transporterNominalTimeInMilliseconds;
                 return new Tuple<string, double>(transporterIdentifier,
-                    TimeSpan.FromMilliseconds(transportationOverload).TotalMinutes);
+                    TimeSpan.FromMilliseconds(transportationOverload).TotalSeconds);
             }
         }
 
@@ -167,22 +175,28 @@
             PscFailedBags = new List<Baggage>();
             PscSucceededBags = new List<Baggage>();
 
-            AscFailedBags = new List<Baggage>();
-            AscSucceededBags = new List<Baggage>();
+            var receivedInBsuText = string.Format(LoggingConstants.BagReceivedInTemplate, typeof(BSU).Name, bag.TransporterId);
+            var receivedInRobotFromBucket = string.Format(LoggingConstants.ReceivedInRobotSendingTo, typeof(Mpa).Name, bag.TransporterId);
 
-            TotalBagsArrivedLateAtAa = new List<Baggage>();
+            var startTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInBsuText))?.LogCreated ?? TimeSpan.Zero;
+            var endTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInRobotFromBucket))?.LogCreated ?? TimeSpan.Zero;
 
-            
-
-            
-
+            return endTime.TotalSeconds - startTime.TotalSeconds;
         }
+
+
+
+
+    }
+
+    public class StatisticsData
+    {
 
         //Colum Chart -- DONE
         public Baggage FirstDispatchedBag { get; set; }
         public Baggage LastDispatchedBag { get; set; }
-        public Baggage FirstCollectedBag { get; set; }
-        public Baggage LastCollectedBag { get; set; }
+        public double FirstCollectedBag { get; set; }
+        public double LastCollectedBag { get; set; }
 
         //Pie chart
         public List<Baggage> PscFailedBags { get; set; }
@@ -209,6 +223,10 @@
 
         public List<Baggage> TotalBagsThatWentToBsu { get; set; }
 
+        public double AverageBsuStayTimeInSeconds { get; set; }
+        public double MinBsuStayTimeInSeconds { get; set; }
+        public double MaxBsuStayTimeInSeconds { get; set; }
+
         //Column
         public double AverageBsuStayTimeInMinutes { get; set; }
         public double MinBsuStayTimeInMinutes { get; set; }
@@ -224,4 +242,5 @@
         public Tuple<string, double> MaxWaitingTimeAtTransporterOrQueue { get; set; }
         public Dictionary<string, double> AverageWaitingTimePerTransporterOrQueue { get; set; }
     }
+
 }
