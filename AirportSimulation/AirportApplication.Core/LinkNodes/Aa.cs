@@ -24,7 +24,7 @@
         {
             var logMessage = $"{Destination} processing - ";
 
-            if (baggage.Destination != typeof(Mpa).Name)
+            if (baggage.Flight.FlightState == FlightState.Landed)
             {
                 baggage.Destination = typeof(BagCollector).Name;
                 if (baggage.Flight.FlightState == FlightState.Departed)

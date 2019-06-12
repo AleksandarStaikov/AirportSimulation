@@ -52,9 +52,9 @@
             NextLink = _allSuccessors
                 .FirstOrDefault(x => x.Destination == baggage.Destination);
 
-            Condition
-                .Requires(NextLink)
-                .IsNotNull();
+            //Condition
+            //    .Requires(NextLink)
+            //    .IsNotNull();
 
             _currentBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
 
