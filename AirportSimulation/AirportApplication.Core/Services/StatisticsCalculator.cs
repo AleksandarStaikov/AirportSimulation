@@ -31,7 +31,7 @@
 
         private static void SetDispatchedTimes(StatisticsData data, List<Baggage> baggage)
         {
-            var orderedByFirstLogTime = baggage.OrderBy(b => b.Log[0].LogCreated).ToList();
+            var orderedByFirstLogTime = baggage.OrderBy(b => SafeGet(b.Log, 0)?.LogCreated).ToList();
 
             data.FirstDispatchedBag = orderedByFirstLogTime.FirstOrDefault();
             data.LastDispatchedBag = orderedByFirstLogTime.LastOrDefault();
@@ -148,6 +148,15 @@
             return (endTime - startTime).TotalMinutes;
         }
 
+        private static T SafeGet<T>(List<T> elements, int index)
+        {
+            if (elements.Count < index)
+            {
+                return elements[index];
+            }
+
+            return default(T);
+        }
     }
 
     public class StatisticsData

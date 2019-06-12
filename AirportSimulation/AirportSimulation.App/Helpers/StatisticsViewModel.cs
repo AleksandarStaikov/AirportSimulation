@@ -81,11 +81,11 @@
 
             // first pie chart
             _gr2Par1.Add(new StatisticsModel() { Category = "PSC Failed Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
-            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Succeeded Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
+            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Succeeded Percentage", Number = statisticsData?.PscSucceededBags?.Count ?? 0 });
 
             //second pie chart
             _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
-            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
+            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscSucceededBags?.Count ?? 0 });
 
             //third pie chart - TO DO throws nu
                 _gr4Par1.Add(new StatisticsModel() { Category = "ACS Invalidation Percentage", Number = (float)statisticsData.AscInvalidationPercentage });

@@ -208,6 +208,21 @@
                 NextNodes = new List<NodeCreationData>() { addition[1] }.ToDictionary(key => key, value => new int?())
             });
 
+            foreach (var aa in nodes.Where(n => n.Type == BuildingComponentType.AA))
+            {
+                var bsuToAaConveyorLen = nodes.FirstOrDefault(n => n.NextNodes.ContainsKey(aa)).Length;
+
+                addition.Add(new NodeCreationData()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Length = bsuToAaConveyorLen,
+                    Type = BuildingComponentType.Conveyor,
+                    NextNodes = nodes.Where(n => n.Type == BuildingComponentType.MPA).ToDictionary(key => key, value => new int?())
+                });
+
+                aa.NextNodes.Add(addition.Last(), 0);
+            }
+
             nodes.FirstOrDefault(n => n.Type == BuildingComponentType.MPA).NextNodes.Add(addition[2], 0);
 
             return addition;
