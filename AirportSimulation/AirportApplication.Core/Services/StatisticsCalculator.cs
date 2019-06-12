@@ -16,15 +16,20 @@
 
             var statisticsData = new StatisticsData();
 
-            SetDispatchedTimes(statisticsData, baggage);
-            SetCollectedTimes(statisticsData, baggage);
-            SetPscSucceededAndFailed(statisticsData, baggage);
-            SetAscSucceededAndFailed(statisticsData, baggage);
-            SetFlightDelays(statisticsData, baggage);
-            SetTransferredBagsCount(statisticsData, baggage);
-            SetBsuRelatedStatistics(statisticsData, baggage);
-
-            SetTransportingTimeRelatedData(statisticsData, baggage);
+            try
+            {
+                SetDispatchedTimes(statisticsData, baggage);
+                SetCollectedTimes(statisticsData, baggage);
+                SetPscSucceededAndFailed(statisticsData, baggage);
+                SetAscSucceededAndFailed(statisticsData, baggage);
+                SetFlightDelays(statisticsData, baggage);
+                SetTransferredBagsCount(statisticsData, baggage);
+                SetBsuRelatedStatistics(statisticsData, baggage);
+                SetTransportingTimeRelatedData(statisticsData, baggage);
+            }
+            catch (Exception e)
+            {
+            }
 
             return statisticsData;
         }
@@ -41,8 +46,8 @@
         {
             var orderedByFirstLogTime = baggage.OrderBy(b => b.Log.LastOrDefault()?.LogCreated)?.ToList();
 
-            data.FirstCollectedBag = orderedByFirstLogTime.FirstOrDefault().Log.FirstOrDefault().LogCreated.TotalSeconds;
-            data.LastCollectedBag = orderedByFirstLogTime.FirstOrDefault().Log.LastOrDefault().LogCreated.TotalSeconds;
+            data.FirstCollectedBag = orderedByFirstLogTime?.FirstOrDefault()?.Log?.FirstOrDefault()?.LogCreated.TotalSeconds ?? 0;
+            data.LastCollectedBag = orderedByFirstLogTime?.FirstOrDefault()?.Log?.LastOrDefault()?.LogCreated.TotalSeconds ?? 0;
         }
 
         private static void SetPscSucceededAndFailed(StatisticsData data, List<Baggage> baggage)
@@ -91,10 +96,10 @@
             data.MaxBsuStayTimeInMinutes = (double)data.TotalBagsThatWentToBsu.DefaultIfEmpty().Max(b => GetBsuStayTime(b));
 
             data.LongestSystemStayWithoutBsu = baggages.DefaultIfEmpty().Max(bag =>
-                (bag.Log.LastOrDefault().LogCreated - bag.Log.FirstOrDefault().LogCreated).TotalSeconds - GetBsuStayTimeInSeconds(bag));
+                (bag.Log.LastOrDefault()?.LogCreated - bag.Log.FirstOrDefault()?.LogCreated)?.TotalSeconds ?? 0 - GetBsuStayTimeInSeconds(bag));
 
             data.ShortestSystemStayWithoutBsu = baggages.DefaultIfEmpty().Min(bag =>
-                (bag.Log.LastOrDefault().LogCreated - bag.Log.FirstOrDefault().LogCreated).TotalSeconds - GetBsuStayTimeInSeconds(bag));
+                (bag.Log.LastOrDefault()?.LogCreated - bag.Log.FirstOrDefault()?.LogCreated)?.TotalSeconds ?? 0 - GetBsuStayTimeInSeconds(bag));
         }
 
         private static void SetTransportingTimeRelatedData(StatisticsData data, List<Baggage> baggage)
@@ -174,6 +179,11 @@
 
             var startTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInBsuText))?.LogCreated ?? TimeSpan.Zero;
             var endTime = bag.Log.FirstOrDefault(log => log.Description.Contains(receivedInRobotFromBucket))?.LogCreated ?? TimeSpan.Zero;
+
+            if (endTime == TimeSpan.Zero)
+            {
+                return startTime.TotalSeconds;
+            }
 
             return endTime.TotalSeconds - startTime.TotalSeconds;
         }

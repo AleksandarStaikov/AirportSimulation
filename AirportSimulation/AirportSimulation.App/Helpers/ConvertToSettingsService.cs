@@ -43,9 +43,9 @@
             return NodesSerializedData;
         }
 
-        public static List<NodeCreationData> SerializedToCreation(List<NodeCreationData> serializedData)
+        public static List<NodeCreationData> SerializedToCreation(List<NodeCreationData> importedData)
         {
-            
+            var serializedData = importedData;
             serializedData.Reverse();
             int lenght = 0;
 

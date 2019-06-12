@@ -21,6 +21,7 @@
 
         private void RunSimulation(MainWindow obj)
         {
+            MainTabMenu.SelectedIndex = 2;
             var engine = ContainerConfig.Resolve<IEngine>();
 
             var settings = new SimulationSettings
@@ -31,7 +32,7 @@
                 Ascs = FlightsOrganizer.CurrentAscSettings,
                 Pscs = FlightsOrganizer.CurrentPscSettings,
                 TransBaggagePercentage = FlightsOrganizer.TransBaggagePercentage,
-                Nodes = ConvertToSettingsService.ConvertToCreationData()
+                Nodes = ConvertToSettingsService.NodesCreationData,
             };
 
             engine.ActualRun(settings);
@@ -40,6 +41,11 @@
 
         private void SwitchTab(MainWindow obj)
         {
+            if(ConvertToSettingsService.NodesCreationData.Count == 0)
+            {
+                ConvertToSettingsService.ConvertToCreationData();
+            }
+            
             FlightsView.IncomingPickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
             FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
             FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
@@ -63,10 +69,7 @@
             SimulationView.AA.IsEnabled = false;
             SimulationView.PA.IsEnabled = false;
             SimulationView.MPA.IsEnabled = false;
-            SimulationView.Next.IsEnabled = false;
-            SimulationView.Export.IsEnabled = false;
-            SimulationView.Import.IsEnabled = false;
-            SimulationView.ClearGridButton.IsEnabled = false;
+            SimulationView.Bridge.IsEnabled = false;
         }
     }
 }

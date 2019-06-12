@@ -199,7 +199,7 @@
 
             foreach (var aa in nodes.Where(n => n.Type == BuildingComponentType.AA))
             {
-                var bsuToAaConveyorLen = nodes.FirstOrDefault(n => n.NextNodes.ContainsKey(aa)).Length;
+                var bsuToAaConveyorLen = nodes.FirstOrDefault(n => n.NextNodes.Any(nn => nn.Key.Type == BuildingComponentType.AA)).Length;
 
                 addition.Add(new NodeCreationData()
                 {

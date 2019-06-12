@@ -9,6 +9,7 @@
         private bool _canBuildCheckIn = true;
         private bool _canBuildConveyor = true;
         private bool _canBuildManyToOneConveyor = true;
+        private bool _canBuildBirdge = true;
         private bool _canBuildAsc = true;
         private bool _canBuildPsc = true;
         private bool _canBuildAa = true;
@@ -24,6 +25,16 @@
         public string GridRows => $"*#{++GRID_MAX_ROWS}";
 
         public string GridColumns => $"*#{++GRID_MAX_COLUMNS}";
+
+        public bool CanBuildBridge
+        {
+            get => _canBuildBirdge;
+            set
+            {
+                _canBuildBirdge = value;
+                OnPropertyRaised(nameof(CanBuildBridge));
+            }
+        }
 
         public bool CanNext
         {

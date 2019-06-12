@@ -84,7 +84,17 @@
 			InitializeClickableGridCells();
 			ConvertToSettingsService.ClearNodesSerializedData();
             ConvertToSettingsService.ClearNodesCreationData();
-		}
+
+            SimulationGridOptions.CanBuildCheckIn = true;
+            SimulationGridOptions.CanBuildConveyor = true;
+            SimulationGridOptions.CanBuildManyToOneConveyor = true;
+            SimulationGridOptions.CanBuildPsc = true;
+            SimulationGridOptions.CanBuildAsc = true;
+            SimulationGridOptions.CanBuildAa = true;
+            SimulationGridOptions.CanBuildPickUp = true;
+            SimulationGridOptions.CanBuildMpa = true;
+            SimulationGridOptions.CanBuildBridge = true;
+        }
 
 		private void Export_Click(object sender, RoutedEventArgs e)
 		{
@@ -162,16 +172,6 @@
                         ImageSource = BuildingComponentsHelper.GetBuildingComponentImage(component.Type),
                         Stretch = Stretch.Fill
                     });
-                    //var enabledRectangle = new MutantRectangle(cell);
-
-                    //if(component.Type == BuildingComponentType.Conveyor || component.Type == BuildingComponentType.ManyToOneConveyor)
-                    //{
-                    //    enabledRectangle.Content = new MultipleCellComponentFactory().CreateComponent(component.Type, cell);
-                    //}
-                    //else
-                    //{
-                    //    enabledRectangle.Content = new SingleCellComponentFactory().CreateComponent(component.Type, cell);
-                    //}
 
                     Grid.SetRow(enabledRectangle, row);
                     Grid.SetColumn(enabledRectangle, col);
