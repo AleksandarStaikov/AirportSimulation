@@ -1,34 +1,35 @@
 ﻿namespace AirportSimulation.Core
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using Abstractions.Contracts;
-	using Abstractions.Core;
-	using Common.Models;
-	using Contracts;
-	using Contracts.Services;
-	using LinkNodes;
-	using LinkNodes.Contracts;
-	using Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Abstractions.Contracts;
+    using Abstractions.Core;
+    using Common;
+    using Common.Models;
+    using Contracts;
+    using Contracts.Services;
+    using LinkNodes;
+    using LinkNodes.Contracts;
+    using Services;
 
-	public class Engine : IEngine
-	{
-		private readonly IChainLinkFactory _chainLinkFactory;
-		private readonly ITimerService _timerService;
-		private readonly INodeConnectorService _nodeConnectorService;
+    public class Engine : IEngine
+    {
+        private readonly IChainLinkFactory _chainLinkFactory;
+        private readonly ITimerService _timerService;
+        private readonly INodeConnectorService _nodeConnectorService;
 
 		private List<IPauseResume> _pauseResumeNodes;
 		private SimulationSettings _settings;
 
-		public Engine(IChainLinkFactory chainLinkFactory,
-			ITimerService timerService,
-			INodeConnectorService nodeConnectorService)
-		{
-			_chainLinkFactory = chainLinkFactory;
-			_timerService = timerService;
-			_nodeConnectorService = nodeConnectorService;
-		}
+        public Engine(IChainLinkFactory chainLinkFactory,
+            ITimerService timerService,
+            INodeConnectorService nodeConnectorService)
+        {
+            _chainLinkFactory = chainLinkFactory;
+            _timerService = timerService;
+            _nodeConnectorService = nodeConnectorService;
+        }
 
 		public void Run(SimulationSettings settings)
 		{
@@ -91,15 +92,12 @@
 			_timerService.RunNewTimer();
 			checkInToPsc.Start();
 
-			PscToMpa.Start();
-			MpaToAA.Start();
-			mpaToBsu.Start();
-			bsuToMpa.Start();
-			checkInDispatcher.Start();
-
-			//Stats
-			// _statisticsCalculator.CalculateStatistics(settings);
-		}
+            PscToMpa.Start();
+            MpaToAA.Start();
+            mpaToBsu.Start();
+            bsuToMpa.Start();
+            checkInDispatcher.Start();
+        }
 
 		public void RunDemo(SimulationSettings settings)
 		{
@@ -143,10 +141,12 @@
 			_chainLinkFactory.SetSettings(settings);
 			_timerService.SetSettings(settings);
 
-			var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings)).ToList();
-			nodes.Add(_chainLinkFactory.CreateCheckInDispatcher());
-			nodes.Add(_chainLinkFactory.CreateAaDispatcher());
-			nodes.Add(_chainLinkFactory.CreateBagCollector());
+            settings.Nodes = settings.Nodes.Concat(AddBsu(settings.Nodes)).ToList();
+
+            var nodes = settings.Nodes.Select(n => _chainLinkFactory.CreateChainLink(n, settings)).ToList();
+            nodes.Add(_chainLinkFactory.CreateCheckInDispatcher());
+            nodes.Add(_chainLinkFactory.CreateAaDispatcher());
+            nodes.Add(_chainLinkFactory.CreateBagCollector());
 
 			_nodeConnectorService.ConnectNodes(nodes, settings.Nodes);
 
@@ -164,10 +164,42 @@
 			_pauseResumeNodes.ForEach(n => n.Stop());
 		}
 
-		public void Resume()
-		{
-			_timerService.Start();
-			_pauseResumeNodes.ForEach(n => n.Start());
-		}
-	}
+        public void Resume()
+        {
+            _timerService.Start();
+            _pauseResumeNodes.ForEach(n => n.Start());
+        }
+
+        private IEnumerable<NodeCreationData> AddBsu(IEnumerable<NodeCreationData> nodes)
+        {
+            var addition = new List<NodeCreationData>();
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Length = 5,
+                Type = BuildingComponentType.Conveyor,
+                NextNodes = nodes.Where(n => n.Type == BuildingComponentType.MPA).ToDictionary(key => key, value => new int?())
+            });
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Type = BuildingComponentType.BSU,
+                NextNodes = new List<NodeCreationData>(){ addition[0] }.ToDictionary(key => key, value => new int?())
+            });
+
+            addition.Add(new NodeCreationData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Length = 5,
+                Type = BuildingComponentType.Conveyor,
+                NextNodes = new List<NodeCreationData>() { addition[1] }.ToDictionary(key => key, value => new int?())
+            });
+
+            nodes.FirstOrDefault(n => n.Type == BuildingComponentType.MPA).NextNodes.Add(addition[2], 0);
+
+            return addition;
+        }
+    }
 }

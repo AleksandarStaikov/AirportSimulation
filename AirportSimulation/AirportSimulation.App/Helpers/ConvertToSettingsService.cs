@@ -11,8 +11,10 @@
     internal static class ConvertToSettingsService
     {
         public readonly static List<GenericBuildingComponent> StartNodes = new List<GenericBuildingComponent>();
-        public readonly static List<string> Listed = new List<string>();
+        public readonly static List<string> ListedForCreation = new List<string>();
+        public readonly static List<string> ListedForSerialization = new List<string>();
         public readonly static List<NodeCreationData> NodesCreationData = new List<NodeCreationData>();
+        public readonly static List<NodeCreationData> NodesSerializedData = new List<NodeCreationData>();
 
         public static IEnumerable<NodeCreationData> Convert()
         {
@@ -21,10 +23,24 @@
                 if (startingNode is ICreatable creatableNode)
                 {
                     creatableNode.GetCreationData();
+                    creatableNode.GetSerializedData();
                 }
             }
 
             return NodesCreationData.AsEnumerable();
+        }
+
+        public static List<NodeCreationData> Serialize()
+        {
+            foreach (GenericBuildingComponent startingNode in StartNodes)
+            {
+                if (startingNode is ICreatable creatableNode)
+                {
+                    creatableNode.GetSerializedData();
+                }
+            }
+
+            return NodesSerializedData;
         }
 
         public static ObservableCollection<string> GetAvailablePickUpAreas() => GetByType(BuildingComponentType.PA, "P");

@@ -35,6 +35,7 @@
             };
 
             engine.ActualRun(settings);
+            StatisticsViewModel.StartStatisticsTimer();
         }
 
         private void SwitchTab(MainWindow obj)
