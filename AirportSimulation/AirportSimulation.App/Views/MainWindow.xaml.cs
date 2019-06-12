@@ -32,7 +32,7 @@
                 Ascs = FlightsOrganizer.CurrentAscSettings,
                 Pscs = FlightsOrganizer.CurrentPscSettings,
                 TransBaggagePercentage = FlightsOrganizer.TransBaggagePercentage,
-                Nodes = ConvertToSettingsService.SerializedToCreation()
+                Nodes = ConvertToSettingsService.NodesSerializedData,
             };
 
             engine.ActualRun(settings);
@@ -41,7 +41,11 @@
 
         private void SwitchTab(MainWindow obj)
         {
-            ConvertToSettingsService.ConvertToCreationData();
+            if(ConvertToSettingsService.NodesCreationData.Count == 0)
+            {
+                ConvertToSettingsService.ConvertToCreationData();
+            }
+            
             FlightsView.IncomingPickUpAreasComboBox.ItemsSource = ConvertToSettingsService.GetAvailablePickUpAreas();
             FlightsView.OutgoingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
             FlightsView.IncomingGatesComboBox.ItemsSource = ConvertToSettingsService.GetAvailableGates();
@@ -65,10 +69,7 @@
             SimulationView.AA.IsEnabled = false;
             SimulationView.PA.IsEnabled = false;
             SimulationView.MPA.IsEnabled = false;
-            SimulationView.Next.IsEnabled = false;
-            SimulationView.Export.IsEnabled = false;
-            SimulationView.Import.IsEnabled = false;
-            SimulationView.ClearGridButton.IsEnabled = false;
+            SimulationView.Bridge.IsEnabled = false;
         }
     }
 }

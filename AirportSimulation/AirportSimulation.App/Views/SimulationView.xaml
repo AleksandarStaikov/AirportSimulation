@@ -143,7 +143,7 @@
                     Width="60"
                     BorderThickness="0"
                     Click="BuildingComponent_Click"
-                    IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+                    IsEnabled="{Binding Path=SimulationGridOptions.CanBuildBridge, Mode=TwoWay}"
                     Background="{StaticResource BridgeImageBrush}">
                     <Button.ToolTip>
                         <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
