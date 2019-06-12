@@ -19,8 +19,8 @@
         private readonly ITimerService _timerService;
         private readonly INodeConnectorService _nodeConnectorService;
 
-        private List<IPauseResume> _pauseResumeNodes;
-        private SimulationSettings _settings;
+		private List<IPauseResume> _pauseResumeNodes;
+		private SimulationSettings _settings;
 
         public Engine(IChainLinkFactory chainLinkFactory,
             ITimerService timerService,
@@ -31,72 +31,66 @@
             _nodeConnectorService = nodeConnectorService;
         }
 
-        public void Run(SimulationSettings settings)
-        {
-            _chainLinkFactory.SetSettings(settings);
-            _timerService.SetSettings(settings);
+		public void Run(SimulationSettings settings)
+		{
+			_chainLinkFactory.SetSettings(settings);
+			_timerService.SetSettings(settings);
 
+			var checkIn = _chainLinkFactory.CreateCheckInDesk();
+			var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
+			var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
+			var psc = _chainLinkFactory.CreatePsc();
+			var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
+			var PscToAsc = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToAsc[0].Length);
+			var asc = _chainLinkFactory.CreateAsc();
+			var ascToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsAscToMpu[0].Length);
+			var mpa = _chainLinkFactory.CreateMpa();
+			var bsu = _chainLinkFactory.CreateBsu();
+			var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
+			var bsuToMpa = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
+			var MpaToAA = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
+			var aa = _chainLinkFactory.CreateAa();
+			var pua = _chainLinkFactory.CreatePua();
 
-            var checkIn = _chainLinkFactory.CreateCheckInDesk();
-            var checkInToConveyorConnector = _chainLinkFactory.CreateConveyorConnector();
-            var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(settings.ConveyorSettingsCheckInToPsc[0].Length);
-            var psc = _chainLinkFactory.CreatePsc();
-            var PscToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToMpa[0].Length);
-            var PscToAsc = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsPscToAsc[0].Length);
-            var asc = _chainLinkFactory.CreateAsc();
-            var ascToMpa = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsAscToMpu[0].Length);
-            var mpa = _chainLinkFactory.CreateMpa();
-            var bsu = _chainLinkFactory.CreateBsu();
-            var mpaToBsu = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
-            var bsuToMpa = _chainLinkFactory.CreateOneToOneConveyor(10); //Implement conveyorSettings
-            var MpaToAA = _chainLinkFactory.CreateOneToOneConveyor(settings.ConveyorSettingsMpaToAa[0].Length);
-            var aa = _chainLinkFactory.CreateAa();
-            var pua = _chainLinkFactory.CreatePua();
+			//EndNodes
+			var checkInDispatcher = _chainLinkFactory.CreateCheckInDispatcher();
+			var bagCollector = _chainLinkFactory.CreateBagCollector();
 
+			//Linking
+			checkInDispatcher.SetCheckIns(new List<ICheckInDesk> { checkIn });
 
-            //EndNodes
-            var checkInDispatcher = _chainLinkFactory.CreateCheckInDispatcher();
-            var bagCollector = _chainLinkFactory.CreateBagCollector();
+			checkIn.AddSuccessor(checkInToConveyorConnector);
+			//checkIn1.AddSuccessor(checkIn1ToConveyorConnector);
+			//checkIn2.AddSuccessor(checkIn2ToConveyorConnector);
+			checkInToConveyorConnector.SetNextNode(checkInToPsc, 0);
+			checkInToPsc.SetSuccessor(psc);
+			//checkIn1ToConveyorConnector.SetNextNode(checkIn2ToPsc, 1);
+			//checkIn2ToConveyorConnector.SetNextNode(checkIn2ToPsc, 2);
 
-            //Linking
-            checkInDispatcher.SetCheckIns(new List<ICheckInDesk> { checkIn });
+			// checkInToPsc.SetSuccessor(psc);
 
-            checkIn.AddSuccessor(checkInToConveyorConnector);
-            //checkIn1.AddSuccessor(checkIn1ToConveyorConnector);
-            //checkIn2.AddSuccessor(checkIn2ToConveyorConnector);
-            checkInToConveyorConnector.SetNextNode(checkInToPsc, 0);
-            checkInToPsc.SetSuccessor(psc);
-            //checkIn1ToConveyorConnector.SetNextNode(checkIn2ToPsc, 1);
-            //checkIn2ToConveyorConnector.SetNextNode(checkIn2ToPsc, 2);
+			//Transporting nodes
+			mpaToBsu.SetSuccessor(bsu);
+			PscToMpa.SetSuccessor(mpa);
+			PscToAsc.SetSuccessor(asc);
+			ascToMpa.SetSuccessor(mpa);
+			MpaToAA.SetSuccessor(aa);
+			bsuToMpa.SetSuccessor(mpa);
 
-            // checkInToPsc.SetSuccessor(psc);
+			//Processing and complex nodes
+			psc.AddSuccessor(PscToMpa);
+			psc.AddSuccessor(PscToAsc);
+			asc.AddSuccessor(ascToMpa);
+			asc.AddSuccessor(bagCollector);
+			aa.AddSuccessor(bagCollector);
+			mpa.AddSuccessor(MpaToAA);
+			mpa.AddSuccessor(mpaToBsu);
+			bsu.SetSuccessor(bsuToMpa);
+			aa.AddSuccessor(bagCollector);
 
-
-
-            //Transporting nodes
-            mpaToBsu.SetSuccessor(bsu);
-            PscToMpa.SetSuccessor(mpa);
-            PscToAsc.SetSuccessor(asc);
-            ascToMpa.SetSuccessor(mpa);
-            MpaToAA.SetSuccessor(aa);
-            bsuToMpa.SetSuccessor(mpa);
-
-            //Processing and complex nodes
-            psc.AddSuccessor(PscToMpa);
-            psc.AddSuccessor(PscToAsc);
-            asc.AddSuccessor(ascToMpa);
-            asc.AddSuccessor(bagCollector);
-            aa.AddSuccessor(bagCollector);
-            mpa.AddSuccessor(MpaToAA);
-            mpa.AddSuccessor(mpaToBsu);
-            bsu.SetSuccessor(bsuToMpa);
-            aa.AddSuccessor(bagCollector);
-
-
-
-            //Starting
-            _timerService.RunNewTimer();
-            checkInToPsc.Start();
+			//Starting
+			_timerService.RunNewTimer();
+			checkInToPsc.Start();
 
             PscToMpa.Start();
             MpaToAA.Start();
@@ -105,49 +99,47 @@
             checkInDispatcher.Start();
         }
 
-        public void RunDemo(SimulationSettings settings)
-        {
-            _chainLinkFactory.SetSettings(settings);
-            _timerService.SetSettings(settings);
+		public void RunDemo(SimulationSettings settings)
+		{
+			_chainLinkFactory.SetSettings(settings);
+			_timerService.SetSettings(settings);
 
-            var conveyorData = settings.ConveyorSettingsMpaToAa;
+			var conveyorData = settings.ConveyorSettingsMpaToAa;
+			var checkInDisp = _chainLinkFactory.CreateCheckInDispatcher();
+			var checkIn = _chainLinkFactory.CreateCheckInDesk();
+			var firstCheckInConnector = _chainLinkFactory.CreateConveyorConnector();
+			var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(conveyorData[0].Length);
+			var psc = _chainLinkFactory.CreatePsc();
+			var pscToMpa = _chainLinkFactory.CreateOneToOneConveyor(conveyorData[1].Length);
+			var mpa = _chainLinkFactory.CreateMpa();
+			var mpaToAA = _chainLinkFactory.CreateOneToOneConveyor(conveyorData[2].Length);
+			var aa = _chainLinkFactory.CreateAa();
+			var bagCollector = _chainLinkFactory.CreateBagCollector();
 
-            var checkInDisp = _chainLinkFactory.CreateCheckInDispatcher();
-            var checkIn = _chainLinkFactory.CreateCheckInDesk();
-            var firstCheckInConnector = _chainLinkFactory.CreateConveyorConnector();
-            var checkInToPsc = _chainLinkFactory.CreateManyToOneConveyor(conveyorData[0].Length);
-            var psc = _chainLinkFactory.CreatePsc();
-            var pscToMpa = _chainLinkFactory.CreateOneToOneConveyor(conveyorData[1].Length);
-            var mpa = _chainLinkFactory.CreateMpa();
-            var mpaToAA = _chainLinkFactory.CreateOneToOneConveyor(conveyorData[2].Length);
-            var aa = _chainLinkFactory.CreateAa();
-            var bagCollector = _chainLinkFactory.CreateBagCollector();
+			checkInDisp.SetCheckIns(new List<ICheckInDesk>() { checkIn });
+			checkIn.AddSuccessor(firstCheckInConnector);
+			firstCheckInConnector.SetNextNode(checkInToPsc, 0);
+			checkInToPsc.SetSuccessor(psc);
+			psc.AddSuccessor(pscToMpa);
+			pscToMpa.SetSuccessor(mpa);
 
-            checkInDisp.SetCheckIns(new List<ICheckInDesk>() { checkIn });
-            checkIn.AddSuccessor(firstCheckInConnector);
-            firstCheckInConnector.SetNextNode(checkInToPsc, 0);
-            checkInToPsc.SetSuccessor(psc);
-            psc.AddSuccessor(pscToMpa);
-            pscToMpa.SetSuccessor(mpa);
+			aa.AddSuccessor(bagCollector);
+			mpaToAA.SetSuccessor(aa);
+			mpa.AddSuccessor(mpaToAA);
 
-            aa.AddSuccessor(bagCollector);
-            mpaToAA.SetSuccessor(aa);
+			checkInToPsc.Start();
+			mpaToAA.Start();
+			pscToMpa.Start();
 
-            mpa.AddSuccessor(mpaToAA);
+			_timerService.RunNewTimer();
+			checkInDisp.Start();
+		}
 
-            checkInToPsc.Start();
-            mpaToAA.Start();
-            pscToMpa.Start();
-
-            _timerService.RunNewTimer();
-            checkInDisp.Start();
-        }
-
-        public void ActualRun(SimulationSettings settings)
-        {
-            _settings = settings;
-            _chainLinkFactory.SetSettings(settings);
-            _timerService.SetSettings(settings);
+		public void ActualRun(SimulationSettings settings)
+		{
+			_settings = settings;
+			_chainLinkFactory.SetSettings(settings);
+			_timerService.SetSettings(settings);
 
             settings.Nodes = settings.Nodes.Concat(AddBsu(settings.Nodes)).ToList();
 
@@ -156,24 +148,21 @@
             nodes.Add(_chainLinkFactory.CreateAaDispatcher());
             nodes.Add(_chainLinkFactory.CreateBagCollector());
 
-            _nodeConnectorService.ConnectNodes(nodes, settings.Nodes);
+			_nodeConnectorService.ConnectNodes(nodes, settings.Nodes);
 
-            _pauseResumeNodes = nodes.OfType<IPauseResume>().ToList();
+			_pauseResumeNodes = nodes.OfType<IPauseResume>().ToList();
 
-            _timerService.RunNewTimer();
-            _pauseResumeNodes.ForEach(n => n.Start());
-        }
+			_timerService.RunNewTimer();
+			_pauseResumeNodes.ForEach(n => n.Start());
+		}
 
-        public Func<StatisticsData> GetStatisticsCalculator()
-        {
-            return () => { return StatisticsCalculator.CalculateStatistics(this._settings); };
-        }
+		public Func<StatisticsData> GetStatisticsCalculator() => () => StatisticsCalculator.CalculateStatistics(this._settings);
 
-        public void Pause()
-        {
-            _timerService.Stop();
-            _pauseResumeNodes.ForEach(n => n.Stop());
-        }
+		public void Pause()
+		{
+			_timerService.Stop();
+			_pauseResumeNodes.ForEach(n => n.Stop());
+		}
 
         public void Resume()
         {
@@ -207,6 +196,21 @@
                 Type = BuildingComponentType.Conveyor,
                 NextNodes = new List<NodeCreationData>() { addition[1] }.ToDictionary(key => key, value => new int?())
             });
+
+            foreach (var aa in nodes.Where(n => n.Type == BuildingComponentType.AA))
+            {
+                var bsuToAaConveyorLen = nodes.FirstOrDefault(n => n.NextNodes.ContainsKey(aa)).Length;
+
+                addition.Add(new NodeCreationData()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Length = bsuToAaConveyorLen,
+                    Type = BuildingComponentType.Conveyor,
+                    NextNodes = nodes.Where(n => n.Type == BuildingComponentType.MPA).ToDictionary(key => key, value => new int?())
+                });
+
+                aa.NextNodes.Add(addition.Last(), 0);
+            }
 
             nodes.FirstOrDefault(n => n.Type == BuildingComponentType.MPA).NextNodes.Add(addition[2], 0);
 

@@ -1,4 +1,4 @@
-﻿namespace AirportSimulation.App
+﻿namespace AirportSimulation.App.Views
 {
 	using System.Linq;
 	using System.Windows;

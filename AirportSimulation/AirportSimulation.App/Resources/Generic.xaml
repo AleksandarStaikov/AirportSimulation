@@ -4,15 +4,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
-    x:Class="AirportSimulation.App.Helpers.StatisticsViewModel">
+    x:Class="AirportSimulation.App.Models.StatisticsViewModel">
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFEFEFEF"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFF"/>
     <SolidColorBrush x:Key="ForegroundBrush" Color="#FF666666"/>
     <Color x:Key="PrimaryForeground">#FF666666</Color>
 
     <Style x:Key="BasicTextStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#FF666666"/>
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="TextTrimming" Value="WordEllipsis"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
@@ -26,7 +26,7 @@
     </Style>
 
     <Style x:Key="HeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaselineTextStyle}">
-        <Setter Property="FontSize" Value="42"/>
+        <Setter Property="FontSize" Value="23"/>
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="TextTrimming" Value="WordEllipsis"/>
         <Setter Property="TextWrapping" Value="NoWrap"/>
@@ -50,151 +50,16 @@
     <Style x:Key="SeriesHeader" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
         <Setter Property="Margin" Value="0,0,10,10"/>
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="15" />
     </Style>
 
-
-    <Style x:Key="BackButtonStyle" TargetType="Button">
-        <Setter Property="MinWidth" Value="0"/>
-        <Setter Property="Width" Value="48"/>
-        <Setter Property="Height" Value="48"/>
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="FontSize" Value="56"/>
-        <Setter Property="AutomationProperties.AutomationId" Value="BackButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Back"/>
-        <Setter Property="AutomationProperties.ItemType" Value="Navigation Button"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Grid x:Name="RootGrid">
-                        <Grid Margin="-1,-16,0,0">
-                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" Foreground="Transparent"/>
-                            <TextBlock x:Name="NormalGlyph" Text="&#xE071;" Foreground="#FF666666"/>
-                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0A6;" Foreground="Black" Opacity="0"/>
-                        </Grid>
-                        <Rectangle
-                            x:Name="FocusVisualWhite"
-                            IsHitTestVisible="False"
-                            Stroke="White"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="1.5"/>
-                        <Rectangle
-                            x:Name="FocusVisualBlack"
-                            IsHitTestVisible="False"
-                            Stroke="Black"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="0.5"/>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="#FF666666"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="Black"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="#FF666666"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="Black"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <SolidColorBrush Color="Black"/>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ArrowGlyph"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1"
-                                            Duration="0"/>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="NormalGlyph"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="0"
-                                            Duration="0"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Visibility">
-                                            <DiscreteObjectKeyFrame KeyTime="00:00:00.300">
-                                                <DiscreteObjectKeyFrame.Value>
-                                                    <Visibility>Collapsed</Visibility>
-                                                </DiscreteObjectKeyFrame.Value>
-                                            </DiscreteObjectKeyFrame>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="FocusStates">
-                                <VisualState x:Name="Focused">
-                                    <Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="FocusVisualWhite"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1"
-                                            Duration="0"/>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="FocusVisualBlack"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1"
-                                            Duration="0"/>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unfocused" />
-                                <VisualState x:Name="PointerFocused" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style x:Key="ChartStyle" TargetType="chart:ChartBase">
-        <Setter Property="Margin" Value="0 0 10 10"/>
+        <Setter Property="Margin" Value="5 5 5 5"/>
         <Setter Property="Background" Value="#99FFFFFF"/>
         <Setter Property="Foreground" Value="#FF666666"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontSize" Value="10"/>
         <Setter Property="Width" Value="400"/>
         <Setter Property="Height" Value="400"/>
     </Style>
@@ -227,6 +92,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -236,196 +102,194 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!--<StackPanel 
-                    Width="350" 
-                    Margin="0 0 10 0" 
-                    Background="White" 
-                    Grid.RowSpan="2" 
-                    Grid.Column="0">
-                    <TextBlock 
-                        Style="{StaticResource SeriesHeader}" 
-                        TextWrapping="Wrap" 
-                        Text="Edit the values of the following series to change the charts. Currently only positive values are supported." 
-                        Margin="10" 
-                    />
-                    <ItemsControl 
-                        Margin="10"
-                        x:Name="parentList"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch"
-                        VerticalContentAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        ItemsSource="{Binding Path=Series}"
-                        Tag="{Binding Path=SelectedItem, Mode=TwoWay}" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Width="330">
-                                    <TextBlock Text="{Binding Path=DisplayName}" Style="{StaticResource SeriesHeader}" />
-                                    <ListBox 
-                                            VerticalAlignment="Stretch"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalContentAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            ItemContainerStyle="{StaticResource ListBoxItemStyle}"
-                                            ItemsSource="{Binding Path=Items}" 
-                                            SelectedItem="{Binding Path=Tag, Mode=TwoWay, ElementName=parentList}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Column="0" Text="{Binding Path=Category}" />
-                                                    <TextBox 
-                                                            Width="50" 
-                                                            Background="White" 
-                                                            Margin="0 0 0 0" 
-                                                            BorderBrush="DarkGray" 
-                                                            Grid.Column="1" 
-                                                            HorizontalAlignment="Right" 
-                                                            Text="{Binding Path=Number, Mode=TwoWay}"
-                                                        />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>-->
-                
-                <StackPanel Grid.Column="0" Grid.Row="0">
-                    <chart:ClusteredColumnChart                                
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Dispatch &amp; Collect"
-                                ChartSubTitle="The time in which the first &amp; last bags were dispatched/collected"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                        <chart:ClusteredColumnChart.Series>
-                            <chart:ChartSeries
-                                        SeriesTitle="First"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr1Col1}"
-                                />
-                            <chart:ChartSeries
-                                        SeriesTitle="Last"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr1Col2}" />
-                        </chart:ClusteredColumnChart.Series>
-                    </chart:ClusteredColumnChart>
-                </StackPanel>
-                <StackPanel  Grid.Column="1" Grid.Row="0">
+                <StackPanel  Grid.Column="0" Grid.Row="0">
                     <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
-                            ChartTitle="Primary Failed &amp; Passed Bags"
-                            ChartSubTitle="Primary Security Check Percentage of Passed &amp; Failed Bags"
+                            ChartTitle="Primary Security Inspection"
+                            ChartSubTitle="Total number of bags which failed and passed"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                         <chart:PieChart.Series>
                             <chart:ChartSeries
                                     SeriesTitle="FailedPassed"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr2Par1}">
+                                    ItemsSource="{Binding Path=pscFailSuccChart}">
                             </chart:ChartSeries>
                         </chart:PieChart.Series>
                     </chart:PieChart>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="0">
+
+                <StackPanel Grid.Column="1" Grid.Row="0">
                     <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
-                            ChartTitle="Secondary Failed &amp; Passed Bags"
-                            ChartSubTitle="Secondary Security Check Percentage of Passed &amp; Failed Bags"
+                            ChartTitle="Advanced Security Inspection"
+                            ChartSubTitle="Total number of bags which failed and passed"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                         <chart:PieChart.Series>
                             <chart:ChartSeries
-                                    SeriesTitle="Errors"
+                                SeriesTitle="PassedFailed"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr3Par1}">
+                                    ItemsSource="{Binding Path=ascFailSuccChart}">
                             </chart:ChartSeries>
                         </chart:PieChart.Series>
                     </chart:PieChart>
                 </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="1">
-                    <chart:ClusteredColumnChart                                
-                                Grid.Column="1"
-                                Grid.Row="2"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Second Column Chart"
-                                ChartSubTitle="The borko baby"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                        <chart:ClusteredColumnChart.Series>
-                            <chart:ChartSeries
-                                        SeriesTitle="Total bags"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr2Col1}" />
-                            <!--<chart:ChartSeries
-                                        SeriesTitle="BSU bags"
-                                        DisplayMember="Category"
-                                        ValueMember="Number"
-                                        ItemsSource="{Binding Path=_gr2Col2}" />-->
-                        </chart:ClusteredColumnChart.Series>
-                    </chart:ClusteredColumnChart>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1">
-                    <chart:ClusteredColumnChart                                
-                                Grid.Column="1"
-                                Grid.Row="2"
-                                Style="{StaticResource ChartStyle}"
-                                ChartTitle="Third Column Chart"
-                                ChartSubTitle="The borko baby"                  
-                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                        <chart:ClusteredColumnChart.Series>
-                            <chart:ChartSeries
-                                    SeriesTitle="BSU stay times"
-                                    DisplayMember="Category"
-                                    ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr3Col1}" />
-                        </chart:ClusteredColumnChart.Series>
-                    </chart:ClusteredColumnChart>
-                </StackPanel>
-                <StackPanel  Grid.Column="2" Grid.Row="1">
-                    <chart:ClusteredColumnChart
-                            Style="{StaticResource ChartStyle}"
-                            ChartTitle="Longest and Shortest times"
-                            ChartSubTitle="Borko baby"                  
-                            SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
-                        <chart:ClusteredColumnChart.Series>
-                            <chart:ChartSeries
-                                    SeriesTitle="Longest"
-                                    DisplayMember="Category"
-                                    ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr4Col1}"
-                                />
-                            <!--<chart:ChartSeries
-                                    SeriesTitle="Shortest"
-                                    DisplayMember="Category"
-                                    ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr4Col2}" />-->
-                        </chart:ClusteredColumnChart.Series>
-                    </chart:ClusteredColumnChart>
-                </StackPanel>
-                
-                <StackPanel  Grid.Column="3" Grid.Row="0">
+
+
+                <StackPanel  Grid.Column="2" Grid.Row="0">
                     <chart:PieChart                     
                             Style="{StaticResource ChartStyle}"
-                            ChartTitle="ASC PCS Invalidation Percentage"
-                            ChartSubTitle="Invalidaitons"
+                            ChartTitle="Overall Security Inspection"
+                            ChartSubTitle="Percentage of bags which failed &#x0a;primary and advanced inspections"
                             SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
                         <chart:PieChart.Series>
                             <chart:ChartSeries
                                     SeriesTitle="Invalidation %"
                                     DisplayMember="Category"
                                     ValueMember="Number"
-                                    ItemsSource="{Binding Path=_gr4Par1}">
+                                    ItemsSource="{Binding Path=overalPercSecurityChart}">
                             </chart:ChartSeries>
                         </chart:PieChart.Series>
                     </chart:PieChart>
                 </StackPanel>
+
+                <StackPanel Grid.Column="3" Grid.Row="0">
+                    <chart:DoughnutChart
+                        Style="{StaticResource ChartStyle}"
+        ChartTitle="Baggage Storage Unit"
+        ChartSubTitle="Total number of bags which went to BSU."
+        MaxDataPointValue="{Binding Path=totalBsuChart}"
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                SeriesTitle="Errors"
+                DisplayMember="Category"
+                ValueMember="Number"
+                ItemsSource="{Binding Path=totalBsuChart}"/>
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="1">
+                    <chart:DoughnutChart                                
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="BSU Stay Time"
+                                ChartSubTitle="The stay time of a bag in seconds."                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                                        SeriesTitle="BSUTime"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=bsuStayTimeChart}" />
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <chart:DoughnutChart
+                        Style="{StaticResource ChartStyle}"
+        ChartTitle="Redirected Bags"
+        ChartSubTitle="Total number of bags which were redirected &#x0a;to another flight."
+        MaxDataPointValue="{Binding Path=totalTransferBags}"
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                SeriesTitle="Transfer"
+                DisplayMember="Category"
+                ValueMember="Number"
+                ItemsSource="{Binding Path=totalTransferBags}"/>
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Grid.Row="1">
+                    <chart:DoughnutChart
+                        Style="{StaticResource ChartStyle}"
+        ChartTitle="Delays at the Airpot Area"
+        ChartSubTitle="The total number of bags which had a delay &#x0a;at the airport area"
+        MaxDataPointValue="{Binding Path=delaysAtAaChart}"
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                SeriesTitle="Transfer"
+                DisplayMember="Category"
+                ValueMember="Number"
+                ItemsSource="{Binding Path=delaysAtAaChart}"/>
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Grid.Row="1">
+                    <chart:ClusteredColumnChart                                
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Dispatched Bags"
+                                ChartSubTitle="Run-time statistics showing the seconds needed for the first &#x0a; and for each subsequent bag to be dispatched for the &#x0a;flight."                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
+                                    SeriesTitle="Dispatched Bags"
+                                    DisplayMember="Category"
+                                    ValueMember="Number"
+                                    ItemsSource="{Binding Path=dispatchedBags}" />
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="2">
+                    <chart:ClusteredColumnChart                                
+                                Style="{StaticResource ChartStyle}"
+                                ChartTitle="Collected Bags"
+                                ChartSubTitle="Run-time statistics showing the seconds needed for the first &#x0a; and for each subsequent bag to collected from the BSU."                  
+                                SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+                        <chart:ClusteredColumnChart.Series>
+                            <chart:ChartSeries
+                                        SeriesTitle="Collected Bags"
+                                        DisplayMember="Category"
+                                        ValueMember="Number"
+                                        ItemsSource="{Binding Path=collectedBags}"/>
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
+
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="2">
+                    <chart:DoughnutChart
+                        Style="{StaticResource ChartStyle}"
+        ChartTitle="Baggage Storage Unit No Stay"
+        ChartSubTitle="The Minimum and Maximum time in which &#x0a;a baggage stayed in the system without going to the BSU"
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                SeriesTitle="Stay Without BSU"
+                DisplayMember="Category"
+                ValueMember="Number"
+                ItemsSource="{Binding Path=noBsuChart}"/>
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Grid.Row="2">
+                    <chart:DoughnutChart
+                        Style="{StaticResource ChartStyle}"
+        ChartTitle="System Transporting Time"
+        ChartSubTitle="The longest &amp; shortest time which was needed for a baggage to be transported."
+        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" >
+                        <chart:DoughnutChart.Series>
+                            <chart:ChartSeries
+                SeriesTitle="Transporting Time"
+                DisplayMember="Category"
+                ValueMember="Number"
+                ItemsSource="{Binding Path=transportingTimeChart}"/>
+                        </chart:DoughnutChart.Series>
+                    </chart:DoughnutChart>
+                </StackPanel>
+
             </Grid>
         </ScrollViewer>
     </DataTemplate>
