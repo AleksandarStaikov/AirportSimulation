@@ -36,7 +36,7 @@
 
         private static void SetDispatchedTimes(StatisticsData data, List<Baggage> baggage)
         {
-            var orderedByFirstLogTime = baggage.OrderBy(b => SafeGet(b.Log, 0)?.LogCreated).ToList();
+            var orderedByFirstLogTime = baggage.Where(b => b.Log.Count() > 0).OrderBy(b => SafeGet(b.Log, 0)?.LogCreated).ToList();
 
             data.FirstDispatchedBag = orderedByFirstLogTime.FirstOrDefault();
             data.LastDispatchedBag = orderedByFirstLogTime.LastOrDefault();
