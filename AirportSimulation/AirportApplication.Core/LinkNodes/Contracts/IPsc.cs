@@ -5,11 +5,10 @@
     using System;
     using Common.Models.Contracts;
 
-    public interface IPsc : IChainLink
+    public interface IPsc : IProcessingNode
     {
         void Process(IBaggage baggage);
         string Destination { get; }
-        string NodeId { get; set; }
         NodeState Status { get; set; }
         Action OnStatusChangedToFree { get; set; }
         void AddSuccessor(IChainLink chainLink);

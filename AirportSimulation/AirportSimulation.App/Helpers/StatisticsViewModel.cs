@@ -13,114 +13,103 @@
 
     partial class StatisticsViewModel : INotifyPropertyChanged
     {
-        private readonly Func<StatisticsData> _calculateStatistics;
+        private static Func<StatisticsData> _calculateStatistics;
 
         public StatisticsData statisticsData = new StatisticsData();
-        DispatcherTimer timer = new DispatcherTimer();
+        static DispatcherTimer timer = new DispatcherTimer();
         public int myVar;
 
         public StatisticsViewModel()
         {
             timer.Interval = TimeSpan.FromSeconds(2);
             timer.Tick += Timer_Tick;
-            timer.Start();
 
+            collectedBags = new ObservableCollection<StatisticsModel>();
+
+            dispatchedBags = new ObservableCollection<StatisticsModel>();
+
+            pscFailSuccChart = new ObservableCollection<StatisticsModel>();
+
+            ascFailSuccChart = new ObservableCollection<StatisticsModel>();
+
+            overalPercSecurityChart = new ObservableCollection<StatisticsModel>();
+
+            totalTransferBags = new ObservableCollection<StatisticsModel>();
+
+            totalBsuChart = new ObservableCollection<StatisticsModel>();
+
+            delaysAtAaChart = new ObservableCollection<StatisticsModel>();
+
+            bsuStayTimeChart = new ObservableCollection<StatisticsModel>();
+
+            noBsuChart = new ObservableCollection<StatisticsModel>();
+            transportingTimeChart = new ObservableCollection<StatisticsModel>();
+
+        }
+
+        public static void StartStatisticsTimer()
+        {
             _calculateStatistics = ContainerConfig.Resolve<IEngine>().GetStatisticsCalculator();
-
-            Series = new List<SeriesData>();
-
-
-            // gr = Graph --- Col = 1 --- 
-            _gr1Col1 = new ObservableCollection<StatisticsModel>();
-
-            _gr1Col2 = new ObservableCollection<StatisticsModel>();
-
-            _gr2Par1 = new ObservableCollection<StatisticsModel>();
-
-            _gr3Par1 = new ObservableCollection<StatisticsModel>();
-
-            _gr4Par1 = new ObservableCollection<StatisticsModel>();
-
-            _gr2Col1 = new ObservableCollection<StatisticsModel>();
-            _gr2Col2 = new ObservableCollection<StatisticsModel>();
-
-            _gr3Col1 = new ObservableCollection<StatisticsModel>();
-            _gr3Col2 = new ObservableCollection<StatisticsModel>();
-
-            _gr4Col1 = new ObservableCollection<StatisticsModel>();
-            _gr4Col2 = new ObservableCollection<StatisticsModel>();
-
-            
-
-            //Series is the left column of the window ONLY  used for testing the numbers of different charts
-            //Series.Add(new SeriesData() { DisplayName = "First", Items = _gr1Col1 });
-            //Series.Add(new SeriesData() { DisplayName = "Last", Items = _gr1Col2 });
-
-            //Series.Add(new SeriesData() { DisplayName = "Pie Chart", Items = _gr2Par1 });
-            //Series.Add(new SeriesData() { DisplayName = "Pie Second", Items = _gr3Par1 });
-
-            //Series.Add(new SeriesData() { DisplayName = "Longest", Items = _gr4Col1 });
-            //Series.Add(new SeriesData() { DisplayName = "Shortest", Items = _gr4Col2 });
-            //Series.Add(new SeriesData() { DisplayName = "BSU bags", Items = _gr2Col2 });
-
+            timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             statisticsData = _calculateStatistics();
 
-            //fir column chart
-            _gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
-            _gr1Col2.Add(new StatisticsModel() { Category = "Collected Bags", Number = int.Parse(DateTime.Now.ToString("ss")) });
+            // PSC Failed or Succeed Chart
+            pscFailSuccChart.Add(new StatisticsModel() { Category = "Failed", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
+            pscFailSuccChart.Add(new StatisticsModel() { Category = "Succeeded", Number = statisticsData?.PscSucceededBags?.Count ?? 0 });
 
-            _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault()) });
-            _gr1Col2.Add(new StatisticsModel() { Category = "Dispatched Bags", Number = Convert.ToInt32(statisticsData?.LastDispatchedBag?.Log?.FirstOrDefault()) });
+            // ASC Failed or Succeed Chart
+            ascFailSuccChart.Add(new StatisticsModel() { Category = "Failed", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
+            ascFailSuccChart.Add(new StatisticsModel() { Category = "Succeeded", Number = statisticsData?.AscSucceededBags?.Count ?? 0 });
 
-            // first pie chart
-            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Failed Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
-            _gr2Par1.Add(new StatisticsModel() { Category = "PSC Succeeded Percentage", Number = statisticsData?.PscFailedBags?.Count ?? 0 });
+            // Overall Security Chart
+            overalPercSecurityChart.Add(new StatisticsModel() { Category = "Advanced", Number = (float)statisticsData.AscInvalidationPercentage });
+            overalPercSecurityChart.Add(new StatisticsModel() { Category = "Primary", Number = (float)statisticsData.PscInvalidationPercentage });
 
-            //second pie chart
-            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Failed Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
-            _gr3Par1.Add(new StatisticsModel() { Category = "ASC Succeeded Percentage", Number = statisticsData?.AscFailedBags?.Count ?? 0 });
+            // Total Bags at BSU
+            totalBsuChart.Add(new StatisticsModel() { Category = "Total Bags That Went To BSU", Number = statisticsData?.TotalBagsThatWentToBsu?.Count ?? 0 });
 
-            //third pie chart - TO DO throws null
-            if (statisticsData.AscInvalidationPercentage != null && statisticsData.PscInvalidationPercentage !=  null)
-            {
-                _gr4Par1.Add(new StatisticsModel() { Category = "ACS Invalidation Percentage", Number = (float)statisticsData.AscInvalidationPercentage });
-                _gr4Par1.Add(new StatisticsModel() { Category = "PCS Invalidation Percentage", Number = (float)statisticsData.PscInvalidationPercentage });
-            }
+            // Total Transfer Bags
+            totalTransferBags.Add(new StatisticsModel() { Category = "Total Transferred Bags", Number = statisticsData?.TotalTransferredBags?.Count ?? 0 });
 
-            //second column chart -> missing the flight per fligh variable commented out below
-            _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags Late at AA", Number = statisticsData?.TotalBagsArrivedLateAtAa?.Count ?? 0 });
-            _gr2Col1.Add(new StatisticsModel() { Category = "Total Transferred Bags", Number = statisticsData?.TotalTransferredBags?.Count ?? 0 });
+            // Total Delays at Airport Security
+            delaysAtAaChart.Add(new StatisticsModel() { Category = "Delays per Flight", Number = statisticsData?.TotalBagsArrivedLateAtAa?.Count ?? 0 });
 
-            _gr2Col1.Add(new StatisticsModel() { Category = "Total Bags At BSU", Number = statisticsData?.TotalBagsThatWentToBsu?.Count ?? 0 });
-            _gr2Col1.Add(new StatisticsModel() { Category = "Delays per Flight", Number = statisticsData?.DelaysPerFlight?.Count ?? 0 });
+            //Collected Bags
+            //collectedBags.Add(new StatisticsModel() { Category = "First", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
+            collectedBags.Add(new StatisticsModel() { Category = "First", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag) });
+            collectedBags.Add(new StatisticsModel() { Category = "Last", Number = Convert.ToInt32(statisticsData?.LastCollectedBag)});
+
+            //Dispatched Bags
+            dispatchedBags.Add(new StatisticsModel() { Category = "First", Number = Convert.ToInt32(statisticsData?.FirstDispatchedBag?.Log?.FirstOrDefault()?.LogCreated.TotalSeconds)});
+            dispatchedBags.Add(new StatisticsModel() { Category = "Last", Number = Convert.ToInt32(statisticsData?.LastDispatchedBag?.Log?.LastOrDefault()?.LogCreated.TotalSeconds) });
+
+
+            //BSU Stay Time
+           
+                bsuStayTimeChart.Add(new StatisticsModel() { Category = "Average", Number = (float)statisticsData?.AverageBsuStayTimeInSeconds });
+                bsuStayTimeChart.Add(new StatisticsModel() { Category = "Max", Number = (float)statisticsData?.MaxBsuStayTimeInSeconds });
+                bsuStayTimeChart.Add(new StatisticsModel() { Category = "Min", Number = (float)statisticsData?.MinBsuStayTimeInSeconds });
+            
+
+            //System Stay Without BSU.
+            noBsuChart.Add(new StatisticsModel() { Category = "Longest", Number = (float)statisticsData?.LongestSystemStayWithoutBsu });
+            noBsuChart.Add(new StatisticsModel() { Category = "Shortest", Number = (float)statisticsData?.ShortestSystemStayWithoutBsu });
+
+            transportingTimeChart.Add(new StatisticsModel() { Category = "Shortest", Number = (float)statisticsData?.ShortestTransportingTime });
+            transportingTimeChart.Add(new StatisticsModel() { Category = "Longest", Number = (float)statisticsData?.LongestTransportingTime });
 
 
             //foreach (var flight in Series)
             //{
-            //    _gr2Col1.Add(new StatisticsModel() { Category = flight.Key.FlightNumber, Number = (float)flight.Value });
+            //    totalBsuChart.Add(new StatisticsModel() { Category = flight.Key.FlightNumber, Number = (float)flight.Value });
             //}
 
 
 
-            // third column chart
-            _gr3Col1.Add(new StatisticsModel() { Category = "Average BSU stay time ", Number = (float)statisticsData?.AverageBsuStayTimeInMinutes });
-            _gr3Col1.Add(new StatisticsModel() { Category = "Max BSU stay time ", Number = (float)statisticsData?.MaxBsuStayTimeInMinutes });
-            _gr3Col1.Add(new StatisticsModel() { Category = "Min BSU stay time ", Number = (float)statisticsData?.MinBsuStayTimeInMinutes });
-
-            // fourth column chart
-            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Stay NO BSU ", Number = (float)statisticsData?.LongestSystemStayWithoutBsu });
-            _gr4Col2.Add(new StatisticsModel() { Category = "Shortest Stay NO BSU ", Number = (float)statisticsData?.ShortestSystemStayWithoutBsu });
-            _gr4Col1.Add(new StatisticsModel() { Category = "Longest Transporting Time", Number = (float)statisticsData?.LongestTransportingTime });
-            _gr4Col2.Add(new StatisticsModel() { Category = "Shortest Transporting Time", Number = (float)statisticsData?.ShortestTransportingTime });
-
-
-
-            //_gr1Col1.Add(new StatisticsModel() { Category = "Collected Bags", Number = Convert.ToInt32(statisticsData?.FirstCollectedBag?.Log?.FirstOrDefault()) });
-           
         }
 
         private object selectedItem = null;
@@ -143,54 +132,35 @@
             set;
         }
         // for column charts
-        public ObservableCollection<StatisticsModel> _gr1Col2
+        public ObservableCollection<StatisticsModel> dispatchedBags
         {
             get;
             set;
         }
-        public ObservableCollection<StatisticsModel> _gr1Col1
-        {
-            get;
-            set;
-        }
-        // gr 2 below
-        public ObservableCollection<StatisticsModel> _gr2Col1
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<StatisticsModel> _gr2Col2
-        {
-            get;
-            set;
-        }
-        // gr 3 below
-        public ObservableCollection<StatisticsModel> _gr3Col1
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<StatisticsModel> _gr3Col2
-        {
-            get;
-            set;
-        }
-        // gr 4 below
-        public ObservableCollection<StatisticsModel> _gr4Col1
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<StatisticsModel> _gr4Col2
-        {
-            get;
-            set;
-        }
-        // for pie charts
-        public ObservableCollection<StatisticsModel> _gr2Par1 { get; set; }
-        public ObservableCollection<StatisticsModel> _gr3Par1 { get; set; }
+        // BSU Graphs
 
-        public ObservableCollection<StatisticsModel> _gr4Par1 { get; set; }
+        // BSU Graphs
+        public ObservableCollection<StatisticsModel> noBsuChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> transportingTimeChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> pscFailSuccChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> ascFailSuccChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> overalPercSecurityChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> totalTransferBags { get; set; }
+
+        public ObservableCollection<StatisticsModel> totalBsuChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> bsuStayTimeChart { get; set;}
+
+        public ObservableCollection<StatisticsModel> delaysAtAaChart { get; set; }
+
+        public ObservableCollection<StatisticsModel> collectedBags { get; set; }
+
+        public ObservableCollection<StatisticsModel> lastBags { get; set; }
 
 
         private void NotifyPropertyChanged(string property)

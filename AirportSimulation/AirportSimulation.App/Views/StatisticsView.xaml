@@ -43,6 +43,19 @@
             </chart:ClusteredColumnChart.Series>
         </chart:ClusteredColumnChart>
 
+        <chart:RadialGaugeChart 
+            Style="{StaticResource MinimalChartStyle}"
+            Grid.Column="1"
+            Grid.Row="0"
+            Margin="5"
+            Name="radialChart"  ChartTitle="Statistics"
+                              ChartSubTitle="Bar Chart"
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}">
+            <chart:RadialGaugeChart.Series>
+                <chart:ChartSeries/>
+            </chart:RadialGaugeChart.Series>
+        </chart:RadialGaugeChart>
+
     </Grid>
 
 </UserControl>
