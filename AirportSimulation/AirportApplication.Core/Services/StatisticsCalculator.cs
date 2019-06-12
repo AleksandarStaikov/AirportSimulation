@@ -80,13 +80,9 @@
             data.TotalBagsThatWentToBsu =
                 baggages.Where(bag => bag.Log.Any(log => log.Description.Contains(typeof(BSU).Name))).ToList();
 
-
-
             data.AverageBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Average(b => GetBsuStayTimeInSeconds(b));
             data.MinBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Min(b => GetBsuStayTimeInSeconds(b));
             data.MaxBsuStayTimeInSeconds = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Max(b => GetBsuStayTimeInSeconds(b));
-
-
 
             data.AverageBsuStayTimeInMinutes = data.TotalBagsThatWentToBsu.DefaultIfEmpty().Average(b => GetBsuStayTime(b));
 
@@ -165,15 +161,13 @@
 
             return default(T);
         }
-    }
 
-    public class StatisticsData
-    {
-
-        public StatisticsData()
+        private static double GetBsuStayTimeInSeconds(Baggage bag)
         {
-            PscFailedBags = new List<Baggage>();
-            PscSucceededBags = new List<Baggage>();
+            if (bag == null)
+            {
+                return 0;
+            }
 
             var receivedInBsuText = string.Format(LoggingConstants.BagReceivedInTemplate, typeof(BSU).Name, bag.TransporterId);
             var receivedInRobotFromBucket = string.Format(LoggingConstants.ReceivedInRobotSendingTo, typeof(Mpa).Name, bag.TransporterId);
@@ -183,14 +177,15 @@
 
             return endTime.TotalSeconds - startTime.TotalSeconds;
         }
-
-
-
-
     }
 
     public class StatisticsData
     {
+        public StatisticsData()
+        {
+            PscFailedBags = new List<Baggage>();
+            PscSucceededBags = new List<Baggage>();
+        }
 
         //Colum Chart -- DONE
         public Baggage FirstDispatchedBag { get; set; }
@@ -242,5 +237,4 @@
         public Tuple<string, double> MaxWaitingTimeAtTransporterOrQueue { get; set; }
         public Dictionary<string, double> AverageWaitingTimePerTransporterOrQueue { get; set; }
     }
-
 }
