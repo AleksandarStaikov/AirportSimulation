@@ -1,15 +1,12 @@
 ﻿namespace AirportSimulation.App
 {
-    using AirportSimulation.App.Views;
     using Core;
     using NLog;
     using System;
     using System.Windows;
-    using Autofac;
-    using Common.Models;
-    using Core.Contracts;
+	using Views;
 
-    public partial class App : Application
+	public partial class App : Application
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -19,9 +16,7 @@
             {
                 Logger.Info("Starting application...");
 
-                base.OnStartup(e);
-
-                ContainerConfig.Configure();
+				ContainerConfig.Configure();
                     
                 InitializeMainWindow();
 
@@ -29,14 +24,16 @@
             }
             catch (Exception ex)
             {
-                Logger.Error($"Something went wrong while starting the application, see inner exception", 
+                Logger.Error("Something went wrong while starting the application, see inner exception", 
                     ex.InnerException?.Message);
 
                 throw new Exception(ex.Message, ex);
             }
-        }
 
-        private void HandleClosed(object sender, EventArgs e)
+			base.OnStartup(e);
+		}
+
+		private void HandleClosed(object sender, EventArgs e)
         {
             ContainerConfig.Stop();
         }

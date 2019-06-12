@@ -1,6 +1,7 @@
 ﻿namespace AirportSimulation.Abstractions.Contracts
 {
     using Common.Models;
+    using Common.Models.Contracts;
     using System;
 
     public interface ITimerService : IPauseResume
@@ -14,6 +15,6 @@
         long GetTicksSinceSimulationStart();
         TimeSpan ConvertMillisecondsToTimeSpan(int milliseconds);
         int ConvertTimeSpanToMilliseconds(TimeSpan span);
-        void SetSettings(SimulationSettings settings);
+        void SetSettings(ISimulationSettings settings);
     }
 }

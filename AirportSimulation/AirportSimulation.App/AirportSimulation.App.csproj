@@ -95,10 +95,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BlinkingCellsPainter.cs" />
+    <Compile Include="Helpers\ConvertToSettingsService.cs" />
+    <Compile Include="Models\StatisticsModel.cs" />
+    <Compile Include="Models\StatisticsViewModel.cs" />
     <Compile Include="Infrastructure\IBuildingComponentFactory.cs" />
     <Compile Include="Helpers\BuildingComponentsHelper.cs" />
     <Compile Include="Infrastructure\MultipleCellComponentFactory.cs" />
     <Compile Include="Infrastructure\SingleCellComponentFactory.cs" />
+    <Compile Include="Models\ConveyorBridge.cs" />
+    <Compile Include="Models\FlightsOrganizer.cs" />
+    <Compile Include="Models\ICreatable.cs" />
     <Compile Include="Models\IParent.cs" />
     <Compile Include="Models\Aa.cs" />
     <Compile Include="Models\Asc.cs" />
@@ -118,12 +124,13 @@
     <Compile Include="Models\MultipleCellComponent.cs" />
     <Compile Include="Models\MutantRectangle.cs" />
     <Compile Include="Models\OneToOneCell.cs" />
+    <Compile Include="Models\OverlappingBlinkingCell.cs" />
     <Compile Include="Models\Pa.cs" />
     <Compile Include="Models\Psc.cs" />
     <Compile Include="Models\SingleCellBuildingComponent.cs" />
     <Compile Include="Models\Succeedable.cs" />
-    <Compile Include="Views\AdminView.xaml.cs">
-      <DependentUpon>AdminView.xaml</DependentUpon>
+    <Compile Include="Views\FlightsView.xaml.cs">
+      <DependentUpon>FlightsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SimulationView.xaml.cs">
       <DependentUpon>SimulationView.xaml</DependentUpon>
@@ -131,10 +138,7 @@
     <Compile Include="Views\StatisticsView.xaml.cs">
       <DependentUpon>StatisticsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Helpers\StatisticsDictionary.xaml">
+    <Page Include="Resources\StatisticsDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,7 +146,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -150,23 +154,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\AdminView.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\FlightsView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SimulationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StatisticsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,6 +185,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\conveyor-bridge.png" />
     <Resource Include="Resources\manytomanyConv.png" />
     <Resource Include="Resources\MPApng.png" />
     <Resource Include="Resources\AdvancedCheckBaggage.png" />

@@ -5,13 +5,14 @@
     using System.Linq;
     using Abstractions.Contracts;
     using Common.Models;
+    using Common.Models.Contracts;
     using Contracts;
     using CuttingEdge.Conditions;
 
     public abstract class ProcessingNode : ChainLink, IProcessingNode
     {
         protected List<IChainLink> _allSuccessors;
-        protected Baggage _currentBaggage;
+        protected IBaggage _currentBaggage;
 
         protected ProcessingNode(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
@@ -25,9 +26,9 @@
             _allSuccessors.Add(chainLink);
         }
 
-        public abstract void Process(Baggage baggage);
+        public abstract void Process(IBaggage baggage);
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             Status = NodeState.Busy;
             _currentBaggage = baggage;
@@ -44,16 +45,16 @@
             ProcessInternal(baggage);
         }
 
-        private void ProcessInternal(Baggage baggage)
+        private void ProcessInternal(IBaggage baggage)
         {
             Process(baggage);
 
             NextLink = _allSuccessors
                 .FirstOrDefault(x => x.Destination == baggage.Destination);
 
-            Condition
-                .Requires(NextLink)
-                .IsNotNull();
+            //Condition
+            //    .Requires(NextLink)
+            //    .IsNotNull();
 
             _currentBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
 

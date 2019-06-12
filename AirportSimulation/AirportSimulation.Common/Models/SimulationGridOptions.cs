@@ -1,12 +1,15 @@
 ﻿namespace AirportSimulation.Common.Models
 {
+    using System;
     using System.ComponentModel;
+    using System.Windows.Input;
 
     public class SimulationGridOptions : INotifyPropertyChanged
     {
         private bool _canBuildCheckIn = true;
-		private bool _canBuildConveyor = true;
+        private bool _canBuildConveyor = true;
         private bool _canBuildManyToOneConveyor = true;
+        private bool _canBuildBirdge = true;
         private bool _canBuildAsc = true;
         private bool _canBuildPsc = true;
         private bool _canBuildAa = true;
@@ -14,8 +17,7 @@
         private bool _canBuildMpa = true;
         private bool _isGridEnabled = true;
         private bool _canCreate;
-        private bool _canClear;
-		private bool _canRun;
+        private bool _canNext;
 
         public static int GRID_MAX_ROWS = 14;
         public static int GRID_MAX_COLUMNS = 19;
@@ -24,13 +26,23 @@
 
         public string GridColumns => $"*#{++GRID_MAX_COLUMNS}";
 
-        public bool CanRun
+        public bool CanBuildBridge
         {
-            get => _canRun;
+            get => _canBuildBirdge;
             set
             {
-                _canRun = value;
-                OnPropertyRaised(nameof(CanRun));
+                _canBuildBirdge = value;
+                OnPropertyRaised(nameof(CanBuildBridge));
+            }
+        }
+
+        public bool CanNext
+        {
+            get => _canNext;
+            set
+            {
+                _canNext = value;
+                OnPropertyRaised(nameof(CanNext));
             }
         }
 
@@ -44,16 +56,6 @@
             }
         }
 
-        public bool CanClear
-        {
-            get => _canClear;
-            set
-            {
-                _canClear = value;
-                OnPropertyRaised(nameof(CanClear));
-            }
-        }
-
         public bool CanCreate
         {
             get => _canCreate;
@@ -64,17 +66,17 @@
             }
         }
 
-		public bool CanBuildMpa
-		{
-			get => _canBuildMpa;
-			set
-			{
-				_canBuildMpa = value;
-				OnPropertyRaised(nameof(CanBuildMpa));
-			}
-		}
+        public bool CanBuildMpa
+        {
+            get => _canBuildMpa;
+            set
+            {
+                _canBuildMpa = value;
+                OnPropertyRaised(nameof(CanBuildMpa));
+            }
+        }
 
-		public bool CanBuildCheckIn
+        public bool CanBuildCheckIn
         {
             get => _canBuildCheckIn;
             set
@@ -113,7 +115,7 @@
                 OnPropertyRaised(nameof(CanBuildPsc));
             }
         }
-        
+
         public bool CanBuildAsc
         {
             get => _canBuildAsc;
@@ -144,7 +146,7 @@
             }
         }
 
-        private void OnPropertyRaised(string propertyname) =>
+        public void OnPropertyRaised(string propertyname) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -12,22 +12,22 @@ namespace AirportSimulation.App.Infrastructure
 {
     class MultipleCellComponentFactory : IBuildingComponentFactory
     {
-        public GenericBuildingComponent CreateComponent(BuildingComponentType type, MutantRectangle container)
+        public GenericBuildingComponent CreateComponent(BuildingComponentType type, (int, int) cell)
         {
             if(type == BuildingComponentType.Conveyor)
             {
-                return CreateOneToOneConveyor(container);
+                return CreateOneToOneConveyor(cell);
             }
             else if(type == BuildingComponentType.ManyToOneConveyor)
             {
-                return CreateManyToOneConveyor(container);
+                return CreateManyToOneConveyor(cell);
             }
             return null;
         }
 
-        private OneToOneCell CreateOneToOneConveyor(MutantRectangle container)
+        private OneToOneCell CreateOneToOneConveyor((int, int) cell)
         {
-            var temp = new OneToOneCell("asd", container.Cell)
+            var temp = new OneToOneCell(cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.Conveyor))
             };
@@ -35,9 +35,9 @@ namespace AirportSimulation.App.Infrastructure
             return temp;
         }
 
-        private ManyToOneCell CreateManyToOneConveyor(MutantRectangle container)
+        private ManyToOneCell CreateManyToOneConveyor((int, int) cell)
         {
-            var temp = new ManyToOneCell("asd", container.Cell)
+            var temp = new ManyToOneCell(cell)
             {
                 Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.ManyToOneConveyor))
             };

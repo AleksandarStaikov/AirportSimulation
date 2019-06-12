@@ -2,6 +2,7 @@
 {
     using Abstractions.Contracts;
     using Abstractions.Core;
+    using Common;
     using Common.Models;
     using Common.Models.Contracts;
     using CuttingEdge.Conditions;
@@ -9,9 +10,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Timers;
-    using Common;
+    using Contracts;
 
-    public class CheckInDispatcher : ChainLink, IPauseResume
+    public class CheckInDispatcher : ChainLink, IPauseResume, ICheckInDispatcher
     {
         public delegate CheckInDispatcher Factory(ISimulationSettings simulationSettings, string nodeId);
 
@@ -20,8 +21,8 @@
 
         private readonly ISimulationSettings _simulationSettings;
 
-        private List<Queue<Baggage>> _checkInQueues;
-        private List<CheckInDesk> _checkIns;
+        private List<Queue<IBaggage>> _checkInQueues;
+        private List<ICheckInDesk> _checkIns;
         private List<Timer> _flightDropOffTimers;
 
         public CheckInDispatcher(ISimulationSettings simulationSettings,string nodeId,  ITimerService timerService)
@@ -35,7 +36,7 @@
 
         public override string Destination => this.GetType().Name;
 
-        public void SetCheckIns(List<CheckInDesk> checkIns)
+        public void SetCheckIns(List<ICheckInDesk> checkIns)
         {
             Condition
                 .Requires(checkIns.Count)
@@ -70,7 +71,7 @@
             }
         }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             throw new NotImplementedException();
         }
@@ -157,11 +158,11 @@
 
         private void SetUpQueues()
         {
-            _checkInQueues = new List<Queue<Baggage>>();
+            _checkInQueues = new List<Queue<IBaggage>>();
 
             foreach (var checkIn in Enumerable.Range(0, _simulationSettings.Nodes.Count(n => n.Type == BuildingComponentType.CheckIn)))
             {
-                _checkInQueues.Add(new Queue<Baggage>());
+                _checkInQueues.Add(new Queue<IBaggage>());
             }
         }
 

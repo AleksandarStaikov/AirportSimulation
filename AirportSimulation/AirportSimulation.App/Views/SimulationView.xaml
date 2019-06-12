@@ -19,8 +19,9 @@
             <ImageBrush x:Key="PickUpImageBrush" ImageSource="/Resources/PickUpBaggage.png" Stretch="Fill"/>
             <ImageBrush x:Key="ManyToOneConveyorImageBrush" ImageSource="/Resources/manytomanyConv.png" Stretch="Fill"/>
             <ImageBrush x:Key="MPAImageBrush" ImageSource="/Resources/MPApng.png" Stretch="Fill"/>
+            <ImageBrush x:Key="BridgeImageBrush" ImageSource="/Resources/conveyor-bridge.png" Stretch="Fill"/>
         </Grid.Resources>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="230"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -39,157 +40,256 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Button
-            x:Name="CheckIn"
-            Grid.Column="0" 
-            Grid.Row="0" 
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildCheckIn, Mode=TwoWay}"
-            Background="{StaticResource CheckInImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Check In</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+        <Grid Grid.RowSpan="7" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <Button 
-            x:Name="Conveyor"
-            Grid.Column="0" 
-            Grid.Row="1" 
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildConveyor, Mode=TwoWay}"
-            Background="{StaticResource ConveyorImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Conveyor</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel 
+                    Grid.Column="0" 
+                    Grid.Row="0">
+                <Button
+                        x:Name="CheckIn"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildCheckIn, Mode=TwoWay}"
+                        Background="{StaticResource CheckInImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Check In</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Check In" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <Button
-            x:Name="ManyToOneConveyor"
-            Grid.Column="0" 
-            Grid.Row="2" 
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildManyToOneConveyor, Mode=TwoWay}"
-            Background="{StaticResource ManyToOneConveyorImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Many to one conveyor</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel 
+                    Grid.Column="0" 
+                    Grid.Row="1" >
+                <Button 
+                        x:Name="Conveyor"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildConveyor, Mode=TwoWay}"
+                        Background="{StaticResource ConveyorImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Conveyor</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Conveyor" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <Button 
-            x:Name="PSC"
-            Grid.Column="0" 
-            Grid.Row="3"
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPsc, Mode=TwoWay}"
-            Background="{StaticResource PSCImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Primary Security Check</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="2" >
+                <Button
+                        x:Name="ManyToOneConveyor"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildManyToOneConveyor, Mode=TwoWay}"
+                        Background="{StaticResource ManyToOneConveyorImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Many to One Conveyor</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Many to One Conveyor" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <Button
-            x:Name="ASC"
-            Grid.Column="0"
-            Grid.Row="4"
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAsc, Mode=TwoWay}"
-            Background="{StaticResource ASCImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Advanced Security Check</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="3">
+                <Button
+                    x:Name="Bridge"
+                    Height="50"
+                    Width="60"
+                    BorderThickness="0"
+                    Click="BuildingComponent_Click"
+                    IsEnabled="{Binding Path=SimulationGridOptions.CanBuildBridge, Mode=TwoWay}"
+                    Background="{StaticResource BridgeImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Bridge Between Conveyors</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Bridge Between Conveyors" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <Button 
-            x:Name="AA"
-            Grid.Column="0" 
-            Grid.Row="5"
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAa, Mode=TwoWay}"
-            Background="{StaticResource AirplaneShapeImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Airport Area</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="4">
+                <Button 
+                        x:Name="PSC"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPsc, Mode=TwoWay}"
+                        Background="{StaticResource PSCImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Primary Security Check</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Primary Security Check" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <!--<Button
-            x:Name="PA"
-            Grid.Column="0" 
-            Grid.Row="6"
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
-            Background="{StaticResource PickUpImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Pick Up</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>-->
+            <StackPanel 
+                    Grid.Column="0"
+                    Grid.Row="5">
+                <Button
+                        x:Name="ASC"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAsc, Mode=TwoWay}"
+                        Background="{StaticResource ASCImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Advanced Security Check</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Advanced Security Check" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
 
-        <Button
-            x:Name="MPA"
-            Grid.Column="0" 
-            Grid.Row="6"
-            Height="50"
-            Width="60"
-            BorderThickness="0"
-            Click="BuildingComponent_Click"
-            IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
-            Background="{StaticResource MPAImageBrush}">
-            <Button.ToolTip>
-                <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Pick Up</TextBlock>
-                    </StackPanel>
-                </ToolTip>
-            </Button.ToolTip>
-        </Button>
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="6">
+                <Button 
+                        x:Name="AA"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildAa, Mode=TwoWay}"
+                        Background="{StaticResource AirplaneShapeImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Airport Area</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Airport Area" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="7">
+                <Button
+                        x:Name="PA"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+                        Background="{StaticResource PickUpImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Pick Up</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="Pick Up" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel
+                    Grid.Column="0" 
+                    Grid.Row="8">
+                <Button
+                        x:Name="MPA"
+                        Height="50"
+                        Width="60"
+                        BorderThickness="0"
+                        Click="BuildingComponent_Click"
+                        IsEnabled="{Binding Path=SimulationGridOptions.CanBuildPickUp, Mode=TwoWay}"
+                        Background="{StaticResource MPAImageBrush}">
+                    <Button.ToolTip>
+                        <ToolTip ToolTipService.HasDropShadow="True" ToolTipService.Placement="Right">
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">MPA</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <TextBlock 
+                        Text="MPA" 
+                        Foreground="Black" 
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
 
         <ScrollViewer 
             Margin="10 10 10 10"
@@ -206,84 +306,67 @@
                 ShowGridLines="True" 
                 Height="1000"
                 Width="1500"
-                IsEnabled="{Binding Path=SimulationGridOptions.IsGridEnabled, Mode=TwoWay}"
-                MouseLeftButtonDown="SimulationGrid_MouseLeftButtonDown"
-                MouseRightButtonDown="SimulationGrid_MouseRightButtonDown">
+                IsEnabled="{Binding Path=SimulationGridOptions.IsGridEnabled, Mode=TwoWay}">
             </Grid>
         </ScrollViewer>
 
         <StackPanel 
-            x:Name="Run"
+            x:Name="Next"
             Grid.Column="1" 
-            Grid.Row="6"
+            Grid.Row="7"
             Margin="25 20">
             <Button 
                 Width="150"
                 FontSize="12" 
-                Click="Run_Click" 
-                IsEnabled="{Binding Path=SimulationGridOptions.CanRun, Mode=TwoWay}">
+                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.OnNextButton_Command}"
+                IsEnabled="{Binding Path=SimulationGridOptions.CanNext, Mode=TwoWay}">
                 <StackPanel>
-                    <TextBlock>RUN</TextBlock>
+                    <TextBlock>NEXT</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>
         <StackPanel 
             x:Name="Export"
             Grid.Column="2" 
-            Grid.Row="6" 
+            Grid.Row="7" 
             Margin="25 20">
             <Button 
                 Width="150"
-                FontSize="12">
+                FontSize="12"
+                Click="Export_Click">
                 <StackPanel>
-                    <TextBlock>EXPORT VARIABLES</TextBlock>
+                    <TextBlock>EXPORT</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>
         <StackPanel 
             x:Name="Import"
             Grid.Column="3" 
-            Grid.Row="6" 
+            Grid.Row="7" 
             Margin="25 20">
             <Button 
                 Width="150"
-                FontSize="12">
+                FontSize="12"
+                Click="Import_Click">
                 <StackPanel>
-                    <TextBlock>IMPORT VARIABLES</TextBlock>
+                    <TextBlock>IMPORT</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>
         <StackPanel 
             Grid.Column="4" 
-            Grid.Row="6" 
-            Margin="25 20">
-            <Button 
-                Name="CreateButton"
-                Width="150"
-                FontSize="12"
-                Click="CreateButton_Click"
-                IsEnabled="{Binding Path=SimulationGridOptions.CanCreate, Mode=TwoWay}">
-                <StackPanel>
-                    <TextBlock>CREATE</TextBlock>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-        <StackPanel 
-            
-            Grid.Column="5" 
-            Grid.Row="6" 
+            Grid.Row="7" 
             Margin="25 20">
             <Button 
                 Name="ClearGridButton"
                 Width="150"
                 FontSize="12"
                 Click="ClearGridButton_Click"
-                IsEnabled="{Binding Path=SimulationGridOptions.CanClear, Mode=TwoWay}">
+                IsEnabled="True">
                 <StackPanel>
                     <TextBlock>CLEAR</TextBlock>
                 </StackPanel>
             </Button>
         </StackPanel>
-
     </Grid>
 </UserControl>

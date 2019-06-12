@@ -7,8 +7,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Common.Models.Contracts;
+    using Contracts;
 
-    public class BSU : ChainLink, ISingleSuccessor
+    public class BSU : ChainLink, ISingleSuccessor, IBSU
     {
         public delegate BSU Factory(string nodeId);
 
@@ -28,7 +30,7 @@
 
         public override string Destination => GetType().Name;
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
             Status = NodeState.Busy;
             AddTransportationLog(baggage);
@@ -53,14 +55,14 @@
 
         }
 
-        private void PassToRobot(Baggage baggage)
+        private void PassToRobot(IBaggage baggage)
         {
             _inboundRobot.OnStatusChangedToFree = null;
             _inboundRobot.PassBaggage(baggage);
             Status = NodeState.Free;
         }
 
-        private void AssignBucket(Baggage baggage)
+        private void AssignBucket(IBaggage baggage)
         {
             if (!_baggageBuckets.Keys.Contains(baggage.Flight.FlightNumber))
             {
@@ -70,7 +72,7 @@
             baggage.Destination = baggage.Flight.FlightNumber;
         }
 
-        private void AddBaggageBucket(Flight flight)
+        private void AddBaggageBucket(IFlight flight)
         {
             var bucket = new BaggageBucket(flight.FlightNumber, Guid.NewGuid().ToString(), TimerService);
             bucket.SetSuccessor(_outboundRobot);
@@ -97,7 +99,7 @@
             _outboundRobot.AddSuccessor(NextLink);
         }
 
-        private void AddTransportationLog(Baggage baggage)
+        private void AddTransportationLog(IBaggage baggage)
         {
             if (baggage.TransportationStartTime != null)
             {

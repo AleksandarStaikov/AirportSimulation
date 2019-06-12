@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using AirportSimulation.Common;
+
     internal class OneToOneCell : MultipleCellComponent //TODO: Disable previous blinking cells
     {
-        public OneToOneCell(string nodeId, (int, int) cell) : base(BuildingComponentType.Conveyor, nodeId, cell)
+        public OneToOneCell((int, int) cell) : base(BuildingComponentType.Conveyor, cell)
         {
         }
 

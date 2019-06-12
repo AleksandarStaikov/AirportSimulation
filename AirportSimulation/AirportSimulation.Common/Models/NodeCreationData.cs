@@ -1,12 +1,16 @@
 ﻿namespace AirportSimulation.Common.Models
 {
+    using System;
     using System.Collections.Generic;
 
+    [Serializable]
     public class NodeCreationData
     {
         public string Id { get; set; }
 
-        public IEnumerable<NodeCreationData> NextNodes { get; set; }
+        public Dictionary<NodeCreationData, int?> NextNodes { get; set; }
+
+        public List<(int Row, int Column)> Cell { get; set; }
 
         public BuildingComponentType Type { get; set; }
 

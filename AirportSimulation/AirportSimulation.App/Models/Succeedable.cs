@@ -1,17 +1,10 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using AirportSimulation.Common.Models;
-    using AirportSimulation.App.Infrastructure;
     using AirportSimulation.App.Helpers;
-    using System.Windows.Controls;
     using AirportSimulation.Common;
+    using System.Windows.Controls;
 
-    class Succeedable : ISucceedable //TODO: Delete Succeedable
+    internal class Succeedable : ISucceedable //TODO: Delete Succeedable
     {
         private GenericBuildingComponent _succeedableComponent;
 
@@ -30,13 +23,11 @@
 
         private bool IsMutable(MutantRectangle rectangle)
         {
-            if (rectangle.Content is EnabledCell)
+            if (rectangle.Content is DisabledCell disabledCell)
             {
-                return true;
-            }
-            else if (rectangle.Content is DisabledCell)
-            {
-                if(((DisabledCell)rectangle.Content).ParentComponent == null || ((DisabledCell)rectangle.Content).ParentComponent == _succeedableComponent)
+                if(disabledCell.ParentComponent == null || 
+                    disabledCell.ParentComponent == _succeedableComponent ||
+                    _succeedableComponent.Type == BuildingComponentType.Bridge)
                 {
                     return true;
                 }
@@ -58,18 +49,29 @@
                     var cell = adjancentRectangle.Cell;
                     adjancentRectangle.ChangeContent(new DisabledCell(_succeedableComponent as IParent, cell));
                 }
-                
             }
         }
 
         public void ShowBlinkingCells()
         {
-            foreach (MutantRectangle adjancentRectangle in _succeedableComponent.PossibleNeighbours)
+            foreach (MutantRectangle adjacentRectangle in _succeedableComponent.PossibleNeighbours)
             {
-                if (IsMutable(adjancentRectangle))
+                if (IsMutable(adjacentRectangle))
                 {
-                    var cell = adjancentRectangle.Cell;
-                    adjancentRectangle.ChangeContent(new BlinkingCell(_succeedableComponent as IParent, cell));
+                    var cell = adjacentRectangle.Cell;
+                    var newBlinkingCell = new BlinkingCell(_succeedableComponent as IParent, cell);
+
+                    if (adjacentRectangle.Content is BlinkingCell adjacentBlinkingCell && adjacentBlinkingCell.ParentComponent != _succeedableComponent)
+                    {
+                        var overlappingCell = new OverlappingBlinkingCell(cell);
+                        overlappingCell.AddLayer(adjacentBlinkingCell);
+                        overlappingCell.AddLayer(newBlinkingCell);
+                        adjacentRectangle.ChangeContent(overlappingCell);
+                    }
+                    else
+                    {
+                        adjacentRectangle.ChangeContent(newBlinkingCell);
+                    }
                 }
             }
         }

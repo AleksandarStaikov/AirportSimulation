@@ -1,17 +1,8 @@
 ﻿namespace AirportSimulation.App.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using AirportSimulation.Common;
-    using System.Windows;
     using AirportSimulation.App.Infrastructure;
-    using System.Windows.Shapes;
-    using System.Windows.Media;
-    using System.Windows.Input;
-
+    
     internal class BlinkingCell : GridCell, IClickable 
     {
         public readonly IParent ParentComponent;
@@ -22,25 +13,34 @@
             Fill = RectangleFactory.CreateBlinkingRectangle().Fill;
         }
 
-        public void ClickHandler(MutantRectangle sender, BuildingComponentType type) //TODO: Add factory as a property?
+        public void ClickHandler(MutantRectangle sender, BuildingComponentType type) 
         {
             GenericBuildingComponent content;
 
-            if (IsConveyor(type))
+            if (IsConveyor(type))  //TODO: Add factory as a property?
             {
-                content = new MultipleCellComponentFactory().CreateComponent(type, sender);
+                content = new MultipleCellComponentFactory().CreateComponent(type, sender.Cell);
+                if(ParentComponent is MultipleCellComponent component) //TODO: Guid from bridged component
+                {
+                    content.NodeId = component.NodeId;
+                }
                 
             }
             else
             {
-                content = new SingleCellComponentFactory().CreateComponent(type, sender);
+                content = new SingleCellComponentFactory().CreateComponent(type, sender.Cell);
+                if(content is Aa)
+                {
+                    sender.ReadyToGoNext?.Invoke();
+                    sender.ReadyToGoNext = null;
+                }
             }
 
             ParentComponent.ChildClicked(content);
 
-            if(content is IParent)
+            if(content is IParent parent)
             {
-                ((IParent)content).PopulatePossibleNeighbours(sender);
+                parent.PopulatePossibleNeighbours(sender);
             }
 
             sender.ChangeContent(content);

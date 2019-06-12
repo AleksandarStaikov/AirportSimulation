@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using AirportSimulation.App.Helpers;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
+    using System.Collections.Generic;
+    using System.Windows.Media;
+    using Helpers;
+    using Common;
+    
     internal class Mpa : SingleCellBuildingComponent, IParent
     {
         private static Mpa _instance = null;
+        public new List<(int row, int column)> Cell;
 
-        protected Mpa(string nodeId, (int, int) cell) : base(BuildingComponentType.MPA, nodeId, cell)
+        protected Mpa((int, int) cell) : base(BuildingComponentType.MPA, cell)
         {
             AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
             {
-                BuildingComponentType.AA
+                BuildingComponentType.AA,
+                BuildingComponentType.PA
             };
         }
 
-        public static Mpa GetInstance(string nodeId, (int, int) cell)
+        public static Mpa GetInstance((int, int) cell)
         {
             if(_instance == null)
             {
-                _instance = new Mpa(nodeId, cell)
+                _instance = new Mpa(cell)
                 {
                     Fill = new ImageBrush(BuildingComponentsHelper.GetBuildingComponentImage(BuildingComponentType.MPA)),
+                    Cell = new List<(int row, int column)>()
                 };
                 _instance.successorEnabler = new Succeedable(_instance);
             }
 
-            _instance.Cell = cell;
+            _instance.Cell.Add(cell);
 
             return _instance;
         }
@@ -41,16 +40,27 @@ namespace AirportSimulation.App.Models
         {
             if (successor.GetType().BaseType == typeof(MultipleCellComponent))
             {
-                var temp = successor as MultipleCellComponent;
-                temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
-                if (temp is ManyToOneCell)
+                if (successor.AllowedNonConveyorSuccessors == null)
                 {
-                    ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    var temp = successor as MultipleCellComponent;
+                    temp.ChangeAllowedSuccessors(AllowedNonConveyorSuccessors);
+
+                    if (temp is ManyToOneCell)
+                    {
+                        ((ManyToOneCell)temp).PredecessorType = this.Type;
+                    }
+
+                    NextNodes.Add(successor);
+                }
+                else
+                {
+                    if (successor is IParent parentComponent)
+                    {
+                        parentComponent.ChildClicked(this);
+                    }
                 }
             }
-            NextNodes.Add(successor);
 
-            ShowBlinkingChildren(successor.Type);
         }
 
         public void PopulatePossibleNeighbours(MutantRectangle container)

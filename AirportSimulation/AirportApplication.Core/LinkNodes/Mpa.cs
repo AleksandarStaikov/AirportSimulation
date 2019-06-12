@@ -3,22 +3,24 @@
     using Abstractions.Contracts;
     using Abstractions.Core;
     using Abstractions.Core.Contracts;
-    using System.Collections.Generic;
     using Common.Models;
-	using System.Threading.Tasks;
+    using Contracts;
     using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Common.Models.Contracts;
 
-    public class Mpa : ChainLink, IMultiSuccessor
+    public class Mpa : ChainLink, IMultiSuccessor, IMpa
     {
         public delegate Mpa Factory(string nodeId);
 
         private Dictionary<string, IChainLink> _allSuccessors;
-        private Dictionary<string, Queue<Baggage>> _baggageDistributors;
+        private Dictionary<string, Queue<IBaggage>> _baggageDistributors;
 
         public Mpa(string nodeId, ITimerService timerService) : base(nodeId, timerService)
         {
             _allSuccessors = new Dictionary<string, IChainLink>();
-            _baggageDistributors = new Dictionary<string, Queue<Baggage>>();
+            _baggageDistributors = new Dictionary<string, Queue<IBaggage>>();
         }
 
         public override string Destination => this.GetType().Name;
@@ -26,7 +28,7 @@
         public void AddSuccessor(IChainLink successor)
         {
             _allSuccessors[successor.Destination] = successor;
-            _baggageDistributors[successor.Destination] = new Queue<Baggage>();
+            _baggageDistributors[successor.Destination] = new Queue<IBaggage>();
 
             Task.Run(() =>
             {
@@ -34,7 +36,7 @@
             });
         }
 
-        public override void PassBaggage(Baggage baggage)
+        public override void PassBaggage(IBaggage baggage)
         {
 
             AddTransportationLog(baggage);
@@ -58,6 +60,12 @@
                         if (nextNode.Status == NodeState.Free)
                         {
                             var tempBaggage = _baggageDistributors[destination].Dequeue();
+
+                            if (tempBaggage == null)
+                            {
+                                return;
+                            }
+
                             tempBaggage.TransportationStartTime = TimerService.GetTicksSinceSimulationStart();
 
                             nextNode.PassBaggage(tempBaggage);
@@ -66,7 +74,7 @@
                 };
         }
         
-        private void SortToDestinationDistributor(Baggage baggage)
+        private void SortToDestinationDistributor(IBaggage baggage)
         {
             var timeToFlight = (baggage.Flight.TimeToFlightSinceSimulationStart - TimerService.GetTimeSinceSimulationStart()).TotalMilliseconds;
 
@@ -85,7 +93,7 @@
             }
         }
 
-        private void AddTransportationLog(Baggage baggage)
+        private void AddTransportationLog(IBaggage baggage)
         {
             if (baggage.TransportationStartTime != null)
             {

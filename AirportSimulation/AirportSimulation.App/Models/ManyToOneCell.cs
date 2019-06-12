@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AirportSimulation.Common;
-
-namespace AirportSimulation.App.Models
+﻿namespace AirportSimulation.App.Models
 {
-    class ManyToOneCell : MultipleCellComponent
+    using System.Collections.Generic;
+    using AirportSimulation.Common;
+    
+    internal class ManyToOneCell : MultipleCellComponent
     {
         public BuildingComponentType PredecessorType;
-        public ManyToOneCell(string nodeId, (int, int) cell) : base(BuildingComponentType.ManyToOneConveyor, nodeId, cell)
+
+        public ManyToOneCell((int, int) cell) : base(BuildingComponentType.ManyToOneConveyor,cell)
         {
         }
 
         public override void ShowBlinkingChildren(BuildingComponentType type) //TODO: review repeated code
         {
-            if (((AllowedNonConveyorSuccessors.Contains(type) && NextNodes.Count != 0) != 
-                (NextNodes.Count == 0 && (AllowedNonConveyorSuccessors.Contains(type) || type == this.Type)))) //TODO: Simplify expression //TODO: Many SingleCell to one MultiCell
+            if ((PredecessorType == type && NextNodes.Count != 0) || 
+                (NextNodes.Count == 0 && (AllowedNonConveyorSuccessors.Contains(type) || type == this.Type))) //TODO: Simplify expression //TODO: Many SingleCell to one MultiCell
             {
                 successorEnabler.ShowBlinkingCells();
             }
@@ -33,12 +30,12 @@ namespace AirportSimulation.App.Models
             {
                 ((IParent)successor).ChildClicked(this);
             }
+            else if(successor is ManyToOneCell mtoSuccessor)
+            {
+                mtoSuccessor.PredecessorType = PredecessorType;
+            }
 
             base.ChildClicked(successor);
-            AllowedNonConveyorSuccessors = new List<BuildingComponentType>()
-                {
-                    PredecessorType
-                };
         }
     }
 }
